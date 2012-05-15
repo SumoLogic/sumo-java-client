@@ -1,5 +1,6 @@
-
-import static org.junit.Assert.*;
+import com.sumologic.client.Credential;
+import com.sumologic.client.SearchQuery;
+import com.sumologic.client.SumoClient;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,23 +15,24 @@ import org.junit.Test;
 public class SumoClientTest {
 
   private static SumoClient sumoClient;
+  private static Credential credential;
   private static String userEmail;
   private static String userPassword;
 
   @Before
   public void initialize() {
     userEmail = "daphy@demo.com";
-    userPassword = "Silver12";
+    userPassword = "XXX";
     sumoClient = new SumoClient();
-  }
+    credential = new Credential();
+}
 
   @Test
   public void testSearch() throws Exception {
-    SumoSearchQuery searchQuery = new SumoSearchQuery("error");
-    sumoClient.setEmailAndPassword(userEmail, userPassword);
-    sumoClient.search(searchQuery);
-
-
+    SearchQuery searchQuery = new SearchQuery("error");
+    credential.setEmailAndPassword(userEmail, userPassword);
+    sumoClient.setCredential(credential);
+    sumoClient.search(searchQuery.setResultFormat("json"));
   }
 
 }
