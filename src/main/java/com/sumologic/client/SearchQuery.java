@@ -7,22 +7,17 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: daphne
- * Date: 5/10/12
- * Time: 4:45 PM
- * To change this template use File | Settings | File Templates.
- */
 
 public class SearchQuery {
   private String query = "";
-  private String fromTime = "";
-  private String toTime = "";
+  private Date fromTime = null;
+  private Date toTime = null;
   private String timeZone = "";
   private String resultFormat = "";
+  private List<NameValuePair> customParams = null;
 
   public String getQuery() {
     return query;
@@ -33,20 +28,20 @@ public class SearchQuery {
     return this;
   }
 
-  public String getFromTime() {
+  public Date getFromTime() {
     return fromTime;
   }
 
-  public SearchQuery setFromTime(String fromTime) {
+  public SearchQuery setFromTime(Date fromTime) {
     this.fromTime = fromTime;
     return this;
   }
 
-  public String getToTime() {
+  public Date getToTime() {
     return toTime;
   }
 
-  public SearchQuery setToTime(String toTime) {
+  public SearchQuery setToTime(Date toTime) {
     this.toTime = toTime;
     return this;
   }
@@ -69,7 +64,16 @@ public class SearchQuery {
     return this;
   }
 
-  public SearchQuery(){
+  public List<NameValuePair> getCustomParams() {
+    return customParams;
+  }
+
+  public SearchQuery setCustomParams(List<NameValuePair> customParams) {
+    this.customParams = customParams;
+    return this;
+  }
+
+  public SearchQuery() {
   }
 
   public SearchQuery(String searchQuery) {
@@ -78,15 +82,18 @@ public class SearchQuery {
 
   public String formQueryUri() {
     List<NameValuePair> params = new ArrayList<NameValuePair>();
-    params.add(new BasicNameValuePair("q", query));
-    if (!fromTime.isEmpty()) {
-      params.add(new BasicNameValuePair("from", fromTime));
+    if (customParams != null && !customParams.isEmpty()) {
+      params.addAll(this.customParams);
     }
-    if (!toTime.isEmpty()) {
-      params.add(new BasicNameValuePair("to", fromTime));
+    params.add(new BasicNameValuePair("q", query));
+    if (fromTime != null) {
+      params.add(new BasicNameValuePair("from", String.valueOf(fromTime.getTime())));
+    }
+    if (toTime != null) {
+      params.add(new BasicNameValuePair("to", String.valueOf(toTime.getTime())));
     }
     if (!timeZone.isEmpty()) {
-      params.add(new BasicNameValuePair("tz", fromTime));
+      params.add(new BasicNameValuePair("tz", timeZone));
     }
     if (!resultFormat.isEmpty()) {
       params.add(new BasicNameValuePair("format", resultFormat));
