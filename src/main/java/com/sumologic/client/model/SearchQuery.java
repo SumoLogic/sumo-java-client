@@ -10,9 +10,7 @@ import java.util.*;
 public class SearchQuery {
   private String query = "";
   private Date fromTime = null;
-  private String fromTimeISO8601 = "";
   private Date toTime = null;
-  private String toTimeISO8601 = "";
   private String timeZone = "";
 
   public SearchQuery() {
@@ -30,23 +28,6 @@ public class SearchQuery {
   public SearchQuery setQuery(String query) {
     this.query = query;
     return this;
-  }
-
-  public String getFromTimeISO8601() {
-    return fromTimeISO8601;
-  }
-
-  public SearchQuery setFromTimeISO8601(String fromTimeISO8601) {
-    this.fromTimeISO8601 = fromTimeISO8601;
-    return this;
-  }
-
-  public String getToTimeISO8601() {
-    return toTimeISO8601;
-  }
-
-  public void setToTimeISO8601(String toTimeISO8601) {
-    this.toTimeISO8601 = toTimeISO8601;
   }
 
   public Date getFromTime() {
@@ -88,12 +69,6 @@ public class SearchQuery {
     }
     if (!timeZone.isEmpty()) {
       params.add(new BasicNameValuePair("tz", timeZone));
-    }
-    if (!fromTimeISO8601.isEmpty()) {
-      params.add(new BasicNameValuePair("from", fromTimeISO8601));
-    }
-    if(!toTimeISO8601.isEmpty()) {
-      params.add(new BasicNameValuePair("to", toTimeISO8601));
     }
     return URLEncodedUtils.format(params, "UTF-8");
   }

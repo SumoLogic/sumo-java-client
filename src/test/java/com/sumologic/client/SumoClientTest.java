@@ -29,7 +29,7 @@ public class SumoClientTest {
     //list.add(new BasicNameValuePair("to", "2012-05-16"));
     //list.add(new BasicNameValuePair("from", "2012-05-17"));
     SearchResponse response = sumoClient.search(
-        new SearchQuery("error").setFromTimeISO8601("2012-05-17"));
+        new SearchQuery("error"));
     //    searchQuery.setResultFormat("json"));
     assert(response.getLogMessages().size() > 0);
     for(LogMessage log: response.getLogMessages()){
