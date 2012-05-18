@@ -14,7 +14,6 @@ public class SearchQuery {
   private Date toTime = null;
   private String toTimeISO8601 = "";
   private String timeZone = "";
-//  private Map<String, String> customParamsMap;
 
   public SearchQuery() {
   }
