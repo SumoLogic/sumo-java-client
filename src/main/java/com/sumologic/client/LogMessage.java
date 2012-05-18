@@ -5,6 +5,10 @@ import java.util.Map;
 public class LogMessage {
   private Map<String,String> rawMessageMap;
 
+  public Map<String, String> getRawMessageMap() {
+    return this.rawMessageMap;
+  }
+
   public String getField(String fieldName) {
     if(this.rawMessageMap.containsKey(fieldName)) {
       return rawMessageMap.get(fieldName);
