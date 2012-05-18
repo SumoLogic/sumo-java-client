@@ -12,31 +12,27 @@ import org.apache.http.client.ResponseHandler;
 
 
 public class SumoClient implements Sumo {
-  private static SumoClient ourInstance = new SumoClient();
-  private static DefaultHttpClient httpClient = new DefaultHttpClient();
-  private static String sumoApiUrl = "service.sumologic.com";
+  private String sumoApiUrl = "service.sumologic.com";
+  private Credential credential;
+
+  public SumoClient(Credential credential) {
+    this.credential = credential;
+  }
 
   public String getSumoApiUrl() {
     return sumoApiUrl;
   }
 
   public void setSumoApiUrl(String url) {
-    SumoClient.sumoApiUrl = url;
-  }
-
-  public SumoClient getOurInstance() {
-    return ourInstance;
-  }
-
-
-
-  public void setCredential(Credential credential) {
-    httpClient.getCredentialsProvider().setCredentials(
-        new AuthScope(sumoApiUrl, 443),
-        new UsernamePasswordCredentials(credential.getEmail(), credential.getPassword()));
+    this.sumoApiUrl = url;
   }
 
   public SearchResponse search(SearchQuery query) throws Exception {
+    DefaultHttpClient httpClient = new DefaultHttpClient();
+    httpClient.getCredentialsProvider().setCredentials(
+        new AuthScope(sumoApiUrl, 443),
+        new UsernamePasswordCredentials(credential.getEmail(), credential.getPassword()));
+
     SearchResponse response = null;
     HttpGet searchGetMethod = new HttpGet(URIUtils.createURI("https", sumoApiUrl, -1,
         "/api/v1/logs/search", query.formQueryUri(), null));
@@ -49,17 +45,6 @@ public class SumoClient implements Sumo {
       searchGetMethod.abort();
     }
     return response;
-  }
-
-  public SumoClient getInstance() {
-    return ourInstance;
-  }
-
-  public SumoClient() {
-  }
-
-  public SumoClient(Credential credential) {
-    this.setCredential(credential);
   }
 
 }

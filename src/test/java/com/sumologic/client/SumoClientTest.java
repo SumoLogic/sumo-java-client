@@ -16,12 +16,11 @@ public class SumoClientTest {
   public void testSearch() throws Exception {
     userEmail = "daphy@demo.com";
     userPassword = "Whatever0987";
-    sumoClient = new SumoClient();
-    credential = new Credential(userEmail, userPassword);
 
+    credential = new Credential(userEmail, userPassword);
+    sumoClient = new SumoClient(credential);
     //SearchQuery searchQuery = new SearchQuery("error");
     sumoClient.setSumoApiUrl("nite-api.sumologic.net");
-    sumoClient.setCredential(credential);
     //Date currentTime = new Date();
     //Date oneHourBefore = new Date(currentTime.getTime() - 1000 * 60 * 60);
     //System.out.println(oneHourBefore.toString());
@@ -30,7 +29,7 @@ public class SumoClientTest {
     //list.add(new BasicNameValuePair("to", "2012-05-16"));
     //list.add(new BasicNameValuePair("from", "2012-05-17"));
     SearchResponse response = sumoClient.search(
-        new SearchQuery("error").addCustomParam("format", "json"));
+        new SearchQuery("error").setFromTimeISO8601("2012-05-17"));
     //    searchQuery.setResultFormat("json"));
     assert(response.getLogMessages().size() > 0);
     for(LogMessage log: response.getLogMessages()){

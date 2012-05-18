@@ -10,10 +10,19 @@ import java.util.*;
 public class SearchQuery {
   private String query = "";
   private Date fromTime = null;
+  private String fromTimeISO8601 = "";
   private Date toTime = null;
+  private String toTimeISO8601 = "";
   private String timeZone = "";
-  private String resultFormat = "";
-  private Map<String, String> customParamsMap;
+//  private Map<String, String> customParamsMap;
+
+  public SearchQuery() {
+  }
+
+  public SearchQuery(String searchQuery) {
+    query = searchQuery;
+  }
+
 
   public String getQuery() {
     return query;
@@ -22,6 +31,23 @@ public class SearchQuery {
   public SearchQuery setQuery(String query) {
     this.query = query;
     return this;
+  }
+
+  public String getFromTimeISO8601() {
+    return fromTimeISO8601;
+  }
+
+  public SearchQuery setFromTimeISO8601(String fromTimeISO8601) {
+    this.fromTimeISO8601 = fromTimeISO8601;
+    return this;
+  }
+
+  public String getToTimeISO8601() {
+    return toTimeISO8601;
+  }
+
+  public void setToTimeISO8601(String toTimeISO8601) {
+    this.toTimeISO8601 = toTimeISO8601;
   }
 
   public Date getFromTime() {
@@ -51,56 +77,10 @@ public class SearchQuery {
     return this;
   }
 
-  public String getResultFormat() {
-    return resultFormat;
-  }
-
-  public SearchQuery setResultFormat(String resultFormat) {
-    this.resultFormat = resultFormat;
-    return this;
-  }
-
-  public Map<String, String> getCustomParamsMap() {
-    return customParamsMap;
-  }
-
-  public SearchQuery setCustomParams(Map<String, String> customParamsMap) {
-    this.customParamsMap = customParamsMap;
-    return this;
-  }
-
-  public SearchQuery addCustomParams(Map<String, String> customParamsMap) {
-    if (this.customParamsMap == null) {
-      this.customParamsMap = customParamsMap;
-    } else {
-      this.customParamsMap.putAll(customParamsMap);
-    }
-    return this;
-  }
-
-  public SearchQuery addCustomParam(String key, String value) {
-    if (this.customParamsMap == null) {
-      this.customParamsMap = new HashMap<String, String>();
-    }
-    this.customParamsMap.put(key, value);
-    return this;
-  }
-
-  public SearchQuery() {
-  }
-
-  public SearchQuery(String searchQuery) {
-    query = searchQuery;
-  }
-
   public String formQueryUri() {
     List<NameValuePair> params = new ArrayList<NameValuePair>();
     params.add(new BasicNameValuePair("q", query));
-    if (this.customParamsMap != null) {
-      for (Map.Entry<String, String> param : this.customParamsMap.entrySet()) {
-        params.add(new BasicNameValuePair(param.getKey(), param.getValue()));
-      }
-    }
+    params.add(new BasicNameValuePair("format", "json")); // SearchResponse only accept json.
     if (fromTime != null) {
       params.add(new BasicNameValuePair("from", String.valueOf(fromTime.getTime())));
     }
@@ -110,8 +90,11 @@ public class SearchQuery {
     if (!timeZone.isEmpty()) {
       params.add(new BasicNameValuePair("tz", timeZone));
     }
-    if (!resultFormat.isEmpty()) {
-      params.add(new BasicNameValuePair("format", resultFormat));
+    if (!fromTimeISO8601.isEmpty()) {
+      params.add(new BasicNameValuePair("from", fromTimeISO8601));
+    }
+    if(!toTimeISO8601.isEmpty()) {
+      params.add(new BasicNameValuePair("to", toTimeISO8601));
     }
     return URLEncodedUtils.format(params, "UTF-8");
   }
