@@ -13,10 +13,18 @@ import org.codehaus.jackson.type.TypeReference;
 
 public class SearchResponse {
 
-  //private List<Map<String,Object>> logMessages;
   private List<LogMessage> logMessages;
+  private String searchQueryUri;
 
-  //public List<Map<String, Object>> getLogMessages() {
+  public String getSearchQueryUri() {
+    return searchQueryUri;
+  }
+
+  public void setSearchQueryUri(String searchQueryUri) {
+    this.searchQueryUri = searchQueryUri;
+  }
+
+
   public List<LogMessage> getLogMessages() {
     return logMessages;
   }

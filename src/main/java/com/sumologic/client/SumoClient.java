@@ -36,11 +36,12 @@ public class SumoClient implements Sumo {
     SearchResponse response = null;
     HttpGet searchGetMethod = new HttpGet(URIUtils.createURI("https", sumoApiUrl, -1,
         "/api/v1/logs/search", query.formQueryUri(), null));
-    System.out.println(searchGetMethod.getURI());
+
     try {
       ResponseHandler<String> responseHandler = new BasicResponseHandler();
       String responseBody = httpClient.execute(searchGetMethod, responseHandler);
       response = new SearchResponse(responseBody);
+      response.setSearchQueryUri(searchGetMethod.getURI().toString());
     } finally {
       searchGetMethod.abort();
     }
