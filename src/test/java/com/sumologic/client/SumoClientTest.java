@@ -1,19 +1,15 @@
-import com.sumologic.client.*;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.junit.Before;
-import org.junit.Test;
+package com.sumologic.client;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.sumologic.client.model.SearchQuery;
+import com.sumologic.client.model.SearchResponse;
+import org.junit.Test;
 
 public class SumoClientTest {
 
-  private static SumoClient sumoClient;
-  private static Credential credential;
-  private static String userEmail;
-  private static String userPassword;
+  private SumoClient sumoClient;
+  private Credential credential;
+  private String userEmail;
+  private String userPassword;
 
 
   @Test
@@ -23,7 +19,7 @@ public class SumoClientTest {
     sumoClient = new SumoClient();
     credential = new Credential(userEmail, userPassword);
 
-    SearchQuery searchQuery = new SearchQuery("error");
+    //SearchQuery searchQuery = new SearchQuery("error");
     sumoClient.setSumoApiUrl("nite-api.sumologic.net");
     sumoClient.setCredential(credential);
     //Date currentTime = new Date();
@@ -34,10 +30,11 @@ public class SumoClientTest {
     //list.add(new BasicNameValuePair("to", "2012-05-16"));
     //list.add(new BasicNameValuePair("from", "2012-05-17"));
     SearchResponse response = sumoClient.search(
-        searchQuery.setResultFormat("json"));
+        new SearchQuery("error").addCustomParam("format", "json"));
+    //    searchQuery.setResultFormat("json"));
     assert(response.getLogMessages().size() > 0);
     for(LogMessage log: response.getLogMessages()){
-      System.out.println(log.getRawMessage());
+      System.out.println(log.getReceiptTime());
     }
   }
 

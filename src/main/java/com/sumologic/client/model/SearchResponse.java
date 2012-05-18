@@ -1,10 +1,11 @@
-package com.sumologic.client;
+package com.sumologic.client.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.sumologic.client.LogMessage;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -28,7 +29,8 @@ public class SearchResponse {
     try {
       logMessages = new ArrayList<LogMessage>();
       List<Map<String, String>> messages =
-          mapper.readValue(response, new TypeReference<List<Map<String, String>>>(){});
+          mapper.readValue(response, new TypeReference<List<Map<String, String>>>() {
+          });
       for(Map<String,String> message : messages) {
         logMessages.add(new LogMessage(message));
       }

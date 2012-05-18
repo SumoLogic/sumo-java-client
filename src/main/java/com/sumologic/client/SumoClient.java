@@ -1,5 +1,7 @@
 package com.sumologic.client;
 
+import com.sumologic.client.model.SearchQuery;
+import com.sumologic.client.model.SearchResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
@@ -14,15 +16,15 @@ public class SumoClient implements Sumo {
   private static DefaultHttpClient httpClient = new DefaultHttpClient();
   private static String sumoApiUrl = "service.sumologic.com";
 
-  public static String getSumoApiUrl() {
+  public String getSumoApiUrl() {
     return sumoApiUrl;
   }
 
-  public static void setSumoApiUrl(String url) {
+  public void setSumoApiUrl(String url) {
     SumoClient.sumoApiUrl = url;
   }
 
-  public static SumoClient getOurInstance() {
+  public SumoClient getOurInstance() {
     return ourInstance;
   }
 
@@ -49,7 +51,7 @@ public class SumoClient implements Sumo {
     return response;
   }
 
-  public static SumoClient getInstance() {
+  public SumoClient getInstance() {
     return ourInstance;
   }
 
