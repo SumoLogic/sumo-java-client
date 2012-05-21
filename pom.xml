@@ -30,6 +30,19 @@
       </plugin>
     </plugins>
   </build>
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sumo-snapshots</id>
+      <name>Sumo Snapshots</name>
+      <url>https://nexus.kumoroku.com/nexus/content/repositories/sumo-snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sumo-releases</id>
+      <name>Sumo Snapshots</name>
+      <url>https://nexus.kumoroku.com/nexus/content/repositories/sumo-releases/</url>
+    </repository>
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
