@@ -1,0 +1,18 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>dir</format>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <unpack>false</unpack>
+
+        </dependencySet>
+    </dependencySets>
+</assembly> 
+
+

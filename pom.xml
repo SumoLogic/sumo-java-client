@@ -7,6 +7,29 @@
   <groupId>sumo-java-client</groupId>
   <artifactId>sumo-java-client</artifactId>
   <version>1.0</version>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <verbose>true</verbose>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
   <dependencies>
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -24,6 +47,11 @@
       <artifactId>junit</artifactId>
       <version>4.8.1</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jasypt</groupId>
+      <artifactId>jasypt</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 
