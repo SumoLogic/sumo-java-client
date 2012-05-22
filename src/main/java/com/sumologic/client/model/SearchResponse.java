@@ -32,18 +32,14 @@ public class SearchResponse {
   public SearchResponse() {
   }
 
-  public SearchResponse(String response) {
+  public SearchResponse(String response) throws Exception {
     ObjectMapper mapper = new ObjectMapper();
-    try {
-      logMessages = new ArrayList<LogMessage>();
-      List<Map<String, String>> messages =
-          mapper.readValue(response, new TypeReference<List<Map<String, String>>>() {
-          });
-      for(Map<String,String> message : messages) {
-        logMessages.add(new LogMessage(message));
-      }
-    } catch (Exception e) {
-      System.out.println(e.toString());
+    logMessages = new ArrayList<LogMessage>();
+    List<Map<String, String>> messages =
+        mapper.readValue(response, new TypeReference<List<Map<String, String>>>() {
+        });
+    for (Map<String, String> message : messages) {
+      logMessages.add(new LogMessage(message));
     }
   }
 }
