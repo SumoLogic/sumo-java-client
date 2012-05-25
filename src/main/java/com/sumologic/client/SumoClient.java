@@ -65,7 +65,7 @@ public class SumoClient implements Sumo {
           searchResponse = new SearchResponse(writer.toString());
           searchResponse.setSearchQueryUri(searchGetMethod.getURI().toString());
         } else {
-          throw new ServerException(writer.toString());
+          throw new ServerException(searchGetMethod.getURI().toString(), writer.toString());
         }
       } catch (IOException ex) {
         throw ex;

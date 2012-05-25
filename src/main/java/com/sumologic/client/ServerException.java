@@ -9,6 +9,7 @@ public class ServerException extends Exception{
   private int statusCode;
   private String errorId;
   private String errorCode;
+  private String queryUri;
   private String message;
 
   public ServerException() {
@@ -16,8 +17,9 @@ public class ServerException extends Exception{
     statusCode = -1;
   }
 
-  public ServerException(String jsonString) throws Exception{
+  public ServerException(String queryUri, String jsonString) throws Exception{
     super();
+    this.queryUri = queryUri;
     ObjectMapper mapper = new ObjectMapper();
     Map<String, String> errorResponseMap = mapper.readValue(
         jsonString, new TypeReference<Map<String,String>>() {});
@@ -37,6 +39,10 @@ public class ServerException extends Exception{
 
   public String getErrorCode() {
     return errorCode;
+  }
+
+  public String getQueryUri() {
+    return queryUri;
   }
 
   public String getMessage() {
