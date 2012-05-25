@@ -5,7 +5,7 @@ import org.codehaus.jackson.type.TypeReference;
 
 import java.util.Map;
 
-public class ServerException extends Exception{
+public class ServerException extends Exception {
   private int statusCode;
   private String errorId;
   private String errorCode;
@@ -17,16 +17,21 @@ public class ServerException extends Exception{
     statusCode = -1;
   }
 
-  public ServerException(String queryUri, String jsonString) throws Exception{
+  public ServerException(String queryUri, String jsonString) throws Exception {
     super();
     this.queryUri = queryUri;
     ObjectMapper mapper = new ObjectMapper();
-    Map<String, String> errorResponseMap = mapper.readValue(
-        jsonString, new TypeReference<Map<String,String>>() {});
-    statusCode = Integer.parseInt(errorResponseMap.get("status"));
-    errorId = errorResponseMap.get("id");
-    errorCode = errorResponseMap.get("code");
-    message = errorResponseMap.get("message");
+    try {
+      Map<String, String> errorResponseMap = mapper.readValue(
+          jsonString, new TypeReference<Map<String, String>>() {
+      });
+      statusCode = Integer.parseInt(errorResponseMap.get("status"));
+      errorId = errorResponseMap.get("id");
+      errorCode = errorResponseMap.get("code");
+      message = errorResponseMap.get("message");
+    } catch (Exception e) {
+      throw new Exception("Exception while parsing json:\n" + jsonString, e);
+    }
   }
 
   public int getStatusCode() {
