@@ -6,6 +6,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,7 @@ public final class SearchResult {
     public final List<LogMessage> getMessages() {
         return messages;
     }
+
     /**
      * Returns the number of log messages.
      *
@@ -53,6 +55,17 @@ public final class SearchResult {
      */
     public final int size() {
         return messages.size();
+    }
+
+    /**
+     * Returns the raw log lines assembled in one string
+     *
+     * @return The raw log lines of this result.
+     */
+    @Override public String toString() {
+        StringBuffer buf = new StringBuffer();
+        for (LogMessage msg: messages) buf.append(msg.toString()+"\n");
+        return buf.toString();
     }
 
     private ArrayList<LogMessage> messages;

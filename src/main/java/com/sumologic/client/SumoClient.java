@@ -67,6 +67,15 @@ public class SumoClient implements SumoLogs {
     }
 
     /**
+     * Sets the HTTP(s) port of sumo's log web service.
+     *
+     * @param port The HTTP(s) port.
+     */
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    /**
      * Issues a search query using Sumo Logic's web service.
      *
      * @param query The search Query
@@ -77,7 +86,7 @@ public class SumoClient implements SumoLogs {
 
         // Create http client and set credentials for HTTP auth
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(new AuthScope(hostname, 443),
+        httpClient.getCredentialsProvider().setCredentials(new AuthScope(hostname, port),
                 new UsernamePasswordCredentials(credential.getEmail(), credential.getPassword()));
 
         // Try to issue query
@@ -87,8 +96,17 @@ public class SumoClient implements SumoLogs {
         try {
             // Issue http get request
             searchGetMethod = new HttpGet(
-                    URIUtils.createURI(useHTTPs ? "https" : "http", hostname, -1,
-                            "/" + Headers.API_SERVICE + "/" + Headers.VERSION_PREFIX + "1/" + Headers.LOGS_SERVICE + "/" + Headers.SEARCH, query.toString(), null)
+                    URIUtils.createURI(
+                            useHTTPs ? "https" : "http",
+                            hostname,
+                            -1,
+                            "/" + Headers.API_SERVICE +
+                                    "/" + Headers.VERSION_PREFIX + "1" +
+                                    "/" + Headers.LOGS_SERVICE +
+                                    "/" + Headers.SEARCH,
+                            query.toString(),
+                            null
+                    )
             );
             HttpResponse response = httpClient.execute(searchGetMethod);
             HttpEntity entity = response.getEntity();
@@ -170,6 +188,7 @@ public class SumoClient implements SumoLogs {
     }
 
     private boolean useHTTPs = true;
+    private int port = 443;
     private String hostname = "service.sumologic.com";
     private Credential credential;
     private static JsonFactory jsonFactory = new JsonFactory();
