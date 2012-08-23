@@ -202,6 +202,6 @@ public final class SearchQuery {
     private Date toTime = null;
     private long limit = 0;
     private long offset = 0;
-    private SearchOrder order;
+    private SearchOrder order = SearchOrder.DEFAULT;
     private String timeZone = "";
 }

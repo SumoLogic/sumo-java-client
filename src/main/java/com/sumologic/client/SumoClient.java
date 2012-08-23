@@ -1,5 +1,9 @@
 package com.sumologic.client;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.model.SearchQuery;
 import com.sumologic.client.model.SearchResult;
 import org.apache.http.HttpEntity;
@@ -9,14 +13,9 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.*;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * The sumo client implementation.
@@ -59,11 +58,16 @@ public class SumoClient implements SumoLogs {
     /**
      * Sets the flag indicating whether https should be
      * used for connecting to the web-service.
+     * <p/>
+     * <p></p><b>Note:</b> This method resets the server
+     * port to a default value (80/443).</p>
      *
      * @param useHTTPs True, if HTTPS should be used (default).
      */
     public void setUseHTTPs(boolean useHTTPs) {
         this.useHTTPs = useHTTPs;
+        if (this.useHTTPs) port = 443;
+        else port = 80;
     }
 
     /**
@@ -92,21 +96,20 @@ public class SumoClient implements SumoLogs {
         // Try to issue query
         HttpGet searchGetMethod = null;
         InputStream httpStream = null;
-        SearchResult searchResult = new SearchResult(query);
         try {
             // Issue http get request
             searchGetMethod = new HttpGet(
-                    URIUtils.createURI(
-                            useHTTPs ? "https" : "http",
-                            hostname,
-                            -1,
-                            "/" + Headers.API_SERVICE +
-                                    "/" + Headers.VERSION_PREFIX + "1" +
-                                    "/" + Headers.LOGS_SERVICE +
-                                    "/" + Headers.SEARCH,
-                            query.toString(),
-                            null
-                    )
+                URIUtils.createURI(
+                    useHTTPs ? "https" : "http",
+                    hostname + (((port != 443 && useHTTPs) || (port != 80 && !useHTTPs)) ? ":" + port : ""),
+                    -1,
+                    "/" + Headers.API_SERVICE +
+                            "/" + Headers.VERSION_PREFIX + "1" +
+                            "/" + Headers.LOGS_SERVICE +
+                            "/" + Headers.SEARCH,
+                    query.toString(),
+                    null
+                )
             );
             HttpResponse response = httpClient.execute(searchGetMethod);
             HttpEntity entity = response.getEntity();
@@ -116,14 +119,20 @@ public class SumoClient implements SumoLogs {
             if (response.getStatusLine().getStatusCode() == 200) {
 
                 // Parse all JSON records
+                SearchResult searchResult = new SearchResult(query);
                 JsonParser jp = jsonFactory.createJsonParser(httpStream);
-                ArrayList<HashMap<String, String>> messages =
-                        jp.readValueAs(new TypeReference<ArrayList<HashMap<String, String>>>() {
-                        });
-
-                // Add to result
-                for (HashMap<String, String> message : messages) {
-                    searchResult.getMessages().add(new LogMessage(message));
+                if  (jp.nextToken() != JsonToken.START_ARRAY) {
+                    return searchResult;
+                }
+                while (jp.nextToken() == JsonToken.START_OBJECT) {
+                    LogMessage msg = new LogMessage();
+                    while (jp.nextToken() != JsonToken.END_OBJECT) {
+                        String key = jp.getCurrentName();
+                        jp.nextToken();
+                        String value = jp.getText();
+                        msg.getInternalMap().put(key, value);
+                    }
+                    searchResult.getMessages().add(msg);
                 }
 
                 // Finished

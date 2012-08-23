@@ -1,4 +1,6 @@
-package com.sumologic.client;
+package com.sumologic.client.model;
+
+import com.sumologic.client.Headers;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,7 +18,7 @@ public class LogMessage {
     /**
      * Constructs a empty log message (usually done by the client).
      */
-    protected LogMessage() {
+    public LogMessage() {
         map = new HashMap<String, String>();
     }
 
@@ -25,7 +27,7 @@ public class LogMessage {
      *
      * @param map The fields of the log message.
      */
-    protected LogMessage( HashMap<String, String> map ) {
+    public LogMessage( HashMap<String, String> map ) {
         this.map = map;
     }
 

@@ -1,17 +1,18 @@
-package com.sumologic.client;
+package com.sumologic.client.examples;
 
+import com.sumologic.client.Credential;
+import com.sumologic.client.model.LogMessage;
+import com.sumologic.client.SumoClient;
+import com.sumologic.client.SumoException;
 import com.sumologic.client.model.SearchQuery;
 import com.sumologic.client.model.SearchResult;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import java.util.Date;
 
-public class SumoClientTest {
+public class SumoClientExamples {
 
     private static SumoClient sumoClient;
 
-    @BeforeClass
+//    @BeforeClass
     public static void oneTimeSetUp() {
         String userEmail = "daphy@demo.com";
         String userPassword = "XXXXXXX";
@@ -21,7 +22,7 @@ public class SumoClientTest {
         sumoClient.setHostname("nite-api.sumologic.net");
     }
 
-    @Test
+//    @Test
     public void testDefaultSearchQuery() throws Exception {
         SearchResult result = sumoClient.search(
                 new SearchQuery("error"));
@@ -30,7 +31,7 @@ public class SumoClientTest {
         for (LogMessage msg : result.getMessages()) System.out.println(msg);
     }
 
-    @Test
+//    @Test
     public void testGettingCustomizedFieldInLogMessages() throws SumoException {
         SearchResult result = sumoClient.search(new SearchQuery("error"));
         assert (result.size() > 0);
@@ -38,7 +39,7 @@ public class SumoClientTest {
         for (LogMessage log : result.getMessages()) System.out.println(log.getSourceHost());
     }
 
-    @Test
+//    @Test
     public void testSearchForOneHour() throws SumoException {
         Date currentTime = new Date();
         Date oneHourBefore = new Date(currentTime.getTime() - 1000 * 60 * 60);

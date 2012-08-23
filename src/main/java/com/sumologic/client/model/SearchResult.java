@@ -1,15 +1,7 @@
 package com.sumologic.client.model;
 
-import com.sumologic.client.LogMessage;
-import com.sumologic.client.SumoClientException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The search response is an array of log messages with some additional
