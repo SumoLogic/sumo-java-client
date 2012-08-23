@@ -1,7 +1,11 @@
 package com.sumologic.client;
 
-import com.sumologic.client.model.SearchQuery;
-import com.sumologic.client.model.SearchResult;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.sumologic.client.model.LogMessage;
+import com.sumologic.client.model.SearchRequest;
+import com.sumologic.client.model.SearchResponse;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -9,13 +13,11 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.type.TypeReference;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.HashMap;
 
 /**
@@ -25,15 +27,20 @@ import java.util.HashMap;
  * @author Daphne Hsieh
  * @version 1.0
  */
-public class SumoClient implements SumoLogs {
+public class SumoLogicClient implements SumoLogic {
+    private int port = 443;
+    private String protocol = "https";
+    private String hostname = "service.sumologic.com";
+    private Credentials credentials;
+    private static JsonFactory jsonFactory = new JsonFactory();
 
     /**
      * Constructs a Sumo Logic client.
      *
-     * @param credential The credential used to access sumo logic's web service.
+     * @param credentials The credential used to access sumo logic's web service.
      */
-    public SumoClient(Credential credential) {
-        this.credential = credential;
+    public SumoLogicClient(Credentials credentials) {
+        this.credentials = credentials;
     }
 
     /**
@@ -42,69 +49,55 @@ public class SumoClient implements SumoLogs {
      * @param email    Your email
      * @param password Your password
      */
-    public SumoClient(String email, String password) {
-        this.credential = new Credential(email, password);
+    public SumoLogicClient(String email, String password) {
+        this.credentials = new Credentials(email, password);
     }
 
     /**
-     * Sets a custom Sumo Logic API hostname, i.e.,
-     * different from api.sumologic.com
+     * Sets a custom Sumo Logic API url, i.e.,
+     * different from https://api.sumologic.com
      *
-     * @param hostname The custom sumo logic api hostname
+     * @param urlString The custom sumo logic api URL
+     * @throws MalformedURLException On URL syntax error
      */
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    /**
-     * Sets the flag indicating whether https should be
-     * used for connecting to the web-service.
-     *
-     * @param useHTTPs True, if HTTPS should be used (default).
-     */
-    public void setUseHTTPs(boolean useHTTPs) {
-        this.useHTTPs = useHTTPs;
-    }
-
-    /**
-     * Sets the HTTP(s) port of sumo's log web service.
-     *
-     * @param port The HTTP(s) port.
-     */
-    public void setPort(int port) {
-        this.port = port;
+    public void setURL(String urlString) throws MalformedURLException {
+        URL url = new URL(urlString);
+        this.hostname = url.getHost();
+        this.port = (url.getPort() == -1) ?
+                (url.getDefaultPort() == -1 ? 80 : url.getDefaultPort()) : url.getPort();
+        this.protocol = url.getProtocol();
     }
 
     /**
      * Issues a search query using Sumo Logic's web service.
      *
-     * @param query The search Query
+     * @param request The search Query
      * @return The resulting log messages
-     * @throws SumoException Client or server exception
      */
-    public SearchResult search(SearchQuery query) throws SumoException {
+    public SearchResponse search(SearchRequest request) {
 
         // Create http client and set credentials for HTTP auth
         DefaultHttpClient httpClient = new DefaultHttpClient();
         httpClient.getCredentialsProvider().setCredentials(new AuthScope(hostname, port),
-                new UsernamePasswordCredentials(credential.getEmail(), credential.getPassword()));
+                new UsernamePasswordCredentials(credentials.getEmail(), credentials.getPassword()));
 
         // Try to issue query
         HttpGet searchGetMethod = null;
         InputStream httpStream = null;
-        SearchResult searchResult = new SearchResult(query);
+        JsonParser jp = null;
+        SearchResponse searchResponse = null;
         try {
             // Issue http get request
             searchGetMethod = new HttpGet(
                     URIUtils.createURI(
-                            useHTTPs ? "https" : "http",
-                            hostname,
+                            protocol,
+                            hostname + ":" + port,
                             -1,
-                            "/" + Headers.API_SERVICE +
-                                    "/" + Headers.VERSION_PREFIX + "1" +
-                                    "/" + Headers.LOGS_SERVICE +
-                                    "/" + Headers.SEARCH,
-                            query.toString(),
+                            "/" + UrlParameters.API_SERVICE +
+                                    "/" + UrlParameters.VERSION_PREFIX + "1" +
+                                    "/" + UrlParameters.LOGS_SERVICE +
+                                    "/" + UrlParameters.SEARCH,
+                            request.toString(),
                             null
                     )
             );
@@ -116,32 +109,32 @@ public class SumoClient implements SumoLogs {
             if (response.getStatusLine().getStatusCode() == 200) {
 
                 // Parse all JSON records
-                JsonParser jp = jsonFactory.createJsonParser(httpStream);
-                ArrayList<HashMap<String, String>> messages =
-                        jp.readValueAs(new TypeReference<ArrayList<HashMap<String, String>>>() {
-                        });
-
-                // Add to result
-                for (HashMap<String, String> message : messages) {
-                    searchResult.getMessages().add(new LogMessage(message));
+                searchResponse = new SearchResponse(request);
+                jp = jsonFactory.createJsonParser(httpStream);
+                if (jp.nextToken() != JsonToken.START_ARRAY) {
+                    return searchResponse;
                 }
-
-                // Finished
-                jp.close();
-                httpClient.getConnectionManager().shutdown();
-                return searchResult;
-
+                while (jp.nextToken() == JsonToken.START_OBJECT) {
+                    HashMap<String, String> map = new HashMap<String, String>();
+                    while (jp.nextToken() != JsonToken.END_OBJECT) {
+                        String key = jp.getCurrentName();
+                        jp.nextToken();
+                        String value = jp.getText();
+                        map.put(key, value);
+                    }
+                    searchResponse.getMessages().add( new LogMessage(map) );
+                }
             }
 
             // no -> get json error and throw exception
             else {
-
                 StringWriter writer = new StringWriter();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(httpStream));
 
                 // Convert response to JSON string
-                for (String s = null; (s = reader.readLine()) != null; )
+                for (String s = null; (s = reader.readLine()) != null; ) {
                     writer.write(s + "\n");
+                }
 
                 throw new SumoServerException(
                         searchGetMethod.getURI().toString(),
@@ -167,6 +160,12 @@ public class SumoClient implements SumoLogs {
 
         // Clean-up
         finally {
+            if (jp != null) try {
+                jp.close();
+            } catch (IOException io) {
+            }
+            httpClient.getConnectionManager().shutdown();
+
             if (httpStream != null) try {
                 httpStream.close();
             } catch (IOException io) {
@@ -174,6 +173,8 @@ public class SumoClient implements SumoLogs {
             if (searchGetMethod != null)
                 searchGetMethod.abort();
         }
+
+        return searchResponse;
     }
 
     /**
@@ -181,15 +182,8 @@ public class SumoClient implements SumoLogs {
      *
      * @param query The sumo log query string
      * @return The search response
-     * @throws SumoException On a client or server exception
      */
-    public SearchResult search(String query) throws SumoException {
-        return search(new SearchQuery(query));
+    public SearchResponse search(String query) {
+        return search(new SearchRequest(query));
     }
-
-    private boolean useHTTPs = true;
-    private int port = 443;
-    private String hostname = "service.sumologic.com";
-    private Credential credential;
-    private static JsonFactory jsonFactory = new JsonFactory();
 }

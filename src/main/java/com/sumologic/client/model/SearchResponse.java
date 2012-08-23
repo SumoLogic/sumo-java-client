@@ -1,15 +1,7 @@
 package com.sumologic.client.model;
 
-import com.sumologic.client.LogMessage;
-import com.sumologic.client.SumoClientException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The search response is an array of log messages with some additional
@@ -18,15 +10,17 @@ import java.util.Map;
  * @author Sebastian Mies
  * @version 1.0
  */
-public final class SearchResult {
+public final class SearchResponse {
+    private ArrayList<LogMessage> messages;
+    private SearchRequest request;
 
     /**
      * Constructs a search response.
      *
-     * @param query The search query that has been used .
+     * @param request The search query that has been used .
      */
-    public SearchResult(SearchQuery query ) {
-        this.query = query;
+    public SearchResponse(SearchRequest request) {
+        this.request = request;
         this.messages = new ArrayList<LogMessage>();
     }
 
@@ -35,8 +29,8 @@ public final class SearchResult {
      *
      * @return The used search query.
      */
-    public final SearchQuery getQuery() {
-        return query;
+    public final SearchRequest getQuery() {
+        return request;
     }
 
     /**
@@ -67,7 +61,4 @@ public final class SearchResult {
         for (LogMessage msg: messages) buf.append(msg.toString()+"\n");
         return buf.toString();
     }
-
-    private ArrayList<LogMessage> messages;
-    private SearchQuery query;
 }

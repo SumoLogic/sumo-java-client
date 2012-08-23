@@ -1,4 +1,6 @@
-package com.sumologic.client;
+package com.sumologic.client.model;
+
+import com.sumologic.client.UrlParameters;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -13,10 +15,12 @@ import java.util.Map;
  */
 public class LogMessage {
 
+    private HashMap<String, String> map;
+
     /**
      * Constructs a empty log message (usually done by the client).
      */
-    protected LogMessage() {
+    public LogMessage() {
         map = new HashMap<String, String>();
     }
 
@@ -25,17 +29,8 @@ public class LogMessage {
      *
      * @param map The fields of the log message.
      */
-    protected LogMessage( HashMap<String, String> map ) {
+    public LogMessage(HashMap<String, String> map) {
         this.map = map;
-    }
-
-    /**
-     * Returns the internal map.
-     *
-     * @return the internal map.
-     */
-    public final Map<String, String> getInternalMap() {
-        return map;
     }
 
     /**
@@ -88,7 +83,7 @@ public class LogMessage {
      * @return The raw log line human-readable string.
      */
     public final String getLogLine() {
-        return stringField(Headers.LOG_MESSAGE_RAW);
+        return stringField(UrlParameters.LOG_MESSAGE_RAW);
     }
 
 
@@ -98,7 +93,7 @@ public class LogMessage {
      * @return The log message time
      */
     public final Date getTime() {
-        return dateField(Headers.LOG_MESSAGE_TIME);
+        return dateField(UrlParameters.LOG_MESSAGE_TIME);
     }
 
     /**
@@ -107,7 +102,7 @@ public class LogMessage {
      * @return The log message receipt time
      */
     public final Date getReceiptTime() {
-        return dateField(Headers.LOG_MESSAGE_RECEIPT_TIME);
+        return dateField(UrlParameters.LOG_MESSAGE_RECEIPT_TIME);
     }
 
     /**
@@ -116,7 +111,7 @@ public class LogMessage {
      * @return The log message source host
      */
     public final String getSourceHost() {
-        return stringField(Headers.LOG_MESSAGE_SOURCE_HOST);
+        return stringField(UrlParameters.LOG_MESSAGE_SOURCE_HOST);
     }
 
 
@@ -126,7 +121,7 @@ public class LogMessage {
      * @return The log message source category
      */
     public final String getSourceCategory() {
-        return stringField(Headers.LOG_MESSAGE_SOURCE_CATEGORY);
+        return stringField(UrlParameters.LOG_MESSAGE_SOURCE_CATEGORY);
     }
 
     /**
@@ -135,7 +130,7 @@ public class LogMessage {
      * @return The log message source name
      */
     public final String getSourceName() {
-        return stringField(Headers.LOG_MESSAGE_SOURCE_NAME);
+        return stringField(UrlParameters.LOG_MESSAGE_SOURCE_NAME);
     }
 
     /**
@@ -144,7 +139,7 @@ public class LogMessage {
      * @return log message line count when results are aggregated.
      */
     public final long getLineCount() {
-        return longField(Headers.LOG_MESSAGE_COUNT);
+        return longField(UrlParameters.LOG_MESSAGE_COUNT);
     }
 
     /**
@@ -153,7 +148,7 @@ public class LogMessage {
      * @return The log message signature
      */
     public final String getSignature() {
-        return stringField(Headers.LOG_MESSAGE_SIGNATURE);
+        return stringField(UrlParameters.LOG_MESSAGE_SIGNATURE);
     }
 
     /**
@@ -161,9 +156,9 @@ public class LogMessage {
      *
      * @return The raw text log line.
      */
-    @Override public String toString() {
+    @Override
+    public String toString() {
         return getLogLine();
     }
 
-    private HashMap<String, String> map;
 }

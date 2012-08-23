@@ -1,21 +1,21 @@
 package com.sumologic.client.examples;
 
-import com.sumologic.client.SumoClient;
 import com.sumologic.client.SumoException;
-import com.sumologic.client.model.SearchResult;
+import com.sumologic.client.SumoLogicClient;
+import com.sumologic.client.model.SearchResponse;
 
 public class HelloWorld {
 
-    public static void main( String[] args ) {
+    public static void main(String[] args) {
         // Create a client
-        SumoClient client = new SumoClient( "user@demo.com", "password" );
+        SumoLogicClient client = new SumoLogicClient("user@demo.com", "password");
 
         try {
             // Search for log lines containing "error"
-            SearchResult result = client.search("error");
+            SearchResponse response = client.search("error");
 
             // Print raw log lines
-            System.out.println( result );
+            System.out.println(response);
         } catch (SumoException e) {
             e.printStackTrace();
         }

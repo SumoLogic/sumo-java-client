@@ -11,6 +11,8 @@ public enum SumoServerErrors implements SumoServerError {
     UNAUTHORIZED("unauthorized"),
     UNAVAILABLE("service.unavailable");
 
+    private String id = "";
+
     SumoServerErrors(String id) {
         this.id = id;
     }
@@ -18,6 +20,4 @@ public enum SumoServerErrors implements SumoServerError {
     public String getId() {
         return id;
     }
-
-    private String id = "";
 }

@@ -7,7 +7,9 @@ package com.sumologic.client;
  * @author Sebastian Mies
  * @version 1.0
  */
-public class Credential {
+public class Credentials {
+    private String email;
+    private String password;
 
     /**
      * Constructs the credentials using email and password.
@@ -15,29 +17,28 @@ public class Credential {
      * @param email Your email
      * @param password Your password
      */
-    public Credential(String email, String password) {
+    public Credentials(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
     /**
-     * Returns the HTTP auth user name
+     * Returns the user name
      *
-     * @return The HTTP auth user name
+     * @return The user name
      */
     public String getEmail() {
         return this.email;
     }
 
     /**
-     * Returns the HTTP auth password
+     * Returns the password
      *
-     * @return The HTTP auth password
+     * @return The password
      */
     public String getPassword() {
         return this.password;
     }
 
-    private String email;
-    private String password;
+
 }

@@ -7,7 +7,7 @@ package com.sumologic.client;
  * @author Sebastian Mies
  * @version 1.0
  */
-public interface Headers {
+public interface UrlParameters {
 
     /**
      * API

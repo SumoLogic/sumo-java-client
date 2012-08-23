@@ -1,6 +1,6 @@
 package com.sumologic.client.model;
 
-import com.sumologic.client.Headers;
+import com.sumologic.client.UrlParameters;
 
 /**
  * The search order which is either ascending or descending (default)
@@ -9,19 +9,21 @@ import com.sumologic.client.Headers;
  * @version 1.0
  */
 public enum SearchOrder {
-    ASCENDING(Headers.SEARCH_ORDER_ASC),
-    DESCENDING(Headers.SEARCH_ORDER_DESC),
-    DEFAULT(Headers.SEARCH_ORDER_DESC);
+    ASCENDING(UrlParameters.SEARCH_ORDER_ASC),
+    DESCENDING(UrlParameters.SEARCH_ORDER_DESC),
+    DEFAULT(UrlParameters.SEARCH_ORDER_DESC);
+
+    private String order;
 
     /**
      * Order of the of the search results.
      *
      * @param order May be either Headers.SEARCH_ORDER_DESC
      *              or Headers.SEARCH_ORDER_ASC
-     * @see Headers
+     * @see com.sumologic.client.UrlParameters
      */
     SearchOrder(String order) {
-        assert(order.equals(Headers.SEARCH_ORDER_DESC) || order.equals(Headers.SEARCH_ORDER_ASC));
+        assert(order.equals(UrlParameters.SEARCH_ORDER_DESC) || order.equals(UrlParameters.SEARCH_ORDER_ASC));
         this.order = order;
     }
 
@@ -34,5 +36,4 @@ public enum SearchOrder {
         return order;
     }
 
-    private String order;
 }

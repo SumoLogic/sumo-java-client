@@ -1,7 +1,7 @@
 package com.sumologic.client;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
@@ -15,6 +15,11 @@ import java.util.Map;
  * @version 1.0
  */
 public class SumoServerException extends SumoException {
+    private String uri;
+    private int status;
+    private String message;
+    private String id;
+    private String code;
 
     /**
      * Constructs a server exception from a JSON error message
@@ -24,6 +29,7 @@ public class SumoServerException extends SumoException {
      * @throws SumoClientException Thrown if the JSON error message contains syntactic errors.
      */
     protected SumoServerException(String uri, String json) throws SumoClientException {
+        super(json);
         this.uri = uri;
 
         // Parse JSON string
@@ -48,7 +54,7 @@ public class SumoServerException extends SumoException {
      *
      * @return The HTTP status code.
      */
-    public final int getStatus() {
+    public final int getHTTPStatus() {
         return status;
     }
 
@@ -58,7 +64,7 @@ public class SumoServerException extends SumoException {
      *
      * @return The identifier of the error
      */
-    public final String getId() {
+    public final String getErrorId() {
         return id;
     }
 
@@ -67,7 +73,7 @@ public class SumoServerException extends SumoException {
      *
      * @return The error code.
      */
-    public final String getCode() {
+    public final String getErrorCode() {
         return code;
     }
 
@@ -77,7 +83,7 @@ public class SumoServerException extends SumoException {
      *
      * @return A the human-readable message
      */
-    public final String getMessage() {
+    public final String getErrorMessage() {
         return message;
     }
 
@@ -100,10 +106,4 @@ public class SumoServerException extends SumoException {
     public boolean equals(SumoServerError error) {
         return error.getId().equals(id.toLowerCase().trim());
     }
-
-    private String uri;
-    private int status;
-    private String message;
-    private String id;
-    private String code;
 }

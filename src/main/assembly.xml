@@ -10,7 +10,6 @@
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
             <unpack>false</unpack>
-
         </dependencySet>
     </dependencySets>
 </assembly> 

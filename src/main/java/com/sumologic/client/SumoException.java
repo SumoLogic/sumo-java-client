@@ -6,7 +6,7 @@ package com.sumologic.client;
  * @author Sebastian Mies
  * @version 1.0
  */
-public class SumoException extends Exception {
+public class SumoException extends RuntimeException {
 
     /**
      * Delegation to Exception ({@see Exception})
