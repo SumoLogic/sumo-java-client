@@ -100,6 +100,7 @@ public class SumoLogicClient implements SumoLogic {
                             request.toString(),
                             null
                     )
+
             );
             HttpResponse response = httpClient.execute(searchGetMethod);
             HttpEntity entity = response.getEntity();
@@ -122,7 +123,7 @@ public class SumoLogicClient implements SumoLogic {
                         String value = jp.getText();
                         map.put(key, value);
                     }
-                    searchResponse.getMessages().add( new LogMessage(map) );
+                    searchResponse.getMessages().add(new LogMessage(map));
                 }
             }
 

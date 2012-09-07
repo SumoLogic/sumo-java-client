@@ -1,0 +1,59 @@
+package com.sumologic.client.examples;
+
+import com.sumologic.client.Credentials;
+import com.sumologic.client.SumoException;
+import com.sumologic.client.SumoLogicClient;
+import com.sumologic.client.model.LogMessage;
+import com.sumologic.client.model.SearchRequest;
+import com.sumologic.client.model.SearchResponse;
+
+import java.net.MalformedURLException;
+import java.util.Date;
+
+public class SumoClientExamples {
+
+    private static SumoLogicClient sumoClient;
+
+    //    @BeforeClass
+    public static void oneTimeSetUp() {
+        String userEmail = "daphy@demo.com";
+        String userPassword = "XXXXXXX";
+
+        Credentials credential = new Credentials(userEmail, userPassword);
+        sumoClient = new SumoLogicClient(credential);
+        try {
+            sumoClient.setURL("https://api.sumologic.net");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    //    @Test
+    public void testDefaultSearchQuery() throws Exception {
+        SearchResponse result = sumoClient.search(new SearchRequest("error"));
+        assert (result.size() > 0);
+        System.out.println("Query: \n" + result.getQuery() + "\nFirst batch Results:");
+        for (LogMessage msg : result.getMessages()) System.out.println(msg);
+    }
+
+    //    @Test
+    public void testGettingCustomizedFieldInLogMessages() throws SumoException {
+        SearchResponse result = sumoClient.search(new SearchRequest("error"));
+        assert (result.size() > 0);
+        System.out.println("Query: \n" + result.getQuery() + "\nFirst batch Results:");
+        for (LogMessage log : result.getMessages()) System.out.println(log.getSourceHost());
+    }
+
+    //    @Test
+    public void testSearchForOneHour() throws SumoException {
+        Date currentTime = new Date();
+        Date oneHourBefore = new Date(currentTime.getTime() - 1000 * 60 * 60);
+        SearchResponse result = sumoClient.search(
+                new SearchRequest("error").withFromTime(oneHourBefore).withToTime(currentTime));
+        System.out.println("Query: \n" + result.getQuery() + "\nFirst batch Results:");
+        assert (result.getMessages().size() > 0);
+        for (LogMessage log : result.getMessages()) {
+            System.out.println(log.getReceiptTime());
+        }
+    }
+}

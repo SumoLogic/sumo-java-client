@@ -1,7 +1,6 @@
 package com.sumologic.client.model;
 
 import com.sumologic.client.UrlParameters;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class LogMessage {
      *
      * @param map The fields of the log message.
      */
-    public LogMessage(HashMap<String, String> map) {
+    public LogMessage( HashMap<String, String> map ) {
         this.map = map;
     }
 
