@@ -11,17 +11,24 @@
     <name>Sumo Logic Java Client Library</name>
     <description>The java client of sumo logic's log management service</description>
     <url>http://www.sumologic.com</url>
+    <developers>
+        <developer>
+            <name>Sebastian Mies</name>
+            <email>sebastian@sumologic.com</email>
+        </developer>
+    </developers>
 
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
+            <distribution>https://oss.sonatype.org/content/repositories/snapshots/</distribution>
         </license>
     </licenses>
 
     <scm>
         <url>http://github.com/SumoLogic/sumo-java-client</url>
+        <connection>https://github.com/SumoLogic/sumo-java-client.git</connection>
     </scm>
 
     <build>
@@ -45,8 +52,27 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <dependencies>
         <dependency>
