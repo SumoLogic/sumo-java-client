@@ -16,15 +16,15 @@ public class SumoClientExamples {
 
     //    @BeforeClass
     public static void oneTimeSetUp() {
-        String userEmail = "daphy@demo.com";
-        String userPassword = "XXXXXXX";
+        String userEmail = "username";
+        String userPassword = "password";
 
         Credentials credential = new Credentials(userEmail, userPassword);
         sumoClient = new SumoLogicClient(credential);
         try {
-            sumoClient.setURL("https://api.sumologic.net");
+            sumoClient.setURL("https://api.sumologic.com");
         } catch (MalformedURLException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
