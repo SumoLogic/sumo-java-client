@@ -22,7 +22,7 @@
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>https://oss.sonatype.org/content/repositories/snapshots/</distribution>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
@@ -52,6 +52,7 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -65,14 +66,15 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
         </plugins>
     </build>
-
+       <!--
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
-    </parent>
+    </parent>-->
 
     <dependencies>
         <dependency>
