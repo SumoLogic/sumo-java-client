@@ -1,9 +1,8 @@
 package com.sumologic.client.model;
 
 import com.sumologic.client.UrlParameters;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.util.*;
 
 /**
  * This class represents a sumo logic log message which is basically
@@ -30,6 +29,15 @@ public class LogMessage {
      */
     public LogMessage( HashMap<String, String> map ) {
         this.map = map;
+    }
+
+    /**
+     * Returns the names of the fields.
+     *
+     * @return A set of field names.
+     */
+    public final Set<String> getFieldNames() {
+      return Collections.unmodifiableSet(map.keySet());
     }
 
     /**
