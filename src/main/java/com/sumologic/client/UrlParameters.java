@@ -1,7 +1,7 @@
 package com.sumologic.client;
 
 /**
- * Common headers used in the sumo web service API.
+ * Common url parameters used in the sumo web service API.
  * Contains all magic numbers/strings for performing the HTTP requests.
  *
  * @author Sebastian Mies
@@ -123,5 +123,4 @@ public interface UrlParameters {
      * The log message signature field's key
      */
     public static String LOG_MESSAGE_SIGNATURE = "_signature";
-
 }

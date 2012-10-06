@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class SumoLogicClient implements SumoLogic {
     private int port = 443;
     private String protocol = "https";
-    private String hostname = "service.sumologic.com";
+    private String hostname = "api.sumologic.com";
     private Credentials credentials;
     private static JsonFactory jsonFactory = new JsonFactory();
 

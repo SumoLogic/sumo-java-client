@@ -6,7 +6,7 @@
 
     <groupId>com.sumologic.api.client</groupId>
     <artifactId>sumo-java-client</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <packaging>jar</packaging>
     <name>Sumo Logic Java Client Library</name>
     <description>The java client of sumo logic's log management service</description>
@@ -52,7 +52,6 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
-            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
@@ -66,16 +65,15 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
         </plugins>
     </build>
-       <!--
+<!--
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>7</version>
-    </parent>-->
-
+    </parent>
+-->
     <dependencies>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
