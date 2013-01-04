@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0
  */
 public final class SearchResponse {
-    private ArrayList<LogMessage> messages;
+    private List<LogMessage> messages;
     private SearchRequest request;
 
     /**
@@ -57,8 +57,8 @@ public final class SearchResponse {
      * @return The raw log lines of this result.
      */
     @Override public String toString() {
-        StringBuffer buf = new StringBuffer();
-        for (LogMessage msg: messages) buf.append(msg.toString()+"\n");
-        return buf.toString();
+        StringBuilder builder = new StringBuilder();
+        for (LogMessage msg: messages) builder.append(msg.toString()+"\n");
+        return builder.toString();
     }
 }
