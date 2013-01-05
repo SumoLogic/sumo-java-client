@@ -1,32 +1,14 @@
 package com.sumologic.client;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sumologic.client.model.LogMessage;
+import com.sumologic.client.collectors.CollectorsClient;
+import com.sumologic.client.model.GetCollectorsRequest;
+import com.sumologic.client.model.GetCollectorsResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
-import com.sumologic.client.util.HttpUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.impl.client.DefaultHttpClient;
 
-import java.io.*;
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The sumo client implementation.
@@ -86,12 +68,31 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     /**
-     * Convenience function: takes a query string as argument
+     * Convenience function: takes a query string as argument.
      *
      * @param query The sumo log query string
      * @return The search response
      */
     public SearchResponse search(String query) {
         return search(new SearchRequest(query));
+    }
+
+    /**
+     * Gets all available Sumo Logic collectors matching the request.
+     *
+     * @param request The request
+     * @return The collectors response
+     */
+    public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
+        return CollectorsClient.get(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Gets all available Sumo Logic collectors.
+     *
+     * @return The collectors response
+     */
+    public GetCollectorsResponse getCollectors() {
+        return getCollectors(new GetCollectorsRequest());
     }
 }

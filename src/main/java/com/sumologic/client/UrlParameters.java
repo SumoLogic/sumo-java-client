@@ -12,17 +12,22 @@ public interface UrlParameters {
     /**
      * API
      */
-    public static String API_SERVICE="api";
+    public static String API_SERVICE = "api";
 
     /**
      * API version prefix
      */
-    public static String VERSION_PREFIX="v";
+    public static String VERSION_PREFIX = "v";
 
     /**
      * Logs sub-tasks
      */
-    public static String LOGS_SERVICE="logs";
+    public static String LOGS_SERVICE = "logs";
+
+    /**
+     * Collectors sub-tasks
+     */
+    public static String COLLECTORS_SERVICE = "collectors";
 
     /**
      * Search query string
@@ -123,4 +128,5 @@ public interface UrlParameters {
      * The log message signature field's key
      */
     public static String LOG_MESSAGE_SIGNATURE = "_signature";
+
 }

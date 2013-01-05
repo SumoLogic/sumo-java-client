@@ -11,17 +11,29 @@ import java.util.List;
  * @version 1.0
  */
 public final class SearchResponse {
-    private List<LogMessage> messages;
+
     private SearchRequest request;
+    private List<LogMessage> messages;
 
     /**
      * Constructs a search response.
      *
-     * @param request The search query that has been used .
+     * @param request The original request.
+     *
      */
     public SearchResponse(SearchRequest request) {
+        this(request, new ArrayList<LogMessage>());
+    }
+
+    /**
+     * Constructs a search response.
+     *
+     * @param request The original request.
+     * @param messages The messages returned by the search.
+     */
+    public SearchResponse(SearchRequest request, List<LogMessage> messages) {
         this.request = request;
-        this.messages = new ArrayList<LogMessage>();
+        this.messages = messages;
     }
 
     /**

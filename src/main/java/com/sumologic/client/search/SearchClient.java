@@ -12,6 +12,7 @@ import com.sumologic.client.util.HttpUtils.ResponseHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,27 +21,28 @@ public class SearchClient {
     public static SearchResponse search(String protocol, String hostname, int port,
                                         Credentials credentials, SearchRequest request) {
         return HttpUtils.httpGet(protocol, hostname, port, credentials,
-                UrlParameters.VERSION_PREFIX + "1" +
-                        "/" + UrlParameters.LOGS_SERVICE +
-                        "/" + UrlParameters.SEARCH, request,
-                new SearchHandler());
+                getSearchEndpoint(), request, new SearchHandler());
+    }
+
+    private static String getSearchEndpoint() {
+        return UrlParameters.LOGS_SERVICE + "/" + UrlParameters.SEARCH;
     }
 
     private static class SearchHandler implements ResponseHandler<SearchRequest, SearchResponse> {
 
         @Override
         public SearchResponse handle(InputStream httpStream,
-                                     SearchRequest searchRequest) throws IOException {
+                                     SearchRequest request) throws IOException {
 
             ObjectMapper mapper = new ObjectMapper();
             List<Map<String, String>> rawMessages = mapper.readValue(httpStream,
                     new TypeReference<List<Map<String, String>>>() {});
 
-            SearchResponse searchResponse = new SearchResponse(searchRequest);
+            List<LogMessage> messages = new ArrayList<LogMessage>();
             for (Map<String, String> map : rawMessages) {
-                searchResponse.getMessages().add(new LogMessage(map));
+                messages.add(new LogMessage(map));
             }
-            return searchResponse;
+            return new SearchResponse(request, messages);
         }
     }
 }

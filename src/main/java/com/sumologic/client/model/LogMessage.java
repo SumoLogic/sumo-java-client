@@ -27,7 +27,7 @@ public class LogMessage {
      *
      * @param map The fields of the log message.
      */
-    public LogMessage( Map<String, String> map ) {
+    public LogMessage(Map<String, String> map) {
         this.map = map;
     }
 
