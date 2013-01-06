@@ -123,4 +123,14 @@ public interface UrlParameters {
      * The log message signature field's key
      */
     public static String LOG_MESSAGE_SIGNATURE = "_signature";
+
+    /**
+     * Search sub-tasks
+     */
+    public static String SEARCH_SERVICE ="search";
+
+    /**
+     * Search sessions sub-tasks
+     */
+    public static String SEARCH_SESSIONS_SERVICE ="sessions";
 }

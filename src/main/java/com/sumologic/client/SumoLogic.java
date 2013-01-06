@@ -1,5 +1,7 @@
 package com.sumologic.client;
 
+import com.sumologic.client.model.CreateSearchSessionRequest;
+import com.sumologic.client.model.GetSearchSessionStatusResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 
@@ -19,4 +21,17 @@ public interface SumoLogic {
      * @return The search result
      */
     SearchResponse search(SearchRequest searchRequest);
+
+    /**
+     * Start a search session and receive a session ID for subsequent
+     * polling of the search status.
+     *
+     * @param searchSessionRequest The search session to be started
+     * @return The search session ID
+     */
+    String createSearchSession(CreateSearchSessionRequest searchSessionRequest);
+
+    GetSearchSessionStatusResponse getSearchSessionStatus(String searchSessionId);
+
+
 }

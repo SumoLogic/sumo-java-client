@@ -9,7 +9,7 @@
     <version>1.1</version>
     <packaging>jar</packaging>
     <name>Sumo Logic Java Client Library</name>
-    <description>The java client of sumo logic's log management service</description>
+    <description>The Java client for the Sumo Logic log management service</description>
     <url>http://www.sumologic.com</url>
     <developers>
         <developer>
