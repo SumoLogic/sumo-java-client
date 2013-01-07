@@ -1,6 +1,7 @@
-package com.sumologic.client.model;
+package com.sumologic.client.search.model;
 
 import com.sumologic.client.UrlParameters;
+import com.sumologic.client.model.HttpGetRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 

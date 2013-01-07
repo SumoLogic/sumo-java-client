@@ -1,4 +1,4 @@
-package com.sumologic.client.model;
+package com.sumologic.client.search.model;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -3,9 +3,9 @@ package com.sumologic.client.examples;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoException;
 import com.sumologic.client.SumoLogicClient;
-import com.sumologic.client.model.LogMessage;
-import com.sumologic.client.model.SearchRequest;
-import com.sumologic.client.model.SearchResponse;
+import com.sumologic.client.search.model.LogMessage;
+import com.sumologic.client.search.model.SearchRequest;
+import com.sumologic.client.search.model.SearchResponse;
 
 import java.net.MalformedURLException;
 import java.util.Date;

@@ -5,8 +5,8 @@ import com.sumologic.client.collectors.model.GetCollectorRequest;
 import com.sumologic.client.collectors.model.GetCollectorResponse;
 import com.sumologic.client.collectors.model.GetCollectorsRequest;
 import com.sumologic.client.collectors.model.GetCollectorsResponse;
-import com.sumologic.client.model.SearchRequest;
-import com.sumologic.client.model.SearchResponse;
+import com.sumologic.client.search.model.SearchRequest;
+import com.sumologic.client.search.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
 
 import java.net.MalformedURLException;
