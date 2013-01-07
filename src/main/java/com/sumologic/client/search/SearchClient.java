@@ -1,14 +1,14 @@
 package com.sumologic.client.search;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.util.HttpUtils;
-import com.sumologic.client.util.HttpUtils.ResponseHandler;
+import com.sumologic.client.util.JacksonUtils;
+import com.sumologic.client.util.ResponseHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,8 +34,7 @@ public class SearchClient {
         public SearchResponse handle(InputStream httpStream,
                                      SearchRequest request) throws IOException {
 
-            ObjectMapper mapper = new ObjectMapper();
-            List<Map<String, String>> rawMessages = mapper.readValue(httpStream,
+            List<Map<String, String>> rawMessages = JacksonUtils.MAPPER.readValue(httpStream,
                     new TypeReference<List<Map<String, String>>>() {});
 
             List<LogMessage> messages = new ArrayList<LogMessage>();

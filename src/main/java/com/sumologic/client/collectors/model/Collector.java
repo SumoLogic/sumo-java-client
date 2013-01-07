@@ -1,13 +1,14 @@
-package com.sumologic.client.model;
+package com.sumologic.client.collectors.model;
 
 /**
- * This class represents a collector in the sumo logic system.
+ * This class represents a collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
  * @version 1.1
  */
 public class Collector {
 
+    private Long id;
     private String name;
     private Boolean alive;
     private String hostName;
@@ -19,10 +20,17 @@ public class Collector {
     private String osVersion;
     private String osName;
     private String osArch;
-    private Long uptime;
+    private Long upTime;
     private Boolean ephemeral;
 
-    public Collector() { /* This class is automatically deserialized from JSON. */ }
+    /**
+     * Returns the id.
+     *
+     * @return The id.
+     */
+    public Long getId() {
+        return id;
+    }
 
     /**
      * Returns the name.
@@ -31,6 +39,23 @@ public class Collector {
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Sets the name.
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Sets the name.
+     *
+     * @return This object.
+     */
+    public Collector withName(String name) {
+        setName(name);
+        return this;
     }
 
     /**
@@ -61,12 +86,46 @@ public class Collector {
     }
 
     /**
+     * Sets the time zone.
+     */
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    /**
+     * Sets the time zone.
+     *
+     * @return This object.
+     */
+    public Collector withTimeZone(String timeZone) {
+        setTimeZone(timeZone);
+        return this;
+    }
+
+    /**
      * Returns the category.
      *
      * @return The category.
      */
     public String getCategory() {
         return category;
+    }
+
+    /**
+     * Sets the category.
+     */
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    /**
+     * Sets the category.
+     *
+     * @return This object.
+     */
+    public Collector withCategory(String category) {
+        setCategory(category);
+        return this;
     }
 
     /**
@@ -85,6 +144,23 @@ public class Collector {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Sets the description.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Sets the description.
+     *
+     * @return This object.
+     */
+    public Collector withDescription(String description) {
+        setDescription(description);
+        return this;
     }
 
     /**
@@ -128,8 +204,8 @@ public class Collector {
      *
      * @return The collector's uptime.
      */
-    public Long getUptime() {
-        return uptime;
+    public Long getUpTime() {
+        return upTime;
     }
 
     /**

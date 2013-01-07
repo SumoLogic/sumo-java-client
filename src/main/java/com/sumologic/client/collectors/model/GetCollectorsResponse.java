@@ -1,12 +1,16 @@
-package com.sumologic.client.model;
+package com.sumologic.client.collectors.model;
 
 import java.util.List;
 
+/**
+ * A response containing a list of collectors.
+ *
+ * @author Jeffrey Wang
+ * @version 1.1
+ */
 public class GetCollectorsResponse {
 
     private List<Collector> collectors;
-
-    public GetCollectorsResponse() { /* This class is automatically deserialized from JSON. */ }
 
     /**
      * Returns the collectors.

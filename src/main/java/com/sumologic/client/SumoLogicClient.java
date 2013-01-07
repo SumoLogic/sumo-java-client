@@ -1,8 +1,10 @@
 package com.sumologic.client;
 
 import com.sumologic.client.collectors.CollectorsClient;
-import com.sumologic.client.model.GetCollectorsRequest;
-import com.sumologic.client.model.GetCollectorsResponse;
+import com.sumologic.client.collectors.model.GetCollectorRequest;
+import com.sumologic.client.collectors.model.GetCollectorResponse;
+import com.sumologic.client.collectors.model.GetCollectorsRequest;
+import com.sumologic.client.collectors.model.GetCollectorsResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
@@ -68,7 +70,7 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     /**
-     * Convenience function: takes a query string as argument.
+     * Convenience method: takes a query string as argument.
      *
      * @param query The sumo log query string
      * @return The search response
@@ -94,5 +96,25 @@ public class SumoLogicClient implements SumoLogic {
      */
     public GetCollectorsResponse getCollectors() {
         return getCollectors(new GetCollectorsRequest());
+    }
+
+    /**
+     * Gets a single Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The collector response
+     */
+    public GetCollectorResponse getCollector(GetCollectorRequest request) {
+        return CollectorsClient.get(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes an ID as argument.
+     *
+     * @param id The ID
+     * @return The collector response
+     */
+    public GetCollectorResponse getCollector(Long id) {
+        return getCollector(new GetCollectorRequest(id));
     }
 }

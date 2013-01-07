@@ -1,9 +1,7 @@
 package com.sumologic.client.util;
 
-import com.sumologic.client.Credentials;
-import com.sumologic.client.SumoClientException;
-import com.sumologic.client.SumoServerException;
-import com.sumologic.client.UrlParameters;
+import com.sumologic.client.*;
+import com.sumologic.client.model.HttpGetRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -11,10 +9,9 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIUtils;
-import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
@@ -28,13 +25,14 @@ public class HttpUtils {
 
     private static final String JSON_CONTENT_TYPE = "application/json";
 
-    public static <Request, Response> Response
+    public static <Request extends HttpGetRequest, Response> Response
     httpGet(String protocol, String hostname, int port, Credentials credentials, String endpoint,
             Request request, ResponseHandler<Request, Response> handler) {
 
         try {
+            String encodedParams = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
             HttpGet getMethod = new HttpGet(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), request.toString(), null));
+                    -1, getEndpointURI(endpoint), encodedParams, null));
 
             return doRequest(hostname, port, credentials, getMethod, request, handler);
         } catch (URISyntaxException ex) {
@@ -98,7 +96,7 @@ public class HttpUtils {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(httpStream));
 
                 // Convert response to JSON string
-                for (String s = null; (s = reader.readLine()) != null; ) {
+                for (String s; (s = reader.readLine()) != null; ) {
                     writer.write(s + "\n");
                 }
 
@@ -132,8 +130,4 @@ public class HttpUtils {
         }
     }
 
-    public interface ResponseHandler<Request, Response> {
-
-        public Response handle(InputStream httpStream, Request request) throws IOException;
-    }
 }
