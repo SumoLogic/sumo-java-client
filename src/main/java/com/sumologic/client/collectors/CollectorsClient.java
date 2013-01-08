@@ -5,6 +5,7 @@ import com.sumologic.client.UrlParameters;
 import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.DeserializingResponseHandler;
+import com.sumologic.client.util.PassingResponseHandler;
 
 public class CollectorsClient {
 
@@ -26,13 +27,13 @@ public class CollectorsClient {
                         GetCollectorResponse>(GetCollectorResponse.class));
     }
 
-    public ModifyCollectorResponse modify(String protocol, String hostname, int port,
-                                          Credentials credentials, ModifyCollectorRequest request) {
+    public UpdateCollectorResponse update(String protocol, String hostname, int port,
+                                          Credentials credentials, UpdateCollectorRequest request) {
 
         return HttpUtils.put(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
-                new DeserializingResponseHandler<ModifyCollectorRequest,
-                        ModifyCollectorResponse>(ModifyCollectorResponse.class));
+                new DeserializingResponseHandler<UpdateCollectorRequest,
+                        UpdateCollectorResponse>(UpdateCollectorResponse.class));
     }
 
     public DeleteCollectorResponse delete(String protocol, String hostname, int port,
@@ -40,7 +41,7 @@ public class CollectorsClient {
 
         return HttpUtils.delete(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
-                new DeserializingResponseHandler<DeleteCollectorRequest,
-                        DeleteCollectorResponse>(DeleteCollectorResponse.class));
+                new PassingResponseHandler<DeleteCollectorRequest,
+                        DeleteCollectorResponse>(new DeleteCollectorResponse()));
     }
 }

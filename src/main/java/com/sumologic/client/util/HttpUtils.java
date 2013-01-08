@@ -132,7 +132,7 @@ public class HttpUtils {
     doRequest(String hostname, int port, Credentials credentials, HttpUriRequest method,
               Request request, ResponseHandler<Request, Response> handler) {
 
-        HttpClient httpClient = HttpUtils.getHttpClient(hostname, port, credentials);
+        HttpClient httpClient = getHttpClient(hostname, port, credentials);
 
         InputStream httpStream = null;
         try {
@@ -171,14 +171,15 @@ public class HttpUtils {
 
         // Clean-up
         finally {
-            httpClient.getConnectionManager().shutdown();
-
             if (httpStream != null) {
                 try {
                     httpStream.close();
                 } catch (IOException ex) {
                 }
             }
+
+            httpClient.getConnectionManager().shutdown();
+
             if (method != null) {
                 method.abort();
             }

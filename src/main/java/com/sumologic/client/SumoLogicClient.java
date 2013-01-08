@@ -120,13 +120,13 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     /**
-     * Modifies a Sumo Logic collector.
+     * Updates a Sumo Logic collector.
      *
      * @param request The request
      * @return The response
      */
-    public ModifyCollectorResponse modifyCollector(ModifyCollectorRequest request) {
-        return collectorsClient.modify(protocol, hostname, port, credentials, request);
+    public UpdateCollectorResponse updateCollector(UpdateCollectorRequest request) {
+        return collectorsClient.update(protocol, hostname, port, credentials, request);
     }
 
     /**
@@ -135,8 +135,8 @@ public class SumoLogicClient implements SumoLogic {
      * @param collector The collector
      * @return The response
      */
-    public ModifyCollectorResponse modifyCollector(Collector collector) {
-        return modifyCollector(new ModifyCollectorRequest(collector.getId(), collector));
+    public UpdateCollectorResponse updateCollector(Collector collector) {
+        return updateCollector(new UpdateCollectorRequest(collector.getId(), collector));
     }
 
     /**

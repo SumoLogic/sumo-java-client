@@ -8,12 +8,12 @@ import com.sumologic.client.model.HttpPutRequest;
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class ModifyCollectorRequest implements HttpPutRequest {
+public class UpdateCollectorRequest implements HttpPutRequest {
 
     private Long id;
     private Collector collector;
 
-    public ModifyCollectorRequest(Long id, Collector collector) {
+    public UpdateCollectorRequest(Long id, Collector collector) {
         this.id = id;
         this.collector = collector;
     }

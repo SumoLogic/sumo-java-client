@@ -6,7 +6,7 @@ package com.sumologic.client.collectors.model;
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class ModifyCollectorResponse {
+public class UpdateCollectorResponse {
 
     private Collector collector;
 
