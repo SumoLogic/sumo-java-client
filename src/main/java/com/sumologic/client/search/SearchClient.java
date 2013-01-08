@@ -20,7 +20,7 @@ public class SearchClient {
 
     public static SearchResponse search(String protocol, String hostname, int port,
                                         Credentials credentials, SearchRequest request) {
-        return HttpUtils.httpGet(protocol, hostname, port, credentials,
+        return HttpUtils.get(protocol, hostname, port, credentials,
                 getSearchEndpoint(), request, new SearchHandler());
     }
 

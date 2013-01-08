@@ -1,15 +1,18 @@
 package com.sumologic.client.util;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.sumologic.client.*;
+import com.sumologic.client.model.HttpDeleteRequest;
 import com.sumologic.client.model.HttpGetRequest;
+import com.sumologic.client.model.HttpPostRequest;
+import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
@@ -25,40 +28,92 @@ public class HttpUtils {
 
     private static final String JSON_CONTENT_TYPE = "application/json";
 
+    // Public HTTP request methods
+
     public static <Request extends HttpGetRequest, Response> Response
-    httpGet(String protocol, String hostname, int port, Credentials credentials, String endpoint,
-            Request request, ResponseHandler<Request, Response> handler) {
+    get(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+        Request request, ResponseHandler<Request, Response> handler) {
 
         try {
             String encodedParams = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
-            HttpGet getMethod = new HttpGet(URIUtils.createURI(protocol, hostname + ":" + port,
+            HttpGet get = new HttpGet(URIUtils.createURI(protocol, hostname + ":" + port,
                     -1, getEndpointURI(endpoint), encodedParams, null));
 
-            return doRequest(hostname, port, credentials, getMethod, request, handler);
-        } catch (URISyntaxException ex) {
-            throw new SumoClientException("URI cannot be generated", ex);
+            return doRequest(hostname, port, credentials, get, request, handler);
+        } catch (URISyntaxException e) {
+            throw new SumoClientException("URI cannot be generated", e);
         }
     }
 
-    public static <Request, Response> Response
-    httpPost(String protocol, String hostname, int port, Credentials credentials, String endpoint,
-             Request request, ResponseHandler<Request, Response> handler) {
+    public static <Request extends HttpPostRequest, Response> Response
+    post(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+         Request request, ResponseHandler<Request, Response> handler) {
 
         try {
-            HttpPost postMethod = new HttpPost(URIUtils.createURI(protocol, hostname + ":" + port,
+            HttpPost post = new HttpPost(URIUtils.createURI(protocol, hostname + ":" + port,
                     -1, getEndpointURI(endpoint), null, null));
 
-            StringEntity entity = new StringEntity(request.toString(), HTTP.UTF_8);
+            String body = JacksonUtils.MAPPER.writeValueAsString(request);
+            StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
-            postMethod.setEntity(entity);
+            post.setEntity(entity);
 
-            return doRequest(hostname, port, credentials, postMethod, request, handler);
+            return doRequest(hostname, port, credentials, post, request, handler);
+        } catch (URISyntaxException e) {
+            throw new SumoClientException("URI cannot be generated", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new SumoClientException("Unsupported character encoding", e);
+        } catch (JsonMappingException e) {
+            throw new SumoClientException("Error generating JSON", e);
+        } catch (JsonGenerationException e) {
+            throw new SumoClientException("Error generating JSON", e);
+        } catch (IOException e) {
+            throw new SumoClientException("Error generating JSON", e);
+        }
+    }
+
+    public static <Request extends HttpPutRequest, Response> Response
+    put(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+        Request request, ResponseHandler<Request, Response> handler) {
+
+        try {
+            HttpPut put = new HttpPut(URIUtils.createURI(protocol, hostname + ":" + port,
+                    -1, getEndpointURI(endpoint), null, null));
+
+            String body = JacksonUtils.MAPPER.writeValueAsString(request);
+            StringEntity entity = new StringEntity(body, HTTP.UTF_8);
+            entity.setContentType(JSON_CONTENT_TYPE);
+            put.setEntity(entity);
+
+            return doRequest(hostname, port, credentials, put, request, handler);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
             throw new SumoClientException("Unsupported character encoding", ex);
+        } catch (JsonMappingException e) {
+            throw new SumoClientException("Error generating JSON", e);
+        } catch (JsonGenerationException e) {
+            throw new SumoClientException("Error generating JSON", e);
+        } catch (IOException e) {
+            throw new SumoClientException("Error generating JSON", e);
         }
     }
+
+    public static <Request extends HttpDeleteRequest, Response> Response
+    delete(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+           Request request, ResponseHandler<Request, Response> handler) {
+
+        try {
+            HttpDelete delete = new HttpDelete(URIUtils.createURI(protocol, hostname + ":" + port,
+                    -1, getEndpointURI(endpoint), null, null));
+
+            return doRequest(hostname, port, credentials, delete, request, handler);
+        } catch (URISyntaxException ex) {
+            throw new SumoClientException("URI cannot be generated", ex);
+        }
+    }
+
+    // Private methods
 
     private static HttpClient getHttpClient(String hostname, int port, Credentials credentials) {
         DefaultHttpClient httpClient = new DefaultHttpClient();

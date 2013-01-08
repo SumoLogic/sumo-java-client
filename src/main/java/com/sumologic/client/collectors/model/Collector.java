@@ -33,6 +33,23 @@ public class Collector {
     }
 
     /**
+     * Sets the id.
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Sets the id.
+     *
+     * @return This object.
+     */
+    public Collector withId(Long id) {
+        setId(id);
+        return this;
+    }
+
+    /**
      * Returns the name.
      *
      * @return The name.
@@ -74,6 +91,23 @@ public class Collector {
      */
     public String getHostName() {
         return hostName;
+    }
+
+    /**
+     * Sets the host name.
+     */
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
+    }
+
+    /**
+     * Sets the host name.
+     *
+     * @return This object.
+     */
+    public Collector withHostName(String hostName) {
+        setHostName(hostName);
+        return this;
     }
 
     /**
@@ -213,7 +247,7 @@ public class Collector {
      *
      * @return Whether the collector is ephemeral.
      */
-    public Boolean getEphemeral() {
+    public Boolean isEphemeral() {
         return ephemeral;
     }
 }

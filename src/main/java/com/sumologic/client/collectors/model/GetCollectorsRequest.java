@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A request to get collectors from the sumo logic system.
+ * A request to get collectors from the Sumo Logic system.
  *
  * @author Jeffrey Wang
  * @version 1.1

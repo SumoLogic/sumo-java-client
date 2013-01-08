@@ -1,12 +1,12 @@
 package com.sumologic.client.collectors.model;
 
 /**
- * A response containing the requested collector.
+ * A response containing the modified collector.
  *
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class GetCollectorResponse {
+public class ModifyCollectorResponse {
 
     private Collector collector;
 

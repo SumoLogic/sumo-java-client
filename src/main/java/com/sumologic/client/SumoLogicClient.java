@@ -1,10 +1,7 @@
 package com.sumologic.client;
 
 import com.sumologic.client.collectors.CollectorsClient;
-import com.sumologic.client.collectors.model.GetCollectorRequest;
-import com.sumologic.client.collectors.model.GetCollectorResponse;
-import com.sumologic.client.collectors.model.GetCollectorsRequest;
-import com.sumologic.client.collectors.model.GetCollectorsResponse;
+import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.search.model.SearchRequest;
 import com.sumologic.client.search.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
@@ -20,6 +17,7 @@ import java.net.URL;
  * @version 1.0
  */
 public class SumoLogicClient implements SumoLogic {
+
     private int port = 443;
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
@@ -83,7 +81,7 @@ public class SumoLogicClient implements SumoLogic {
      * Gets all available Sumo Logic collectors matching the request.
      *
      * @param request The request
-     * @return The collectors response
+     * @return The response
      */
     public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
         return CollectorsClient.get(protocol, hostname, port, credentials, request);
@@ -92,7 +90,7 @@ public class SumoLogicClient implements SumoLogic {
     /**
      * Gets all available Sumo Logic collectors.
      *
-     * @return The collectors response
+     * @return The response
      */
     public GetCollectorsResponse getCollectors() {
         return getCollectors(new GetCollectorsRequest());
@@ -102,19 +100,59 @@ public class SumoLogicClient implements SumoLogic {
      * Gets a single Sumo Logic collector.
      *
      * @param request The request
-     * @return The collector response
+     * @return The response
      */
     public GetCollectorResponse getCollector(GetCollectorRequest request) {
         return CollectorsClient.get(protocol, hostname, port, credentials, request);
     }
 
     /**
-     * Convenience method: takes an ID as argument.
+     * Convenience method: takes an id as argument.
      *
-     * @param id The ID
-     * @return The collector response
+     * @param id The id
+     * @return The response
      */
     public GetCollectorResponse getCollector(Long id) {
         return getCollector(new GetCollectorRequest(id));
+    }
+
+    /**
+     * Modifies a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public ModifyCollectorResponse modifyCollector(ModifyCollectorRequest request) {
+        return CollectorsClient.modify(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes a collector as argument.
+     *
+     * @param collector The collector
+     * @return The response
+     */
+    public ModifyCollectorResponse modifyCollector(Collector collector) {
+        return modifyCollector(new ModifyCollectorRequest(collector.getId(), collector));
+    }
+
+    /**
+     * Deletes a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request) {
+        return CollectorsClient.delete(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes an id as argument.
+     *
+     * @param id The id
+     * @return The response
+     */
+    public DeleteCollectorResponse deleteCollector(Long id) {
+        return deleteCollector(new DeleteCollectorRequest(id));
     }
 }
