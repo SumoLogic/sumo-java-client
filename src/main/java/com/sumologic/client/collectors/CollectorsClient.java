@@ -12,7 +12,7 @@ public class CollectorsClient {
                                      Credentials credentials, GetCollectorsRequest request) {
 
         return HttpUtils.get(protocol, hostname, port, credentials,
-                UrlParameters.COLLECTORS_SERVICE + "/", request,
+                UrlParameters.COLLECTORS_SERVICE, request,
                 new DeserializingResponseHandler<GetCollectorsRequest,
                         GetCollectorsResponse>(GetCollectorsResponse.class));
     }

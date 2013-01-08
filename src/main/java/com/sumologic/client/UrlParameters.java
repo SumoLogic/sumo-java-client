@@ -30,6 +30,16 @@ public interface UrlParameters {
     public static String COLLECTORS_SERVICE = "collectors";
 
     /**
+     * Limit for pagination
+     */
+    public static String LIMIT = "limit";
+
+    /**
+     * Offset for pagination
+     */
+    public static String OFFSET = "offset";
+
+    /**
      * Search query string
      */
     public static String SEARCH = "search";
