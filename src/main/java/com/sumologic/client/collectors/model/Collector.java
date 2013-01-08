@@ -80,7 +80,7 @@ public class Collector {
      *
      * @return Whether the collector is alive.
      */
-    public Boolean getAlive() {
+    public Boolean isAlive() {
         return alive;
     }
 

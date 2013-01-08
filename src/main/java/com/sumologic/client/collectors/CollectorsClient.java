@@ -8,9 +8,8 @@ import com.sumologic.client.util.DeserializingResponseHandler;
 
 public class CollectorsClient {
 
-    public static GetCollectorsResponse
-    get(String protocol, String hostname, int port,
-        Credentials credentials, GetCollectorsRequest request) {
+    public GetCollectorsResponse get(String protocol, String hostname, int port,
+                                     Credentials credentials, GetCollectorsRequest request) {
 
         return HttpUtils.get(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/", request,
@@ -18,9 +17,8 @@ public class CollectorsClient {
                         GetCollectorsResponse>(GetCollectorsResponse.class));
     }
 
-    public static GetCollectorResponse
-    get(String protocol, String hostname, int port,
-        Credentials credentials, GetCollectorRequest request) {
+    public GetCollectorResponse get(String protocol, String hostname, int port,
+                                    Credentials credentials, GetCollectorRequest request) {
 
         return HttpUtils.get(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
@@ -28,9 +26,8 @@ public class CollectorsClient {
                         GetCollectorResponse>(GetCollectorResponse.class));
     }
 
-    public static ModifyCollectorResponse
-    modify(String protocol, String hostname, int port,
-           Credentials credentials, ModifyCollectorRequest request) {
+    public ModifyCollectorResponse modify(String protocol, String hostname, int port,
+                                          Credentials credentials, ModifyCollectorRequest request) {
 
         return HttpUtils.put(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
@@ -38,9 +35,8 @@ public class CollectorsClient {
                         ModifyCollectorResponse>(ModifyCollectorResponse.class));
     }
 
-    public static DeleteCollectorResponse
-    delete(String protocol, String hostname, int port,
-           Credentials credentials, DeleteCollectorRequest request) {
+    public DeleteCollectorResponse delete(String protocol, String hostname, int port,
+                                          Credentials credentials, DeleteCollectorRequest request) {
 
         return HttpUtils.delete(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,

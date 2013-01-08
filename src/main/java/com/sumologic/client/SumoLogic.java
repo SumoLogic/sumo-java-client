@@ -1,7 +1,7 @@
 package com.sumologic.client;
 
-import com.sumologic.client.search.model.SearchRequest;
-import com.sumologic.client.search.model.SearchResponse;
+import com.sumologic.client.model.SearchRequest;
+import com.sumologic.client.model.SearchResponse;
 
 /**
  * Provides an interface for accessing Sumo Logic's log web service.

@@ -1,4 +1,4 @@
-package com.sumologic.client.search.model;
+package com.sumologic.client.model;
 
 import com.sumologic.client.UrlParameters;
 

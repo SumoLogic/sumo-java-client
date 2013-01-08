@@ -2,8 +2,8 @@ package com.sumologic.client;
 
 import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
-import com.sumologic.client.search.model.SearchRequest;
-import com.sumologic.client.search.model.SearchResponse;
+import com.sumologic.client.model.SearchRequest;
+import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
 
 import java.net.MalformedURLException;
@@ -22,6 +22,9 @@ public class SumoLogicClient implements SumoLogic {
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
     private Credentials credentials;
+
+    private SearchClient searchClient = new SearchClient();
+    private CollectorsClient collectorsClient = new CollectorsClient();
 
     /**
      * Constructs a Sumo Logic client.
@@ -64,7 +67,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The resulting log messages
      */
     public SearchResponse search(SearchRequest request) {
-        return SearchClient.search(protocol, hostname, port, credentials, request);
+        return searchClient.search(protocol, hostname, port, credentials, request);
     }
 
     /**
@@ -84,7 +87,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
-        return CollectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(protocol, hostname, port, credentials, request);
     }
 
     /**
@@ -103,7 +106,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorResponse getCollector(GetCollectorRequest request) {
-        return CollectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(protocol, hostname, port, credentials, request);
     }
 
     /**
@@ -123,7 +126,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public ModifyCollectorResponse modifyCollector(ModifyCollectorRequest request) {
-        return CollectorsClient.modify(protocol, hostname, port, credentials, request);
+        return collectorsClient.modify(protocol, hostname, port, credentials, request);
     }
 
     /**
@@ -143,7 +146,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request) {
-        return CollectorsClient.delete(protocol, hostname, port, credentials, request);
+        return collectorsClient.delete(protocol, hostname, port, credentials, request);
     }
 
     /**
