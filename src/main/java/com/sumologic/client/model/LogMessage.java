@@ -13,7 +13,7 @@ import java.util.*;
  */
 public class LogMessage {
 
-    private HashMap<String, String> map;
+    private Map<String, String> map;
 
     /**
      * Constructs a empty log message (usually done by the client).
@@ -27,7 +27,7 @@ public class LogMessage {
      *
      * @param map The fields of the log message.
      */
-    public LogMessage( HashMap<String, String> map ) {
+    public LogMessage(Map<String, String> map) {
         this.map = map;
     }
 
