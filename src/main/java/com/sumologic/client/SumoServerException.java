@@ -28,7 +28,7 @@ public class SumoServerException extends SumoException {
      * @param json The JSON error message
      * @throws SumoClientException Thrown if the JSON error message contains syntactic errors.
      */
-    protected SumoServerException(String uri, String json) throws SumoClientException {
+    public SumoServerException(String uri, String json) throws SumoClientException {
         super(json);
         this.uri = uri;
 

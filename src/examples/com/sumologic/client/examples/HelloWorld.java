@@ -2,7 +2,7 @@ package com.sumologic.client.examples;
 
 import com.sumologic.client.SumoException;
 import com.sumologic.client.SumoLogicClient;
-import com.sumologic.client.model.SearchResponse;
+import com.sumologic.client.search.model.SearchResponse;
 
 public class HelloWorld {
 

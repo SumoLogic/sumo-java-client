@@ -1,4 +1,4 @@
-package com.sumologic.client.model;
+package com.sumologic.client.search.model;
 
 import com.sumologic.client.UrlParameters;
 
@@ -13,21 +13,14 @@ import java.util.*;
  */
 public class LogMessage {
 
-    private HashMap<String, String> map;
-
-    /**
-     * Constructs a empty log message (usually done by the client).
-     */
-    public LogMessage() {
-        map = new HashMap<String, String>();
-    }
+    private Map<String, String> map;
 
     /**
      * Constructs a log message (usually done by the client).
      *
      * @param map The fields of the log message.
      */
-    public LogMessage( HashMap<String, String> map ) {
+    public LogMessage(Map<String, String> map) {
         this.map = map;
     }
 

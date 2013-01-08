@@ -1,8 +1,8 @@
-package com.sumologic.client.model;
+package com.sumologic.client.search.model;
 
 import com.sumologic.client.UrlParameters;
+import com.sumologic.client.model.HttpGetRequest;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
@@ -21,7 +21,8 @@ import java.util.List;
  * @author Daphne Hsieh
  * @version 1.0
  */
-public final class SearchRequest {
+public final class SearchRequest implements HttpGetRequest {
+
     private String query;
     private Date fromTime = null;
     private Date toTime = null;
@@ -68,7 +69,7 @@ public final class SearchRequest {
      * @return This object.
      */
     public SearchRequest withQuery(String query) {
-        setQuery( query );
+        setQuery(query);
         return this;
     }
 
@@ -227,12 +228,7 @@ public final class SearchRequest {
         return this.order;
     }
 
-    /**
-     * Converts the query to a valid search URL
-     *
-     * @return A valid search URL
-     */
-    public String toString() {
+    public List<NameValuePair> toUrlParams() {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair(UrlParameters.SEARCH_QUERY, query));
         if (fromTime != null) {
@@ -253,6 +249,6 @@ public final class SearchRequest {
         if (limit != 0) {
             params.add(new BasicNameValuePair(UrlParameters.SEARCH_LIMIT, String.valueOf(limit)));
         }
-        return URLEncodedUtils.format(params, "UTF-8");
+        return params;
     }
 }
