@@ -158,4 +158,24 @@ public class SumoLogicClient implements SumoLogic {
     public DeleteCollectorResponse deleteCollector(Long id) {
         return deleteCollector(new DeleteCollectorRequest(id));
     }
+
+    /**
+     * Gets all sources for a Sumo Logic collector matching the request.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public GetSourcesResponse getSources(GetSourcesRequest request) {
+        return collectorsClient.getSources(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes a collector id as argument.
+     *
+     * @param collectorId The collector id
+     * @return The response
+     */
+    public GetSourcesResponse getSources(Long collectorId) {
+        return getSources(new GetSourcesRequest(collectorId));
+    }
 }

@@ -1,5 +1,7 @@
 package com.sumologic.client.model;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.sumologic.client.UrlParameters;
 
 import java.util.*;
@@ -13,22 +15,16 @@ import java.util.*;
  */
 public class LogMessage {
 
-    private Map<String, String> map;
+    private Map<String, String> properties = new HashMap<String, String>();
 
-    /**
-     * Constructs a empty log message (usually done by the client).
-     */
-    public LogMessage() {
-        map = new HashMap<String, String>();
+    @JsonAnyGetter
+    public Map<String, String> getProperties() {
+        return properties;
     }
 
-    /**
-     * Constructs a log message (usually done by the client).
-     *
-     * @param map The fields of the log message.
-     */
-    public LogMessage(Map<String, String> map) {
-        this.map = map;
+    @JsonAnySetter
+    public void setProperty(String name, String value) {
+        properties.put(name, value);
     }
 
     /**
@@ -37,7 +33,7 @@ public class LogMessage {
      * @return A set of field names.
      */
     public final Set<String> getFieldNames() {
-      return Collections.unmodifiableSet(map.keySet());
+      return Collections.unmodifiableSet(properties.keySet());
     }
 
     /**
@@ -47,7 +43,7 @@ public class LogMessage {
      * @return A string
      */
     public final String stringField(String key) {
-        return map.get(key);
+        return properties.get(key);
     }
 
     /**
@@ -58,7 +54,7 @@ public class LogMessage {
      * @throws NumberFormatException Thrown, if field does not contain a long number.
      */
     public final long longField(String key) throws NumberFormatException {
-        return Long.parseLong(map.get(key));
+        return Long.parseLong(properties.get(key));
     }
 
     /**
@@ -69,7 +65,7 @@ public class LogMessage {
      * @throws NumberFormatException Thrown, if field does not contain a long number.
      */
     public final double doubleField(String key) throws NumberFormatException {
-        return Double.parseDouble(map.get(key));
+        return Double.parseDouble(properties.get(key));
     }
 
     /**
@@ -167,5 +163,4 @@ public class LogMessage {
     public String toString() {
         return getLogLine();
     }
-
 }

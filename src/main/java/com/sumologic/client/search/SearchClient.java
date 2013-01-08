@@ -32,13 +32,8 @@ public class SearchClient {
         public SearchResponse handle(InputStream httpStream,
                                      SearchRequest request) throws IOException {
 
-            List<Map<String, String>> rawMessages = JacksonUtils.MAPPER.readValue(httpStream,
-                    new TypeReference<List<Map<String, String>>>() {});
-
-            List<LogMessage> messages = new ArrayList<LogMessage>();
-            for (Map<String, String> map : rawMessages) {
-                messages.add(new LogMessage(map));
-            }
+            List<LogMessage> messages = JacksonUtils.MAPPER.readValue(httpStream,
+                    new TypeReference<List<LogMessage>>() {});
             return new SearchResponse(request, messages);
         }
     }

@@ -44,4 +44,28 @@ public class CollectorsClient {
                 new PassingResponseHandler<DeleteCollectorRequest,
                         DeleteCollectorResponse>(new DeleteCollectorResponse()));
     }
+
+    public GetSourcesResponse getSources(String protocol, String hostname, int port,
+                                         Credentials credentials, GetSourcesRequest request) {
+
+        return HttpUtils.get(protocol, hostname, port, credentials,
+                getSourcesUrl(request.getCollectorId()), request,
+                new DeserializingResponseHandler<GetSourcesRequest,
+                        GetSourcesResponse>(GetSourcesResponse.class));
+    }
+
+    public GetSourceResponse getSource(String protocol, String hostname, int port,
+                                       Credentials credentials, GetSourceRequest request) {
+
+        return HttpUtils.get(protocol, hostname, port, credentials,
+                getSourcesUrl(request.getCollectorId()) + "/" + request.getSourceId(), request,
+                new DeserializingResponseHandler<GetSourceRequest,
+                        GetSourceResponse>(GetSourceResponse.class));
+    }
+
+    private String getSourcesUrl(Long collectorId) {
+        return UrlParameters.COLLECTORS_SERVICE +
+                "/" + collectorId +
+                "/" + UrlParameters.SOURCES_SERVICE;
+    }
 }
