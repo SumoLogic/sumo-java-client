@@ -63,6 +63,32 @@ public class CollectorsClient {
                         GetSourceResponse>(GetSourceResponse.class));
     }
 
+    public CreateSourceResponse createSource(String protocol, String hostname, int port,
+                                             Credentials credentials, CreateSourceRequest request) {
+        return HttpUtils.post(protocol, hostname, port, credentials,
+                getSourcesUrl(request.getCollectorId()), request,
+                new DeserializingResponseHandler<CreateSourceRequest,
+                        CreateSourceResponse>(CreateSourceResponse.class));
+    }
+
+    public UpdateSourceResponse updateSource(String protocol, String hostname, int port,
+                                             Credentials credentials, UpdateSourceRequest request) {
+
+        return HttpUtils.put(protocol, hostname, port, credentials,
+                getSourcesUrl(request.getCollectorId()) + "/" + request.getSourceId(), request,
+                new DeserializingResponseHandler<UpdateSourceRequest,
+                        UpdateSourceResponse>(UpdateSourceResponse.class));
+    }
+
+    public DeleteSourceResponse deleteSource(String protocol, String hostname, int port,
+                                             Credentials credentials, DeleteSourceRequest request) {
+
+        return HttpUtils.delete(protocol, hostname, port, credentials,
+                getSourcesUrl(request.getCollectorId()) + "/" + request.getSourceId(), request,
+                new PassingResponseHandler<DeleteSourceRequest,
+                        DeleteSourceResponse>(new DeleteSourceResponse()));
+    }
+
     private String getSourcesUrl(Long collectorId) {
         return UrlParameters.COLLECTORS_SERVICE +
                 "/" + collectorId +

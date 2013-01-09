@@ -178,4 +178,88 @@ public class SumoLogicClient implements SumoLogic {
     public GetSourcesResponse getSources(Long collectorId) {
         return getSources(new GetSourcesRequest(collectorId));
     }
+
+    /**
+     * Gets a single source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public GetSourceResponse getSource(GetSourceRequest request) {
+        return collectorsClient.getSource(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source id as arguments.
+     *
+     * @param collectorId The collector id
+     * @param sourceId The source id
+     * @return The response
+     */
+    public GetSourceResponse getSource(Long collectorId, Long sourceId) {
+        return getSource(new GetSourceRequest(collectorId, sourceId));
+    }
+
+    /**
+     * Creates a source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public CreateSourceResponse createSource(CreateSourceRequest request) {
+        return collectorsClient.createSource(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source as arguments.
+     *
+     * @param collectorId The collector id
+     * @param source The source
+     * @return The response
+     */
+    public CreateSourceResponse createSource(Long collectorId, Source source) {
+        return createSource(new CreateSourceRequest(collectorId, source));
+    }
+
+    /**
+     * Updates a source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public UpdateSourceResponse updateSource(UpdateSourceRequest request) {
+        return collectorsClient.updateSource(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source as arguments.
+     *
+     * @param collectorId The collector id
+     * @param source The source
+     * @return The response
+     */
+    public UpdateSourceResponse updateSource(Long collectorId, Source source) {
+        return updateSource(new UpdateSourceRequest(collectorId, source.getId(), source));
+    }
+
+    /**
+     * Deletes a source from a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public DeleteSourceResponse deleteSource(DeleteSourceRequest request) {
+        return collectorsClient.deleteSource(protocol, hostname, port, credentials, request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source id as arguments.
+     *
+     * @param collectorId The collector id
+     * @param sourceId The source id
+     * @return The response
+     */
+    public DeleteSourceResponse deleteSource(Long collectorId, Long sourceId) {
+        return deleteSource(new DeleteSourceRequest(collectorId, sourceId));
+    }
 }
