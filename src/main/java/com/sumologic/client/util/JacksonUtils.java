@@ -18,10 +18,16 @@ public class JacksonUtils {
     }
 
     public static Long asLong(Object value) {
+        if (value == null) {
+            return null;
+        }
         return ((Number) value).longValue();
     }
 
     public static Double asDouble(Object value) {
+        if (value == null) {
+            return null;
+        }
         return ((Number) value).doubleValue();
     }
 }

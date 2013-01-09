@@ -1,7 +1,7 @@
 package com.sumologic.client.collectors.model;
 
 /**
- * This class represents a collector in the Sumo Logic system.
+ * A collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
  * @version 1.1
@@ -40,16 +40,6 @@ public class Collector {
     }
 
     /**
-     * Sets the id.
-     *
-     * @return This object.
-     */
-    public Collector withId(Long id) {
-        setId(id);
-        return this;
-    }
-
-    /**
      * Returns the name.
      *
      * @return The name.
@@ -63,16 +53,6 @@ public class Collector {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Sets the name.
-     *
-     * @return This object.
-     */
-    public Collector withName(String name) {
-        setName(name);
-        return this;
     }
 
     /**
@@ -101,16 +81,6 @@ public class Collector {
     }
 
     /**
-     * Sets the host name.
-     *
-     * @return This object.
-     */
-    public Collector withHostName(String hostName) {
-        setHostName(hostName);
-        return this;
-    }
-
-    /**
      * Returns the time zone.
      *
      * @return The time zone.
@@ -127,16 +97,6 @@ public class Collector {
     }
 
     /**
-     * Sets the time zone.
-     *
-     * @return This object.
-     */
-    public Collector withTimeZone(String timeZone) {
-        setTimeZone(timeZone);
-        return this;
-    }
-
-    /**
      * Returns the category.
      *
      * @return The category.
@@ -150,16 +110,6 @@ public class Collector {
      */
     public void setCategory(String category) {
         this.category = category;
-    }
-
-    /**
-     * Sets the category.
-     *
-     * @return This object.
-     */
-    public Collector withCategory(String category) {
-        setCategory(category);
-        return this;
     }
 
     /**
@@ -185,16 +135,6 @@ public class Collector {
      */
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    /**
-     * Sets the description.
-     *
-     * @return This object.
-     */
-    public Collector withDescription(String description) {
-        setDescription(description);
-        return this;
     }
 
     /**
@@ -249,5 +189,12 @@ public class Collector {
      */
     public Boolean isEphemeral() {
         return ephemeral;
+    }
+
+    /**
+     * Sets whether the collector is ephemeral.
+     */
+    public void setEphemeral(Boolean ephemeral) {
+        this.ephemeral = ephemeral;
     }
 }

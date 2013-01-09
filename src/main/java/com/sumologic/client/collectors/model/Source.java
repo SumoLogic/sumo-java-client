@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * This class represents a generic source for a collector in the Sumo Logic system.
+ * A generic source for a collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
  * @version 1.1
@@ -230,6 +230,13 @@ public class Source {
      */
     public String getSourceType() {
         return sourceType;
+    }
+
+    /**
+     * Sets the source type.
+     */
+    public void setSourceType(String sourceType) {
+        this.sourceType = sourceType;
     }
 
     /**

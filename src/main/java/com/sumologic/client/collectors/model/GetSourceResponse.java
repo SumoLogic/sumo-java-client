@@ -1,5 +1,8 @@
 package com.sumologic.client.collectors.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sumologic.client.util.SourceDeserializer;
+
 /**
  * A response containing the requested source.
  *
@@ -8,6 +11,7 @@ package com.sumologic.client.collectors.model;
  */
 public class GetSourceResponse {
 
+    @JsonDeserialize(using = SourceDeserializer.class)
     private Source source;
 
     /**
