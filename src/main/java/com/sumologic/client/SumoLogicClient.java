@@ -18,9 +18,9 @@ import java.net.URL;
  */
 public class SumoLogicClient implements SumoLogic {
 
-    private int port = 443;
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
+    private int port = 443;
     private Credentials credentials;
 
     private SearchClient searchClient = new SearchClient();
@@ -67,7 +67,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The resulting log messages
      */
     public SearchResponse search(SearchRequest request) {
-        return searchClient.search(protocol, hostname, port, credentials, request);
+        return searchClient.search(getAuthContext(), request);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
-        return collectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(getAuthContext(), request);
     }
 
     /**
@@ -106,7 +106,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorResponse getCollector(GetCollectorRequest request) {
-        return collectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(getAuthContext(), request);
     }
 
     /**
@@ -126,7 +126,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public UpdateCollectorResponse updateCollector(UpdateCollectorRequest request) {
-        return collectorsClient.update(protocol, hostname, port, credentials, request);
+        return collectorsClient.update(getAuthContext(), request);
     }
 
     /**
@@ -146,7 +146,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request) {
-        return collectorsClient.delete(protocol, hostname, port, credentials, request);
+        return collectorsClient.delete(getAuthContext(), request);
     }
 
     /**
@@ -166,7 +166,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetSourcesResponse getSources(GetSourcesRequest request) {
-        return collectorsClient.getSources(protocol, hostname, port, credentials, request);
+        return collectorsClient.getSources(getAuthContext(), request);
     }
 
     /**
@@ -186,7 +186,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetSourceResponse getSource(GetSourceRequest request) {
-        return collectorsClient.getSource(protocol, hostname, port, credentials, request);
+        return collectorsClient.getSource(getAuthContext(), request);
     }
 
     /**
@@ -207,7 +207,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public CreateSourceResponse createSource(CreateSourceRequest request) {
-        return collectorsClient.createSource(protocol, hostname, port, credentials, request);
+        return collectorsClient.createSource(getAuthContext(), request);
     }
 
     /**
@@ -228,7 +228,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public UpdateSourceResponse updateSource(UpdateSourceRequest request) {
-        return collectorsClient.updateSource(protocol, hostname, port, credentials, request);
+        return collectorsClient.updateSource(getAuthContext(), request);
     }
 
     /**
@@ -249,7 +249,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteSourceResponse deleteSource(DeleteSourceRequest request) {
-        return collectorsClient.deleteSource(protocol, hostname, port, credentials, request);
+        return collectorsClient.deleteSource(getAuthContext(), request);
     }
 
     /**
@@ -261,5 +261,9 @@ public class SumoLogicClient implements SumoLogic {
      */
     public DeleteSourceResponse deleteSource(Long collectorId, Long sourceId) {
         return deleteSource(new DeleteSourceRequest(collectorId, sourceId));
+    }
+
+    private AuthContext getAuthContext() {
+        return new AuthContext(protocol, hostname, port, credentials);
     }
 }

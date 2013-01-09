@@ -20,6 +20,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 
 public class HttpUtils {
@@ -31,34 +32,36 @@ public class HttpUtils {
     // Public HTTP request methods
 
     public static <Request extends HttpGetRequest, Response> Response
-    get(String protocol, String hostname, int port, Credentials credentials, String endpoint,
-        Request request, ResponseHandler<Request, Response> handler) {
+    get(AuthContext context, String endpoint, Request request,
+        ResponseHandler<Request, Response> handler) {
 
         try {
-            String encodedParams = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
-            HttpGet get = new HttpGet(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), encodedParams, null));
+            String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
+            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
+                    context.getPort(), getEndpointURI(endpoint), params, null);
+            HttpGet get = new HttpGet(uri);
 
-            return doRequest(hostname, port, credentials, get, request, handler);
+            return doRequest(context, get, request, handler);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         }
     }
 
     public static <Request extends HttpPostRequest, Response> Response
-    post(String protocol, String hostname, int port, Credentials credentials, String endpoint,
-         Request request, ResponseHandler<Request, Response> handler) {
+    post(AuthContext context, String endpoint, Request request,
+         ResponseHandler<Request, Response> handler) {
 
         try {
-            HttpPost post = new HttpPost(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), null, null));
+            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
+                    context.getPort(), getEndpointURI(endpoint), null, null);
+            HttpPost post = new HttpPost(uri);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             post.setEntity(entity);
 
-            return doRequest(hostname, port, credentials, post, request, handler);
+            return doRequest(context, post, request, handler);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
@@ -73,19 +76,20 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpPutRequest, Response> Response
-    put(String protocol, String hostname, int port, Credentials credentials, String endpoint,
-        Request request, ResponseHandler<Request, Response> handler) {
+    put(AuthContext context, String endpoint, Request request,
+        ResponseHandler<Request, Response> handler) {
 
         try {
-            HttpPut put = new HttpPut(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), null, null));
+            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
+                    context.getPort(), getEndpointURI(endpoint), null, null);
+            HttpPut put = new HttpPut(uri);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             put.setEntity(entity);
 
-            return doRequest(hostname, port, credentials, put, request, handler);
+            return doRequest(context, put, request, handler);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
@@ -100,14 +104,15 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpDeleteRequest, Response> Response
-    delete(String protocol, String hostname, int port, Credentials credentials, String endpoint,
-           Request request, ResponseHandler<Request, Response> handler) {
+    delete(AuthContext context, String endpoint, Request request,
+           ResponseHandler<Request, Response> handler) {
 
         try {
-            HttpDelete delete = new HttpDelete(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), null, null));
+            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
+                    context.getPort(), getEndpointURI(endpoint), null, null);
+            HttpDelete delete = new HttpDelete(uri);
 
-            return doRequest(hostname, port, credentials, delete, request, handler);
+            return doRequest(context, delete, request, handler);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         }
@@ -115,10 +120,10 @@ public class HttpUtils {
 
     // Private methods
 
-    private static HttpClient getHttpClient(String hostname, int port, Credentials credentials) {
+    private static HttpClient getHttpClient(AuthContext context) {
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(new AuthScope(hostname, port),
-                new UsernamePasswordCredentials(credentials.getEmail(), credentials.getPassword()));
+        httpClient.getCredentialsProvider().setCredentials(context.getAuthScope(),
+                context.getUsernamePasswordCredentials());
         return httpClient;
     }
 
@@ -129,10 +134,10 @@ public class HttpUtils {
     }
 
     private static <Request, Response> Response
-    doRequest(String hostname, int port, Credentials credentials, HttpUriRequest method,
-              Request request, ResponseHandler<Request, Response> handler) {
+    doRequest(AuthContext context, HttpUriRequest method, Request request,
+              ResponseHandler<Request, Response> handler) {
 
-        HttpClient httpClient = getHttpClient(hostname, port, credentials);
+        HttpClient httpClient = getHttpClient(context);
 
         InputStream httpStream = null;
         try {
