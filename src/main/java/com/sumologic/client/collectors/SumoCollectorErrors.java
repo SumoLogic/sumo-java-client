@@ -9,13 +9,13 @@ import com.sumologic.client.SumoServerError;
  * @version 1.1
  */
 public enum SumoCollectorErrors implements SumoServerError {
-    INVALID_COLLECTOR("invalid.collector"),
-    INVALID_BLADE("invalid.blade");
+    INVALID_COLLECTOR("collector.invalid"),
+    INVALID_SOURCE("source.invalid");
 
-    private String id = "";
+    private String id;
 
-    SumoCollectorErrors(String id) {
-        this.id = "collector." + id;
+    private SumoCollectorErrors(String id) {
+        this.id = "collectors." + id;
     }
 
     public String getId() {

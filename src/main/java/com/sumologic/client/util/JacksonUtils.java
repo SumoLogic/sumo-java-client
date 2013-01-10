@@ -1,5 +1,6 @@
 package com.sumologic.client.util;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -11,5 +12,22 @@ public class JacksonUtils {
     static {
         // Don't want old client libraries to break if we add fields.
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        // Only serialize non-null values.
+        MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
+
+    public static Long asLong(Object value) {
+        if (value == null) {
+            return null;
+        }
+        return ((Number) value).longValue();
+    }
+
+    public static Double asDouble(Object value) {
+        if (value == null) {
+            return null;
+        }
+        return ((Number) value).doubleValue();
     }
 }

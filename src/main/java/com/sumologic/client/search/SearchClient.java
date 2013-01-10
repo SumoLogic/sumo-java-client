@@ -1,6 +1,7 @@
 package com.sumologic.client.search;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.sumologic.client.AuthContext;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.model.LogMessage;
@@ -18,12 +19,12 @@ import java.util.Map;
 
 public class SearchClient {
 
-    public SearchResponse search(String protocol, String hostname, int port,
-                                 Credentials credentials, SearchRequest request) {
+    public SearchResponse search(AuthContext context, SearchRequest request) {
+        return HttpUtils.get(context, getSearchEndpoint(), request, new SearchHandler());
+    }
 
-        return HttpUtils.get(protocol, hostname, port, credentials,
-                UrlParameters.LOGS_SERVICE + "/" + UrlParameters.SEARCH, request,
-                new SearchHandler());
+    private static String getSearchEndpoint() {
+        return UrlParameters.LOGS_SERVICE + "/" + UrlParameters.SEARCH;
     }
 
     private static class SearchHandler implements ResponseHandler<SearchRequest, SearchResponse> {
@@ -32,13 +33,8 @@ public class SearchClient {
         public SearchResponse handle(InputStream httpStream,
                                      SearchRequest request) throws IOException {
 
-            List<Map<String, String>> rawMessages = JacksonUtils.MAPPER.readValue(httpStream,
-                    new TypeReference<List<Map<String, String>>>() {});
-
-            List<LogMessage> messages = new ArrayList<LogMessage>();
-            for (Map<String, String> map : rawMessages) {
-                messages.add(new LogMessage(map));
-            }
+            List<LogMessage> messages = JacksonUtils.MAPPER.readValue(httpStream,
+                    new TypeReference<List<LogMessage>>() {});
             return new SearchResponse(request, messages);
         }
     }

@@ -25,9 +25,9 @@ public enum SumoSearchErrors implements SumoServerError {
     OUTPUT_CLOSED("output.closed"),
     FORMAT_UNKNOWN("unknown.format");
 
-    private String id = "";
+    private String id;
 
-    SumoSearchErrors(String id) {
+    private SumoSearchErrors(String id) {
         this.id = "search." + id;
     }
 

@@ -1,7 +1,7 @@
 package com.sumologic.client.collectors.model;
 
 /**
- * A response containing the modified collector.
+ * A response containing the updated collector.
  *
  * @author Jeffrey Wang
  * @version 1.1

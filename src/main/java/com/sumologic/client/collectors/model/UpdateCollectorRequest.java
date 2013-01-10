@@ -1,5 +1,6 @@
 package com.sumologic.client.collectors.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sumologic.client.model.HttpPutRequest;
 
 /**
@@ -10,7 +11,7 @@ import com.sumologic.client.model.HttpPutRequest;
  */
 public class UpdateCollectorRequest implements HttpPutRequest {
 
-    private Long id;
+    @JsonIgnore private Long id;
     private Collector collector;
 
     public UpdateCollectorRequest(Long id, Collector collector) {

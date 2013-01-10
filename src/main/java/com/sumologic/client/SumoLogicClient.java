@@ -18,9 +18,9 @@ import java.net.URL;
  */
 public class SumoLogicClient implements SumoLogic {
 
-    private int port = 443;
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
+    private int port = 443;
     private Credentials credentials;
 
     private SearchClient searchClient = new SearchClient();
@@ -67,7 +67,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The resulting log messages
      */
     public SearchResponse search(SearchRequest request) {
-        return searchClient.search(protocol, hostname, port, credentials, request);
+        return searchClient.search(getAuthContext(), request);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
-        return collectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(getAuthContext(), request);
     }
 
     /**
@@ -106,7 +106,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorResponse getCollector(GetCollectorRequest request) {
-        return collectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(getAuthContext(), request);
     }
 
     /**
@@ -126,7 +126,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public UpdateCollectorResponse updateCollector(UpdateCollectorRequest request) {
-        return collectorsClient.update(protocol, hostname, port, credentials, request);
+        return collectorsClient.update(getAuthContext(), request);
     }
 
     /**
@@ -146,7 +146,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request) {
-        return collectorsClient.delete(protocol, hostname, port, credentials, request);
+        return collectorsClient.delete(getAuthContext(), request);
     }
 
     /**
@@ -157,5 +157,113 @@ public class SumoLogicClient implements SumoLogic {
      */
     public DeleteCollectorResponse deleteCollector(Long id) {
         return deleteCollector(new DeleteCollectorRequest(id));
+    }
+
+    /**
+     * Gets all sources for a Sumo Logic collector matching the request.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public GetSourcesResponse getSources(GetSourcesRequest request) {
+        return collectorsClient.getSources(getAuthContext(), request);
+    }
+
+    /**
+     * Convenience method: takes a collector id as argument.
+     *
+     * @param collectorId The collector id
+     * @return The response
+     */
+    public GetSourcesResponse getSources(Long collectorId) {
+        return getSources(new GetSourcesRequest(collectorId));
+    }
+
+    /**
+     * Gets a single source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public GetSourceResponse getSource(GetSourceRequest request) {
+        return collectorsClient.getSource(getAuthContext(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source id as arguments.
+     *
+     * @param collectorId The collector id
+     * @param sourceId The source id
+     * @return The response
+     */
+    public GetSourceResponse getSource(Long collectorId, Long sourceId) {
+        return getSource(new GetSourceRequest(collectorId, sourceId));
+    }
+
+    /**
+     * Creates a source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public CreateSourceResponse createSource(CreateSourceRequest request) {
+        return collectorsClient.createSource(getAuthContext(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source as arguments.
+     *
+     * @param collectorId The collector id
+     * @param source The source
+     * @return The response
+     */
+    public CreateSourceResponse createSource(Long collectorId, Source source) {
+        return createSource(new CreateSourceRequest(collectorId, source));
+    }
+
+    /**
+     * Updates a source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public UpdateSourceResponse updateSource(UpdateSourceRequest request) {
+        return collectorsClient.updateSource(getAuthContext(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source as arguments.
+     *
+     * @param collectorId The collector id
+     * @param source The source
+     * @return The response
+     */
+    public UpdateSourceResponse updateSource(Long collectorId, Source source) {
+        return updateSource(new UpdateSourceRequest(collectorId, source.getId(), source));
+    }
+
+    /**
+     * Deletes a source from a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public DeleteSourceResponse deleteSource(DeleteSourceRequest request) {
+        return collectorsClient.deleteSource(getAuthContext(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source id as arguments.
+     *
+     * @param collectorId The collector id
+     * @param sourceId The source id
+     * @return The response
+     */
+    public DeleteSourceResponse deleteSource(Long collectorId, Long sourceId) {
+        return deleteSource(new DeleteSourceRequest(collectorId, sourceId));
+    }
+
+    private AuthContext getAuthContext() {
+        return new AuthContext(protocol, hostname, port, credentials);
     }
 }
