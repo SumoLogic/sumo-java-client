@@ -1,12 +1,20 @@
 package com.sumologic.client.collectors.model;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 /**
  * A collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class Collector {
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "collectorType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = InstallableCollector.class, name = "Installable"),
+        @JsonSubTypes.Type(value = HostedCollector.class, name = "Hosted")
+})
+public abstract class Collector {
 
     private Long id;
     private String name;
@@ -17,10 +25,6 @@ public class Collector {
     private String status;
     private String description;
     private String collectorVersion;
-    private String osVersion;
-    private String osName;
-    private String osArch;
-    private Long upTime;
     private Boolean ephemeral;
 
     /**
@@ -144,42 +148,6 @@ public class Collector {
      */
     public String getCollectorVersion() {
         return collectorVersion;
-    }
-
-    /**
-     * Returns the OS version.
-     *
-     * @return The OS version.
-     */
-    public String getOsVersion() {
-        return osVersion;
-    }
-
-    /**
-     * Returns the OS name.
-     *
-     * @return The OS name.
-     */
-    public String getOsName() {
-        return osName;
-    }
-
-    /**
-     * Returns the OS architecture.
-     *
-     * @return The OS architecture.
-     */
-    public String getOsArch() {
-        return osArch;
-    }
-
-    /**
-     * Returns the collector's uptime.
-     *
-     * @return The collector's uptime.
-     */
-    public Long getUpTime() {
-        return upTime;
     }
 
     /**
