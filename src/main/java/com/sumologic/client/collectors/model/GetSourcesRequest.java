@@ -1,9 +1,11 @@
 package com.sumologic.client.collectors.model;
 
+import com.sumologic.client.UrlParameters;
 import com.sumologic.client.model.HttpGetRequest;
 import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,6 +87,13 @@ public class GetSourcesRequest implements HttpGetRequest {
 
     @Override
     public List<NameValuePair> toUrlParams() {
-        return Collections.emptyList();
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        if (limit != null) {
+            params.add(new BasicNameValuePair(UrlParameters.LIMIT, String.valueOf(limit)));
+        }
+        if (offset != null) {
+            params.add(new BasicNameValuePair(UrlParameters.OFFSET, String.valueOf(offset)));
+        }
+        return params;
     }
 }
