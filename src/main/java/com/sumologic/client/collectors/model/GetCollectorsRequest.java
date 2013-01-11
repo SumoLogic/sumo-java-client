@@ -19,27 +19,53 @@ public class GetCollectorsRequest implements HttpGetRequest {
     private Long limit;
     private Long offset;
 
+    /**
+     * Returns the limit.
+     *
+     * @return The limit.
+     */
     public Long getLimit() {
         return limit;
     }
 
+    /**
+     * Sets the limit.
+     */
     public void setLimit(Long limit) {
         this.limit = limit;
     }
 
+    /**
+     * Sets the limit.
+     *
+     * @return This object.
+     */
     public GetCollectorsRequest withLimit(Long limit) {
         setLimit(limit);
         return this;
     }
 
+    /**
+     * Returns the offset.
+     *
+     * @return The offset.
+     */
     public Long getOffset() {
         return offset;
     }
 
+    /**
+     * Sets the offset.
+     */
     public void setOffset(Long offset) {
         this.offset = offset;
     }
 
+    /**
+     * Sets the offset.
+     *
+     * @return This object.
+     */
     public GetCollectorsRequest withOffset(Long offset) {
         setOffset(offset);
         return this;

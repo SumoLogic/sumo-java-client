@@ -13,6 +13,10 @@ public class WindowsEventLogSource extends Source {
     private static String INCLUDE_ALL = "includeAll";
     private static String LOG_NAMES = "logNames";
 
+    public WindowsEventLogSource() {
+        setSourceType(SourceType.LOCAL_WINDOWS_EVENT_LOG.getType());
+    }
+
     /**
      * Returns whether all event types should be included.
      *

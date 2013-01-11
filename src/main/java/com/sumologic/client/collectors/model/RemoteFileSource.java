@@ -17,6 +17,10 @@ public class RemoteFileSource extends Source {
     private static String REMOTE_PATH = "remotePath";
     private static String AUTH_METHOD = "authMethod";
 
+    public RemoteFileSource() {
+        setSourceType(SourceType.REMOTE_FILE.getType());
+    }
+
     /**
      * Returns the remote host.
      *

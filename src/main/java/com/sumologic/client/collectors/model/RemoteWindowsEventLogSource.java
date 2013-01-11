@@ -15,6 +15,10 @@ public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
     private static String PASSWORD = "password";
     private static String HOSTS = "hosts";
 
+    public RemoteWindowsEventLogSource() {
+        setSourceType(SourceType.REMOTE_WINDOWS_EVENT_LOG.getType());
+    }
+
     /**
      * Returns the Windows domain.
      *

@@ -11,6 +11,10 @@ public class SyslogSource extends Source {
     private static String PROTOCOL = "protocol";
     private static String PORT = "port";
 
+    public SyslogSource() {
+        setSourceType(SourceType.SYSLOG.getType());
+    }
+
     /**
      * Returns the protocol.
      *

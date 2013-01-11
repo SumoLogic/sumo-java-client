@@ -11,6 +11,10 @@ public class ScriptSource extends BaseScriptSource {
     private static String SCRIPT = "script";
     private static String CRON_EXPRESSION = "cronExpression";
 
+    public ScriptSource() {
+        setSourceType(SourceType.SCRIPT.getType());
+    }
+
     /**
      * Returns the script contents (if no file is specified).
      *
