@@ -15,8 +15,7 @@ public enum SourceType {
     SYSLOG("Syslog", SyslogSource.class),
     LOCAL_WINDOWS_EVENT_LOG("LocalWindowsEventLog", WindowsEventLogSource.class),
     REMOTE_WINDOWS_EVENT_LOG("RemoteWindowsEventLog", RemoteWindowsEventLogSource.class),
-    SCRIPT("Script", ScriptSource.class),
-    ALERT("Alert", AlertSource.class);
+    SCRIPT("Script", ScriptSource.class);
 
     private String type;
     private Class<? extends Source> sourceClass;

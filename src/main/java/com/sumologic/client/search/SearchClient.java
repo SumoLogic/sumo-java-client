@@ -1,8 +1,7 @@
 package com.sumologic.client.search;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.sumologic.client.AuthContext;
-import com.sumologic.client.Credentials;
+import com.sumologic.client.ConnectionConfig;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.model.SearchRequest;
@@ -13,14 +12,12 @@ import com.sumologic.client.util.ResponseHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class SearchClient {
 
-    public SearchResponse search(AuthContext context, SearchRequest request) {
-        return HttpUtils.get(context, getSearchEndpoint(), request, new SearchHandler());
+    public SearchResponse search(ConnectionConfig config, SearchRequest request) {
+        return HttpUtils.get(config, getSearchEndpoint(), request, new SearchHandler());
     }
 
     private static String getSearchEndpoint() {

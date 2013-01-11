@@ -9,8 +9,6 @@ import com.sumologic.client.model.HttpPostRequest;
 import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIUtils;
@@ -32,28 +30,28 @@ public class HttpUtils {
     // Public HTTP request methods
 
     public static <Request extends HttpGetRequest, Response> Response
-    get(AuthContext context, String endpoint, Request request,
+    get(ConnectionConfig config, String endpoint, Request request,
         ResponseHandler<Request, Response> handler) {
 
         try {
             String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
-            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
-                    context.getPort(), getEndpointURI(endpoint), params, null);
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), params, null);
             HttpGet get = new HttpGet(uri);
 
-            return doRequest(context, get, request, handler);
+            return doRequest(config, get, request, handler);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         }
     }
 
     public static <Request extends HttpPostRequest, Response> Response
-    post(AuthContext context, String endpoint, Request request,
+    post(ConnectionConfig config, String endpoint, Request request,
          ResponseHandler<Request, Response> handler) {
 
         try {
-            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
-                    context.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPost post = new HttpPost(uri);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
@@ -61,7 +59,7 @@ public class HttpUtils {
             entity.setContentType(JSON_CONTENT_TYPE);
             post.setEntity(entity);
 
-            return doRequest(context, post, request, handler);
+            return doRequest(config, post, request, handler);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
@@ -76,12 +74,12 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpPutRequest, Response> Response
-    put(AuthContext context, String endpoint, Request request,
+    put(ConnectionConfig config, String endpoint, Request request,
         ResponseHandler<Request, Response> handler) {
 
         try {
-            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
-                    context.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPut put = new HttpPut(uri);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
@@ -89,7 +87,7 @@ public class HttpUtils {
             entity.setContentType(JSON_CONTENT_TYPE);
             put.setEntity(entity);
 
-            return doRequest(context, put, request, handler);
+            return doRequest(config, put, request, handler);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
@@ -104,15 +102,15 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpDeleteRequest, Response> Response
-    delete(AuthContext context, String endpoint, Request request,
+    delete(ConnectionConfig config, String endpoint, Request request,
            ResponseHandler<Request, Response> handler) {
 
         try {
-            URI uri = URIUtils.createURI(context.getProtocol(), context.getHostname(),
-                    context.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), null, null);
             HttpDelete delete = new HttpDelete(uri);
 
-            return doRequest(context, delete, request, handler);
+            return doRequest(config, delete, request, handler);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         }
@@ -120,10 +118,10 @@ public class HttpUtils {
 
     // Private methods
 
-    private static HttpClient getHttpClient(AuthContext context) {
+    private static HttpClient getHttpClient(ConnectionConfig config) {
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(context.getAuthScope(),
-                context.getUsernamePasswordCredentials());
+        httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
+                config.getUsernamePasswordCredentials());
         return httpClient;
     }
 
@@ -134,10 +132,10 @@ public class HttpUtils {
     }
 
     private static <Request, Response> Response
-    doRequest(AuthContext context, HttpUriRequest method, Request request,
+    doRequest(ConnectionConfig config, HttpUriRequest method, Request request,
               ResponseHandler<Request, Response> handler) {
 
-        HttpClient httpClient = getHttpClient(context);
+        HttpClient httpClient = getHttpClient(config);
 
         InputStream httpStream = null;
         try {

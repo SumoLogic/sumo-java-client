@@ -67,7 +67,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The resulting log messages
      */
     public SearchResponse search(SearchRequest request) {
-        return searchClient.search(getAuthContext(), request);
+        return searchClient.search(getConnectionConfig(), request);
     }
 
     /**
@@ -87,7 +87,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
-        return collectorsClient.get(getAuthContext(), request);
+        return collectorsClient.get(getConnectionConfig(), request);
     }
 
     /**
@@ -106,7 +106,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorResponse getCollector(GetCollectorRequest request) {
-        return collectorsClient.get(getAuthContext(), request);
+        return collectorsClient.get(getConnectionConfig(), request);
     }
 
     /**
@@ -126,7 +126,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public UpdateCollectorResponse updateCollector(UpdateCollectorRequest request) {
-        return collectorsClient.update(getAuthContext(), request);
+        return collectorsClient.update(getConnectionConfig(), request);
     }
 
     /**
@@ -146,7 +146,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request) {
-        return collectorsClient.delete(getAuthContext(), request);
+        return collectorsClient.delete(getConnectionConfig(), request);
     }
 
     /**
@@ -166,7 +166,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetSourcesResponse getSources(GetSourcesRequest request) {
-        return collectorsClient.getSources(getAuthContext(), request);
+        return collectorsClient.getSources(getConnectionConfig(), request);
     }
 
     /**
@@ -186,7 +186,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetSourceResponse getSource(GetSourceRequest request) {
-        return collectorsClient.getSource(getAuthContext(), request);
+        return collectorsClient.getSource(getConnectionConfig(), request);
     }
 
     /**
@@ -207,7 +207,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public CreateSourceResponse createSource(CreateSourceRequest request) {
-        return collectorsClient.createSource(getAuthContext(), request);
+        return collectorsClient.createSource(getConnectionConfig(), request);
     }
 
     /**
@@ -228,7 +228,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public UpdateSourceResponse updateSource(UpdateSourceRequest request) {
-        return collectorsClient.updateSource(getAuthContext(), request);
+        return collectorsClient.updateSource(getConnectionConfig(), request);
     }
 
     /**
@@ -249,7 +249,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteSourceResponse deleteSource(DeleteSourceRequest request) {
-        return collectorsClient.deleteSource(getAuthContext(), request);
+        return collectorsClient.deleteSource(getConnectionConfig(), request);
     }
 
     /**
@@ -263,7 +263,7 @@ public class SumoLogicClient implements SumoLogic {
         return deleteSource(new DeleteSourceRequest(collectorId, sourceId));
     }
 
-    private AuthContext getAuthContext() {
-        return new AuthContext(protocol, hostname, port, credentials);
+    private ConnectionConfig getConnectionConfig() {
+        return new ConnectionConfig(protocol, hostname, port, credentials);
     }
 }

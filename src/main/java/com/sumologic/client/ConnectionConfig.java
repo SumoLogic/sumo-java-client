@@ -3,14 +3,14 @@ package com.sumologic.client;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
-public class AuthContext {
+public class ConnectionConfig {
 
     private String protocol;
     private String hostname;
     private int port;
     private Credentials credentials;
 
-    public AuthContext(String protocol, String hostname, int port, Credentials credentials) {
+    public ConnectionConfig(String protocol, String hostname, int port, Credentials credentials) {
         this.protocol = protocol;
         this.hostname = hostname;
         this.port = port;
