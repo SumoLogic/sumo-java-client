@@ -47,4 +47,9 @@ public class UpdateSourceRequest implements HttpPutRequest {
     public Source getSource() {
         return source;
     }
+
+    @Override
+    public String getETag() {
+        return source.getETag();
+    }
 }

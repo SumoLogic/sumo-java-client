@@ -1,5 +1,7 @@
 package com.sumologic.client.util;
 
+import org.apache.http.HttpResponse;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -13,7 +15,9 @@ public class PassingResponseHandler<Request, Response>
     }
 
     @Override
-    public Response handle(InputStream httpStream, Request request) throws IOException {
+    public Response handle(HttpResponse httpResponse, InputStream httpStream, Request request)
+            throws IOException {
+
         return response;
     }
 }

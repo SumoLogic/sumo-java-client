@@ -1,6 +1,8 @@
 package com.sumologic.client.collectors.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.sumologic.client.model.SumoEntity;
+import com.sumologic.client.model.SumoEntityResponse;
 import com.sumologic.client.util.SourceDeserializer;
 
 /**
@@ -9,7 +11,7 @@ import com.sumologic.client.util.SourceDeserializer;
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class GetSourceResponse {
+public class GetSourceResponse extends SumoEntityResponse {
 
     @JsonDeserialize(using = SourceDeserializer.class)
     private Source source;
@@ -20,6 +22,11 @@ public class GetSourceResponse {
      * @return The source.
      */
     public Source getSource() {
+        return source;
+    }
+
+    @Override
+    protected SumoEntity getEntity() {
         return source;
     }
 }

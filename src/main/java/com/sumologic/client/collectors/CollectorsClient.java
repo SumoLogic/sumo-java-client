@@ -6,6 +6,7 @@ import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.PassingResponseHandler;
+import com.sumologic.client.util.SumoEntityResponseHandler;
 
 public class CollectorsClient {
 
@@ -17,7 +18,7 @@ public class CollectorsClient {
 
     public GetCollectorResponse get(ConnectionConfig config, GetCollectorRequest request) {
         return HttpUtils.get(config, getCollectorEndpoint(request.getId()), request,
-                new DeserializingResponseHandler<GetCollectorRequest,
+                new SumoEntityResponseHandler<GetCollectorRequest,
                         GetCollectorResponse>(GetCollectorResponse.class));
     }
 
@@ -42,7 +43,7 @@ public class CollectorsClient {
     public GetSourceResponse getSource(ConnectionConfig config, GetSourceRequest request) {
         String sourceEndpoint = getSourceEndpoint(request.getCollectorId(), request.getSourceId());
         return HttpUtils.get(config, sourceEndpoint, request,
-                new DeserializingResponseHandler<GetSourceRequest,
+                new SumoEntityResponseHandler<GetSourceRequest,
                         GetSourceResponse>(GetSourceResponse.class));
     }
 
