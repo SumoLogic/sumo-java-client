@@ -11,12 +11,17 @@ public enum SumoServerErrors implements SumoServerError {
     UNAUTHORIZED("unauthorized"),
     UNAVAILABLE("service.unavailable"),
 
-    INVALID_LIMIT("limit.invalid"),
-    INVALID_OFFSET("offset.invalid");
+    ETAG_MISMATCH("service.etagid.mismatch"),
+    MISSING_PRECONDITION("service.ifthen.missing"),
+    BAD_PRECONDITION("service.ifthen.notquoted"),
+
+    INVALID_LIMIT("service.limit.invalid"),
+    INVALID_OFFSET("service.offset.invalid"),
+    INVALID_JSON("service.json.invalid");
 
     private String id = "";
 
-    SumoServerErrors(String id) {
+    private SumoServerErrors(String id) {
         this.id = id;
     }
 
