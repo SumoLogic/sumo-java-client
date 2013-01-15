@@ -112,7 +112,7 @@ public interface UrlParameters {
     /**
      * The log message time field's key
      */
-    public static String LOG_MESSAGE_TIME = "_mesagetime";
+    public static String LOG_MESSAGE_TIME = "_messagetime";
 
     /**
      * The log message receipt time field's key
@@ -144,4 +144,23 @@ public interface UrlParameters {
      */
     public static String LOG_MESSAGE_SIGNATURE = "_signature";
 
+    /**
+     * Search sub-tasks
+     */
+    public static String SEARCH_SERVICE ="search";
+
+    /**
+     * Search sessions sub-tasks
+     */
+    public static String SEARCH_SESSIONS_SERVICE ="sessions";
+
+    /**
+     * Search session messages
+     */
+    public static String MESSAGES_SEARCH_SESSIONS_SERVICE ="messages";
+
+    /**
+     * Search session records
+     */
+    public static String RECORDS_SEARCH_SESSIONS_SERVICE ="records";
 }

@@ -155,6 +155,26 @@ public class LogMessage {
     }
 
     /**
+     * Returns the map of properties.
+     * This is needed to support the search session API.
+     *
+     * @return The map of properties.
+     */
+    public Map<String, String> getMap() {
+        return properties;
+    }
+
+    /**
+     * Sets the map of properties.
+     * This is needed to support the search session API.
+     *
+     * @param map The map of properties.
+     */
+    public void setMap(Map<String, String> map) {
+        this.properties = map;
+    }
+
+    /**
      * Returns the raw text log line.
      *
      * @return The raw text log line.

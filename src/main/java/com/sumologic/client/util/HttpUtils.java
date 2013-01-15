@@ -20,6 +20,8 @@ import org.apache.http.protocol.HTTP;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpUtils {
 
@@ -30,8 +32,9 @@ public class HttpUtils {
     // Public HTTP request methods
 
     public static <Request extends HttpGetRequest, Response> Response
-    get(ConnectionConfig config, String endpoint, Request request,
-        ResponseHandler<Request, Response> handler) {
+    get(ConnectionConfig config, String endpoint,
+        Request request, Map<String, String> requestHeaders,
+        ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
             String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
@@ -39,27 +42,40 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), params, null);
             HttpGet get = new HttpGet(uri);
 
-            return doRequest(config, get, request, handler);
+            // Set the request headers.
+            for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
+                get.setHeader(header.getKey(), header.getValue());
+            }
+
+            return doRequest(
+                    config, get, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         }
     }
 
     public static <Request extends HttpPostRequest, Response> Response
-    post(ConnectionConfig config, String endpoint, Request request,
-         ResponseHandler<Request, Response> handler) {
+    post(ConnectionConfig config, String endpoint,
+         Request request, Map<String, String> requestHeaders,
+         ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPost post = new HttpPost(uri);
 
+            // Set the request headers.
+            for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
+                post.setHeader(header.getKey(), header.getValue());
+            }
+
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             post.setEntity(entity);
 
-            return doRequest(config, post, request, handler);
+            return doRequest(
+                    config, post, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
@@ -74,8 +90,8 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpPutRequest, Response> Response
-    put(ConnectionConfig config, String endpoint, Request request,
-        ResponseHandler<Request, Response> handler) {
+    put(ConnectionConfig config, String endpoint,
+        Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
@@ -91,7 +107,8 @@ public class HttpUtils {
             entity.setContentType(JSON_CONTENT_TYPE);
             put.setEntity(entity);
 
-            return doRequest(config, put, request, handler);
+            return doRequest(
+                    config, put, request, handler, expectedStatusCode);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
@@ -106,18 +123,27 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpDeleteRequest, Response> Response
-    delete(ConnectionConfig config, String endpoint, Request request,
-           ResponseHandler<Request, Response> handler) {
+    delete(ConnectionConfig config, String endpoint,
+           Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpDelete delete = new HttpDelete(uri);
 
-            return doRequest(config, delete, request, handler);
+            return doRequest(
+                    config, delete, request, handler, expectedStatusCode);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         }
+    }
+
+    public static Map<String, String> toRequestHeaders(String... parts) {
+        Map<String, String> result = new HashMap<String, String>();
+        for (int i = 0; i < parts.length; i++) {
+            result.put(parts[i], parts[++i]);
+        }
+        return result;
     }
 
     // Private methods
@@ -136,8 +162,8 @@ public class HttpUtils {
     }
 
     private static <Request, Response> Response
-    doRequest(ConnectionConfig config, HttpUriRequest method, Request request,
-              ResponseHandler<Request, Response> handler) {
+    doRequest(ConnectionConfig config, HttpUriRequest method,
+              Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         HttpClient httpClient = getHttpClient(config);
 
@@ -148,8 +174,7 @@ public class HttpUtils {
             httpStream = entity.getContent();
 
             // Request was ok? yes -> handle http response
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (statusCode >= 200 && statusCode < 300) {
+            if (httpResponse.getStatusLine().getStatusCode() == expectedStatusCode) {
                 return handler.handle(httpResponse, httpStream, request);
             }
 
@@ -193,5 +218,4 @@ public class HttpUtils {
             }
         }
     }
-
 }
