@@ -148,4 +148,14 @@ public interface UrlParameters {
      * Search sessions sub-tasks
      */
     public static String SEARCH_SESSIONS_SERVICE ="sessions";
+
+    /**
+     * Search session messages
+     */
+    public static String MESSAGES_SEARCH_SESSIONS_SERVICE ="messages";
+
+    /**
+     * Search session records
+     */
+    public static String RECORDS_SEARCH_SESSIONS_SERVICE ="records";
 }

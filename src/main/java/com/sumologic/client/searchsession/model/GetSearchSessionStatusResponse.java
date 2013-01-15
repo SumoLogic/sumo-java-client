@@ -1,8 +1,7 @@
-package com.sumologic.client.model;
+package com.sumologic.client.searchsession.model;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
- * @version 1.0
  */
 public final class GetSearchSessionStatusResponse {
 
@@ -15,22 +14,6 @@ public final class GetSearchSessionStatusResponse {
     // TODO: Errors
 
     // Implementation.
-
-    /**
-     * Constructs a wildcard query that seeks to return all log lines.
-     *
-     * @param query          The query.
-     * @param fromExpression The from expression.
-     * @param toExpression   The toExpression.
-     * @param timeZone       The time zone.
-     */
-    public GetSearchSessionStatusResponse(String state,
-                                          int messages,
-                                          int records) {
-        this.state = state;
-        this.messageCount = messages;
-        this.recordCount = records;
-    }
 
     /**
      * Returns the state.

@@ -3,9 +3,16 @@ package com.sumologic.client;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.sumologic.client.model.*;
+import com.sumologic.client.model.HttpGetRequest;
+import com.sumologic.client.searchsession.*;
+import com.sumologic.client.searchsession.model.*;
+import com.sumologic.client.util.DeserializingResponseHandler;
+import com.sumologic.client.util.HttpUtils;
+import com.sumologic.client.util.JacksonUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.HttpGet;
@@ -26,9 +33,10 @@ import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * The sumo client implementation.
@@ -47,6 +55,7 @@ public class SumoLogicClient implements SumoLogic {
 
     private SearchClient searchClient = new SearchClient();
     private CollectorsClient collectorsClient = new CollectorsClient();
+    private SearchSessionClient searchSessionClient = new SearchSessionClient();
 
     /**
      * Constructs a Sumo Logic client.
@@ -82,6 +91,10 @@ public class SumoLogicClient implements SumoLogic {
         this.protocol = url.getProtocol();
     }
 
+    //
+    // One-shot search.
+    //
+
     /**
      * Issues a search query using Sumo Logic's web service.
      *
@@ -103,247 +116,63 @@ public class SumoLogicClient implements SumoLogic {
         return search(new SearchRequest(query));
     }
 
+    //
+    // Session-based search.
+    //
+
+    /**
+     * Start a search session and receive a session ID for subsequent
+     * polling of the search status.
+     *
+     * @param query          The query.
+     * @param fromExpression The from expression.
+     * @param toExpression   The toExpression.
+     * @param timeZone       The time zone.
+     * @return The search session ID
+     */
     @Override
-    public String createSearchSession(CreateSearchSessionRequest createSearchSessionRequest) {
-
-        // Get the HTTP client.
-        DefaultHttpClient httpClient = getDefaultHttpClient();
-
-        // Setup some stuff we need later.
-        HttpPost httpMethod = null;
-        InputStream responseEntityStream = null;
-        JsonParser jp = null;
-        String searchSessionId = null;
-
-        try {
-
-            // Construct the URI for the request.
-            URI uri = URIUtils.createURI(
-                    protocol,
-                    hostname,
-                    port,
-                    "/" + UrlParameters.API_SERVICE +
-                            "/" + UrlParameters.VERSION_PREFIX + "1" +
-                            "/" + UrlParameters.SEARCH_SERVICE +
-                            "/" + UrlParameters.SEARCH_SESSIONS_SERVICE,
-                    null,
-                    null);
-
-            // Create the request method.
-            httpMethod = new HttpPost(uri);
-
-            // Set the relevant headers.
-            httpMethod.setHeader("Content-type", "application/json");
-            httpMethod.setHeader("Accept", "application/json");
-
-            // Set the request body.
-            String requestBody = createSearchSessionRequest.toJson();
-            HttpEntity requestEntity = new StringEntity(requestBody);
-            httpMethod.setEntity(requestEntity);
-
-            // Fire, aim, ready.
-            HttpResponse response = httpClient.execute(httpMethod);
-
-            // Read the response body.
-            HttpEntity responseEntity = response.getEntity();
-            responseEntityStream = responseEntity.getContent();
-
-            // Did we get the correct status code?
-            if (response.getStatusLine().getStatusCode() == 201) {
-
-                // Parse all JSON records
-                jp = jsonFactory.createJsonParser(responseEntityStream);
-                while (jp.nextToken() == JsonToken.START_OBJECT) {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    while (jp.nextToken() != JsonToken.END_OBJECT) {
-                        String key = jp.getCurrentName();
-                        jp.nextToken();
-                        String value = jp.getText();
-                        map.put(key, value);
-                    }
-                    searchSessionId = map.get("id");
-                }
-            } else {
-
-                // Read the response and create and throw an exception.
-                String responseBody = EntityUtils.toString(responseEntity);
-                throw new SumoServerException(
-                        httpMethod.getURI().toString(),
-                        responseBody);
-            }
-        }
-
-        // Handle IO exceptions
-        catch (IOException ex) {
-            throw new SumoClientException("Error reading server response", ex);
-        }
-
-        // Handle runtime exceptions
-        catch (RuntimeException ex) {
-            throw new SumoClientException("Runtime error reading server response", ex);
-        }
-
-        // Handle URI syntax exceptions
-        catch (URISyntaxException ex) {
-            throw new SumoClientException("URI cannot be generated", ex);
-        }
-
-        // Clean-up
-        finally {
-
-            // Kill the JSON parser.
-            if (jp != null) try {
-                jp.close();
-            } catch (IOException io) {
-                // Yippee-kai-yay.
-            }
-
-            // Kill the stream.
-            if (responseEntityStream != null) {
-                try {
-                    responseEntityStream.close();
-                } catch (IOException io) {
-                    // IOException is exceptional.
-                }
-            }
-
-            // Kill the post method.
-            if (httpMethod != null) {
-                httpMethod.abort();
-            }
-
-            // Kill the connection.
-            httpClient.getConnectionManager().shutdown();
-        }
-
-        return searchSessionId;
+    public String createSearchSession(
+            String query, String fromExpression, String toExpression, String timeZone) {
+        CreateSearchSessionRequest createSearchSessionRequest =
+                new CreateSearchSessionRequest(query, fromExpression, toExpression, timeZone);
+        return searchSessionClient.createSearchSession(
+                protocol, hostname, port, credentials, createSearchSessionRequest);
     }
 
+    /**
+     * Returns the current status of a search session.
+     *
+     * @param searchSessionId The search session ID
+     * @return The status
+     */
     @Override
     public GetSearchSessionStatusResponse getSearchSessionStatus(String searchSessionId) {
-
-        // Get the HTTP client.
-        DefaultHttpClient httpClient = getDefaultHttpClient();
-
-        // Setup some stuff we need later.
-        HttpGet httpMethod = null;
-        InputStream responseEntityStream = null;
-        JsonParser jp = null;
-        GetSearchSessionStatusResponse getSearchSessionStatusResponse = null;
-
-        try {
-
-            // Construct the URI for the request.
-            URI uri = URIUtils.createURI(
-                    protocol,
-                    hostname,
-                    port,
-                    "/" + UrlParameters.API_SERVICE +
-                            "/" + UrlParameters.VERSION_PREFIX + "1" +
-                            "/" + UrlParameters.SEARCH_SERVICE +
-                            "/" + UrlParameters.SEARCH_SESSIONS_SERVICE +
-                            "/" + searchSessionId,
-                    null,
-                    null);
-
-            // Create the request method.
-            httpMethod = new HttpGet(uri);
-
-            // Set the relevant headers.
-            httpMethod.setHeader("Accept", "application/json");
-
-            // Fire, aim, ready.
-            HttpResponse response = httpClient.execute(httpMethod);
-
-            // Read the response body.
-            HttpEntity responseEntity = response.getEntity();
-            responseEntityStream = responseEntity.getContent();
-
-            // Did we get the correct status code?
-            if (response.getStatusLine().getStatusCode() == 200) {
-
-                // Parse all JSON records
-                jp = jsonFactory.createJsonParser(responseEntityStream);
-                while (jp.nextToken() == JsonToken.START_OBJECT) {
-                    HashMap<String, String> map = new HashMap<String, String>();
-                    while (jp.nextToken() != JsonToken.END_OBJECT) {
-                        String key = jp.getCurrentName();
-                        jp.nextToken();
-                        String value = jp.getText();
-                        map.put(key, value);
-                    }
-                    getSearchSessionStatusResponse = new GetSearchSessionStatusResponse(
-                            map.get("state"),
-                            Integer.parseInt(map.get("messages")),
-                            Integer.parseInt(map.get("records")));
-                }
-            } else {
-
-                // Read the response and create and throw an exception.
-                String responseBody = EntityUtils.toString(responseEntity);
-                throw new SumoServerException(
-                        httpMethod.getURI().toString(),
-                        responseBody);
-            }
-        }
-
-        // Handle IO exceptions
-        catch (IOException ex) {
-            throw new SumoClientException("Error reading server response", ex);
-        }
-
-        // Handle runtime exceptions
-        catch (RuntimeException ex) {
-            throw new SumoClientException("Runtime error reading server response", ex);
-        }
-
-        // Handle URI syntax exceptions
-        catch (URISyntaxException ex) {
-            throw new SumoClientException("URI cannot be generated", ex);
-        }
-
-        // Clean-up
-        finally {
-
-            // Kill the JSON parser.
-            if (jp != null) try {
-                jp.close();
-            } catch (IOException io) {
-                // Yippee-kai-yay.
-            }
-
-            // Kill the stream.
-            if (responseEntityStream != null) {
-                try {
-                    responseEntityStream.close();
-                } catch (IOException io) {
-                    // IOException is exceptional.
-                }
-            }
-
-            // Kill the post method.
-            if (httpMethod != null) {
-                httpMethod.abort();
-            }
-
-            // Kill the connection.
-            httpClient.getConnectionManager().shutdown();
-        }
-
-        return getSearchSessionStatusResponse;
+        GetSearchSessionStatusRequest getSearchSessionStatusRequest =
+                new GetSearchSessionStatusRequest(searchSessionId);
+        return searchSessionClient.getSearchSessionStatus(
+                protocol, hostname, port, credentials, getSearchSessionStatusRequest);
     }
 
-    // Private Implementation.
-
-    private DefaultHttpClient getDefaultHttpClient() {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(
-                new AuthScope(hostname, port),
-                new UsernamePasswordCredentials(
-                        credentials.getEmail(),
-                        credentials.getPassword()));
-        return httpClient;
+    /**
+     * Returns search session result messages.
+     *
+     * @param searchSessionId The search session ID.
+     * @param offset          The offset.
+     * @param length          The length.
+     * @return The messages.
+     */
+    @Override
+    public GetMessagesForSearchSessionResponse getMessagesForSearchSession(
+            String searchSessionId, int offset, int length) {
+        GetMessagesForSearchSessionRequest getMessagesForSearchSessionRequest =
+                new GetMessagesForSearchSessionRequest(searchSessionId, offset, length);
+        return searchSessionClient.getMessagesForSearchSession(
+                protocol, hostname, port, credentials, getMessagesForSearchSessionRequest);
     }
+
+    //
+    // Collectors.
+    //
 
     /**
      * Gets all available Sumo Logic collectors matching the request.
@@ -422,5 +251,17 @@ public class SumoLogicClient implements SumoLogic {
      */
     public DeleteCollectorResponse deleteCollector(Long id) {
         return deleteCollector(new DeleteCollectorRequest(id));
+    }
+
+    // Private Implementation.
+
+    private DefaultHttpClient getDefaultHttpClient() {
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        httpClient.getCredentialsProvider().setCredentials(
+                new AuthScope(hostname, port),
+                new UsernamePasswordCredentials(
+                        credentials.getEmail(),
+                        credentials.getPassword()));
+        return httpClient;
     }
 }

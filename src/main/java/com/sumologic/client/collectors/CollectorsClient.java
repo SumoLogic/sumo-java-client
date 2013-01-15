@@ -6,6 +6,7 @@ import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.PassingResponseHandler;
+import org.apache.http.HttpStatus;
 
 public class CollectorsClient {
 
@@ -13,9 +14,10 @@ public class CollectorsClient {
                                      Credentials credentials, GetCollectorsRequest request) {
 
         return HttpUtils.get(protocol, hostname, port, credentials,
-                UrlParameters.COLLECTORS_SERVICE, request,
+                UrlParameters.COLLECTORS_SERVICE, request, HttpUtils.toRequestHeaders(),
                 new DeserializingResponseHandler<GetCollectorsRequest,
-                        GetCollectorsResponse>(GetCollectorsResponse.class));
+                        GetCollectorsResponse>(GetCollectorsResponse.class),
+                HttpStatus.SC_OK);
     }
 
     public GetCollectorResponse get(String protocol, String hostname, int port,
@@ -23,8 +25,10 @@ public class CollectorsClient {
 
         return HttpUtils.get(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
+                HttpUtils.toRequestHeaders(),
                 new DeserializingResponseHandler<GetCollectorRequest,
-                        GetCollectorResponse>(GetCollectorResponse.class));
+                        GetCollectorResponse>(GetCollectorResponse.class),
+                HttpStatus.SC_OK);
     }
 
     public UpdateCollectorResponse update(String protocol, String hostname, int port,
@@ -33,7 +37,8 @@ public class CollectorsClient {
         return HttpUtils.put(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
                 new DeserializingResponseHandler<UpdateCollectorRequest,
-                        UpdateCollectorResponse>(UpdateCollectorResponse.class));
+                        UpdateCollectorResponse>(UpdateCollectorResponse.class),
+                HttpStatus.SC_OK);
     }
 
     public DeleteCollectorResponse delete(String protocol, String hostname, int port,
@@ -42,6 +47,7 @@ public class CollectorsClient {
         return HttpUtils.delete(protocol, hostname, port, credentials,
                 UrlParameters.COLLECTORS_SERVICE + "/" + request.getId(), request,
                 new PassingResponseHandler<DeleteCollectorRequest,
-                        DeleteCollectorResponse>(new DeleteCollectorResponse()));
+                        DeleteCollectorResponse>(new DeleteCollectorResponse()),
+                HttpStatus.SC_OK);
     }
 }

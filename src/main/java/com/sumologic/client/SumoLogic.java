@@ -1,7 +1,8 @@
 package com.sumologic.client;
 
-import com.sumologic.client.model.CreateSearchSessionRequest;
-import com.sumologic.client.model.GetSearchSessionStatusResponse;
+import com.sumologic.client.searchsession.model.CreateSearchSessionRequest;
+import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
+import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 
@@ -10,6 +11,7 @@ import com.sumologic.client.model.SearchResponse;
  *
  * @author Sebastian Mies
  * @author Daphne Hsieh
+ * @author Christian Beedgen
  * @version 1.0
  */
 public interface SumoLogic {
@@ -26,12 +28,31 @@ public interface SumoLogic {
      * Start a search session and receive a session ID for subsequent
      * polling of the search status.
      *
-     * @param searchSessionRequest The search session to be started
+     * @param query          The query.
+     * @param fromExpression The from expression.
+     * @param toExpression   The toExpression.
+     * @param timeZone       The time zone.
      * @return The search session ID
      */
-    String createSearchSession(CreateSearchSessionRequest searchSessionRequest);
+    String createSearchSession(
+            String query, String fromExpression, String toExpression, String timeZone);
 
+    /**
+     * Returns the current status of a search session.
+     *
+     * @param searchSessionId The search session ID
+     * @return The status
+     */
     GetSearchSessionStatusResponse getSearchSessionStatus(String searchSessionId);
 
-
+    /**
+     * Returns search session result messages.
+     *
+     * @param searchSessionId The search session ID.
+     * @param offset          The offset.
+     * @param length          The length.
+     * @return The messages.
+     */
+    GetMessagesForSearchSessionResponse getMessagesForSearchSession(
+            String searchSessionId, int offset, int length);
 }

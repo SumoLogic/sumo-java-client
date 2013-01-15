@@ -1,7 +1,12 @@
 package com.sumologic.client;
 
-import com.sumologic.client.model.CreateSearchSessionRequest;
-import com.sumologic.client.model.GetSearchSessionStatusResponse;
+import com.sumologic.client.searchsession.model.CreateSearchSessionRequest;
+import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
+import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
+import com.sumologic.client.searchsession.model.SearchSessionMessage;
+
+import java.util.Date;
+import java.util.List;
 
 public class SearchSessionExample {
 
@@ -16,16 +21,15 @@ public class SearchSessionExample {
         sumoClient.setURL(apiUrl);
 
         // Create a search session.
-        CreateSearchSessionRequest createSearchSessionRequest =
-                new CreateSearchSessionRequest(
-                        "*",
-                        "2013-01-06T11:00:00",
-                        "2013-01-06T12:00:00",
-                        "UTC");
-        String searchSessionId = sumoClient.createSearchSession(createSearchSessionRequest);
+        String searchSessionId = sumoClient.createSearchSession(
+                "*",
+                "2013-01-13T00:00:00",
+                "2013-01-15T00:00:00",
+                "UTC");
         System.out.printf("Search session ID: '%s'\n", searchSessionId);
 
         // Poll the search session status.
+        int messageCount = 0;
         GetSearchSessionStatusResponse getSearchSessionStatusResponse = null;
         while (getSearchSessionStatusResponse == null ||
                 (!getSearchSessionStatusResponse.getState().equals("DONE GATHERING RESULTS") &&
@@ -33,10 +37,30 @@ public class SearchSessionExample {
             Thread.sleep(5000);
             getSearchSessionStatusResponse =
                     sumoClient.getSearchSessionStatus(searchSessionId);
+            messageCount = getSearchSessionStatusResponse.getMessageCount();
             System.out.printf(
                     "Search session ID: '%s', %s\n",
                     searchSessionId,
                     getSearchSessionStatusResponse);
+        }
+
+        // Get some messages.
+        int offset = 0;
+        int length = Math.min(messageCount, 10);
+        GetMessagesForSearchSessionResponse getMessagesForSearchSessionResponse =
+                sumoClient.getMessagesForSearchSession(searchSessionId, offset, length);
+        System.out.printf(
+                "Search session ID: '%s', %s\n",
+                searchSessionId,
+                getMessagesForSearchSessionResponse);
+        List<SearchSessionMessage> messages = getMessagesForSearchSessionResponse.getMessages();
+        for (SearchSessionMessage message : messages) {
+            System.out.printf("  %s, %s, %s, %s, %s\n",
+                    new Date(message.getMessageTime()),
+                    message.getSourceHost(),
+                    message.getSourceName(),
+                    message.getSourceCategory(),
+                    message.getRaw());
         }
     }
 }

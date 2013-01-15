@@ -23,7 +23,7 @@ public class SearchClient {
 
         return HttpUtils.get(protocol, hostname, port, credentials,
                 UrlParameters.LOGS_SERVICE + "/" + UrlParameters.SEARCH, request,
-                new SearchHandler());
+                HttpUtils.toRequestHeaders(), new SearchHandler(), 200);
     }
 
     private static class SearchHandler implements ResponseHandler<SearchRequest, SearchResponse> {

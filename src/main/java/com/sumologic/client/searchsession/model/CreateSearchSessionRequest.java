@@ -1,17 +1,19 @@
-package com.sumologic.client.model;
+package com.sumologic.client.searchsession.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sumologic.client.model.HttpGetRequest;
+import com.sumologic.client.model.HttpPostRequest;
+import com.sumologic.client.util.JacksonUtils;
+import org.apache.http.NameValuePair;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
- * @version 1.0
  */
-public final class CreateSearchSessionRequest {
+public final class CreateSearchSessionRequest implements HttpPostRequest {
 
     // Instance fields.
 
@@ -23,6 +25,8 @@ public final class CreateSearchSessionRequest {
     // Implementation.
 
     /**
+     * Creates a search session request.
+     *
      * @param query          The query.
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
@@ -121,14 +125,14 @@ public final class CreateSearchSessionRequest {
      *
      * @return The time zone.
      */
-    public String getTimezone() {
+    public String getTimeZone() {
         return timeZone;
     }
 
     /**
      * Sets the time zone.
      */
-    public void setTimezone(String timeZone) {
+    public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
 
@@ -137,10 +141,11 @@ public final class CreateSearchSessionRequest {
      *
      * @return This object.
      */
-    public CreateSearchSessionRequest withTimezone(String timeZone) {
-        setTimezone(timeZone);
+    public CreateSearchSessionRequest withTimeZone(String timeZone) {
+        setTimeZone(timeZone);
         return this;
     }
+
 
     public String toJson() {
         Map<String, Object> map = new TreeMap<String, Object>();
@@ -149,13 +154,14 @@ public final class CreateSearchSessionRequest {
         map.put("to", toExpression);
         map.put("tz", timeZone);
 
-        ObjectMapper objectMapper = new ObjectMapper();
         String result;
         try {
-            result = objectMapper.writeValueAsString(map);
+            result = JacksonUtils.MAPPER.writeValueAsString(map);
         } catch (IOException ioe) {
             throw new RuntimeException(ioe);
         }
         return result;
     }
+
+    // HttpPostRequest implementation.
 }
