@@ -4,7 +4,6 @@ package com.sumologic.client.collectors.model;
  * A source that reads from local files matching a path expression.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class LocalFileSource extends Source {
 

@@ -18,7 +18,6 @@ import java.util.List;
  *
  * @author Sebastian Mies
  * @author Daphne Hsieh
- * @version 1.0
  */
 public final class SearchRequest implements HttpGetRequest {
 

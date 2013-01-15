@@ -4,7 +4,6 @@ package com.sumologic.client;
  * General sumo API web service errors.
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public enum SumoServerErrors implements SumoServerError {
     INTERNAL_SERVER_ERROR("internal.error"),

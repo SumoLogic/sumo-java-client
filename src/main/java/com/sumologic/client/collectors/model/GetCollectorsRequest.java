@@ -12,7 +12,6 @@ import java.util.List;
  * A request to get collectors from the Sumo Logic system.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class GetCollectorsRequest implements HttpGetRequest {
 

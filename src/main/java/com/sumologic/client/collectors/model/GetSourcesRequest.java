@@ -12,7 +12,6 @@ import java.util.List;
  * A request to get sources for a collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class GetSourcesRequest implements HttpGetRequest {
 

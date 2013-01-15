@@ -8,7 +8,6 @@ import com.sumologic.client.model.SumoEntity;
  * A collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "collectorType")
 @JsonSubTypes({

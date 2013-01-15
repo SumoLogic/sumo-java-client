@@ -4,7 +4,6 @@ package com.sumologic.client.collectors.model;
  * A source that collects messages through syslog.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class SyslogSource extends Source {
 

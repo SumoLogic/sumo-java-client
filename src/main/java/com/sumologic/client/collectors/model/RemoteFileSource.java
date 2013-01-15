@@ -4,7 +4,6 @@ package com.sumologic.client.collectors.model;
  * A source that reads from a remote file over SSH.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class RemoteFileSource extends Source {
 

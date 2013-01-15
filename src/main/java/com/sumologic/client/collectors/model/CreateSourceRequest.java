@@ -7,7 +7,6 @@ import com.sumologic.client.model.HttpPostRequest;
  * A request to add a source for a collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class CreateSourceRequest implements HttpPostRequest {
 

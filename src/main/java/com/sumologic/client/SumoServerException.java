@@ -13,7 +13,6 @@ import java.util.Map;
  *
  * @author Sebastian Mies
  * @author Daphne Hsieh
- * @version 1.0
  */
 public class SumoServerException extends SumoException {
 
