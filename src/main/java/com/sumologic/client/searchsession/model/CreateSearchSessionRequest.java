@@ -1,14 +1,6 @@
 package com.sumologic.client.searchsession.model;
 
-import com.sumologic.client.model.HttpGetRequest;
 import com.sumologic.client.model.HttpPostRequest;
-import com.sumologic.client.util.JacksonUtils;
-import org.apache.http.NameValuePair;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
@@ -145,23 +137,4 @@ public final class CreateSearchSessionRequest implements HttpPostRequest {
         setTimeZone(timeZone);
         return this;
     }
-
-
-    public String toJson() {
-        Map<String, Object> map = new TreeMap<String, Object>();
-        map.put("q", query);
-        map.put("from", fromExpression);
-        map.put("to", toExpression);
-        map.put("tz", timeZone);
-
-        String result;
-        try {
-            result = JacksonUtils.MAPPER.writeValueAsString(map);
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
-        return result;
-    }
-
-    // HttpPostRequest implementation.
 }

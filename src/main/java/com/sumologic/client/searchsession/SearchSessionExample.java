@@ -2,14 +2,15 @@ package com.sumologic.client.searchsession;
 
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
-import com.sumologic.client.searchsession.model.CreateSearchSessionRequest;
+import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
-import com.sumologic.client.searchsession.model.SearchSessionMessage;
 
-import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Christian Beedgen (christian@sumologic.com)
+ */
 public class SearchSessionExample {
 
     public static void main(String[] args) throws Exception {
@@ -55,14 +56,20 @@ public class SearchSessionExample {
                 "Search session ID: '%s', %s\n",
                 searchSessionId,
                 getMessagesForSearchSessionResponse);
-        List<SearchSessionMessage> messages = getMessagesForSearchSessionResponse.getMessages();
-        for (SearchSessionMessage message : messages) {
+        List<LogMessage> messages = getMessagesForSearchSessionResponse.getMessages();
+        for (LogMessage message : messages) {
+//            System.out.printf("  %s, %s, %s, %s, %s\n",
+//                    new Date(message.getMessageTime()),
+//                    message.getSourceHost(),
+//                    message.getSourceName(),
+//                    message.getSourceCategory(),
+//                    message.getRaw());
             System.out.printf("  %s, %s, %s, %s, %s\n",
-                    new Date(message.getMessageTime()),
+                    message.getTime(),
                     message.getSourceHost(),
                     message.getSourceName(),
                     message.getSourceCategory(),
-                    message.getRaw());
+                    message.getLogLine());
         }
     }
 }

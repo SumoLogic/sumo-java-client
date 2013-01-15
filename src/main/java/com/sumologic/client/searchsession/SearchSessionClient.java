@@ -1,15 +1,16 @@
 package com.sumologic.client.searchsession;
 
+import org.apache.http.HttpStatus;
+
 import com.sumologic.client.ConnectionConfig;
-import com.sumologic.client.Credentials;
 import com.sumologic.client.UrlParameters;
-import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.searchsession.model.*;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
-import com.sumologic.client.util.PassingResponseHandler;
-import org.apache.http.HttpStatus;
 
+/**
+ * @author Christian Beedgen (christian@sumologic.com)
+ */
 public class SearchSessionClient {
 
     // Constants.

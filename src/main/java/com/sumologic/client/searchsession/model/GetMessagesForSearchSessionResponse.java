@@ -1,7 +1,8 @@
 package com.sumologic.client.searchsession.model;
 
-
 import java.util.List;
+
+import com.sumologic.client.model.LogMessage;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
@@ -11,7 +12,7 @@ public class GetMessagesForSearchSessionResponse {
     // Instance fields.
 
     private List<SearchSessionField> fields;
-    private List<SearchSessionMessage> messages;
+    private List<LogMessage> messages;
 
     // Implementation.
 
@@ -49,7 +50,7 @@ public class GetMessagesForSearchSessionResponse {
      *
      * @return The messages.
      */
-    public List<SearchSessionMessage> getMessages() {
+    public List<LogMessage> getMessages() {
         return messages;
     }
 
@@ -58,7 +59,7 @@ public class GetMessagesForSearchSessionResponse {
      *
      * @param messages The messages.
      */
-    public void setMessages(List<SearchSessionMessage> messages) {
+    public void setMessages(List<LogMessage> messages) {
         this.messages = messages;
     }
 
@@ -67,7 +68,7 @@ public class GetMessagesForSearchSessionResponse {
      * @param messages
      * @return
      */
-    public GetMessagesForSearchSessionResponse withMessages(List<SearchSessionMessage> messages) {
+    public GetMessagesForSearchSessionResponse withMessages(List<LogMessage> messages) {
         setMessages(messages);
         return this;
     }

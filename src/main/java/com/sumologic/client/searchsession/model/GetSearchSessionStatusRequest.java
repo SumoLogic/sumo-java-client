@@ -1,15 +1,10 @@
 package com.sumologic.client.searchsession.model;
 
-import com.sumologic.client.model.HttpGetRequest;
-import com.sumologic.client.model.HttpPostRequest;
-import com.sumologic.client.util.JacksonUtils;
+import java.util.*;
+
 import org.apache.http.NameValuePair;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import com.sumologic.client.model.HttpGetRequest;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
@@ -53,6 +48,6 @@ public final class GetSearchSessionStatusRequest implements HttpGetRequest {
 
     @Override
     public List<NameValuePair> toUrlParams() {
-        return new ArrayList<NameValuePair>(0);
+        return Collections.emptyList();
     }
 }

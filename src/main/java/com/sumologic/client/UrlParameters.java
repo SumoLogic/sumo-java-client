@@ -112,7 +112,7 @@ public interface UrlParameters {
     /**
      * The log message time field's key
      */
-    public static String LOG_MESSAGE_TIME = "_mesagetime";
+    public static String LOG_MESSAGE_TIME = "_messagetime";
 
     /**
      * The log message receipt time field's key

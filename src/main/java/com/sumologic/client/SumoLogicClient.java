@@ -364,16 +364,4 @@ public class SumoLogicClient implements SumoLogic {
     private ConnectionConfig getConnectionConfig() {
         return new ConnectionConfig(protocol, hostname, port, credentials);
     }
-
-    // Private Implementation.
-
-    private DefaultHttpClient getDefaultHttpClient() {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(
-                new AuthScope(hostname, port),
-                new UsernamePasswordCredentials(
-                        credentials.getEmail(),
-                        credentials.getPassword()));
-        return httpClient;
-    }
 }

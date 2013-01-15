@@ -1,12 +1,5 @@
 package com.sumologic.client.searchsession.model;
 
-import com.sumologic.client.model.HttpPostRequest;
-import com.sumologic.client.util.JacksonUtils;
-
-import java.io.IOException;
-import java.util.Map;
-import java.util.TreeMap;
-
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */

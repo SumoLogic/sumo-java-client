@@ -1,11 +1,12 @@
 package com.sumologic.client.searchsession.model;
 
-import com.sumologic.client.model.HttpGetRequest;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.sumologic.client.model.HttpGetRequest;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
@@ -23,7 +24,7 @@ public final class GetMessagesForSearchSessionRequest implements HttpGetRequest 
     /**
      * Creates a new messages for search session request.
      *
-     * @param id The search session ID.
+     * @param id     The search session ID.
      * @param offset The offset.
      * @param length The length.
      */
