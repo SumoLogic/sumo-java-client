@@ -9,15 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A request to get collectors from the Sumo Logic system.
+ * A request to get sources for a collector in the Sumo Logic system.
  *
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class GetCollectorsRequest implements HttpGetRequest {
+public class GetSourcesRequest implements HttpGetRequest {
 
+    private Long collectorId;
     private Long limit;
     private Long offset;
+
+    public GetSourcesRequest(Long collectorId) {
+        this.collectorId = collectorId;
+    }
+
+    /**
+     * Returns the collector id.
+     *
+     * @return The collector id.
+     */
+    public Long getCollectorId() {
+        return collectorId;
+    }
 
     /**
      * Returns the limit.
@@ -40,7 +54,7 @@ public class GetCollectorsRequest implements HttpGetRequest {
      *
      * @return This object.
      */
-    public GetCollectorsRequest withLimit(Long limit) {
+    public GetSourcesRequest withLimit(Long limit) {
         setLimit(limit);
         return this;
     }
@@ -66,7 +80,7 @@ public class GetCollectorsRequest implements HttpGetRequest {
      *
      * @return This object.
      */
-    public GetCollectorsRequest withOffset(Long offset) {
+    public GetSourcesRequest withOffset(Long offset) {
         setOffset(offset);
         return this;
     }

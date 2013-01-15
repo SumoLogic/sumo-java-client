@@ -12,7 +12,6 @@ import com.sumologic.client.model.SearchResponse;
  * @author Sebastian Mies
  * @author Daphne Hsieh
  * @author Christian Beedgen
- * @version 1.0
  */
 public interface SumoLogic {
 

@@ -39,23 +39,27 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * The sumo client implementation.
+ * The Sumo Logic API client implementation.
  *
  * @author Sebastian Mies
  * @author Daphne Hsieh
- * @version 1.0
+ * @author Christian Beedgen
  */
 public class SumoLogicClient implements SumoLogic {
 
-    private int port = 443;
+    // Instance fields.
+
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
+    private int port = 443;
     private Credentials credentials;
     private static JsonFactory jsonFactory = new JsonFactory();
 
     private SearchClient searchClient = new SearchClient();
     private CollectorsClient collectorsClient = new CollectorsClient();
     private SearchSessionClient searchSessionClient = new SearchSessionClient();
+
+    // Implementation.
 
     /**
      * Constructs a Sumo Logic client.
@@ -69,8 +73,8 @@ public class SumoLogicClient implements SumoLogic {
     /**
      * Convenience: constructs the credentials using email and password.
      *
-     * @param email    Your email
-     * @param password Your password
+     * @param email    Your email.
+     * @param password Your password.
      */
     public SumoLogicClient(String email, String password) {
         this.credentials = new Credentials(email, password);
@@ -80,8 +84,8 @@ public class SumoLogicClient implements SumoLogic {
      * Sets a custom Sumo Logic API url, i.e.,
      * different from https://api.sumologic.com
      *
-     * @param urlString The custom sumo logic api URL
-     * @throws MalformedURLException On URL syntax error
+     * @param urlString The custom sumo logic api URL.
+     * @throws MalformedURLException On URL syntax error.
      */
     public void setURL(String urlString) throws MalformedURLException {
         URL url = new URL(urlString);
@@ -98,19 +102,19 @@ public class SumoLogicClient implements SumoLogic {
     /**
      * Issues a search query using Sumo Logic's web service.
      *
-     * @param request The search Query
-     * @return The resulting log messages
+     * @param request The search query.
+     * @return The resulting log messages.
      */
     @Override
     public SearchResponse search(SearchRequest request) {
-        return searchClient.search(protocol, hostname, port, credentials, request);
+        return searchClient.search(getConnectionConfig(), request);
     }
 
     /**
      * Convenience method: takes a query string as argument.
      *
-     * @param query The sumo log query string
-     * @return The search response
+     * @param query The sumo log query string.
+     * @return The search response.
      */
     public SearchResponse search(String query) {
         return search(new SearchRequest(query));
@@ -128,7 +132,7 @@ public class SumoLogicClient implements SumoLogic {
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
-     * @return The search session ID
+     * @return The search session ID.
      */
     @Override
     public String createSearchSession(
@@ -136,21 +140,21 @@ public class SumoLogicClient implements SumoLogic {
         CreateSearchSessionRequest createSearchSessionRequest =
                 new CreateSearchSessionRequest(query, fromExpression, toExpression, timeZone);
         return searchSessionClient.createSearchSession(
-                protocol, hostname, port, credentials, createSearchSessionRequest);
+                getConnectionConfig(), createSearchSessionRequest);
     }
 
     /**
      * Returns the current status of a search session.
      *
      * @param searchSessionId The search session ID
-     * @return The status
+     * @return The status.
      */
     @Override
     public GetSearchSessionStatusResponse getSearchSessionStatus(String searchSessionId) {
         GetSearchSessionStatusRequest getSearchSessionStatusRequest =
                 new GetSearchSessionStatusRequest(searchSessionId);
         return searchSessionClient.getSearchSessionStatus(
-                protocol, hostname, port, credentials, getSearchSessionStatusRequest);
+                getConnectionConfig(), getSearchSessionStatusRequest);
     }
 
     /**
@@ -167,7 +171,7 @@ public class SumoLogicClient implements SumoLogic {
         GetMessagesForSearchSessionRequest getMessagesForSearchSessionRequest =
                 new GetMessagesForSearchSessionRequest(searchSessionId, offset, length);
         return searchSessionClient.getMessagesForSearchSession(
-                protocol, hostname, port, credentials, getMessagesForSearchSessionRequest);
+                getConnectionConfig(), getMessagesForSearchSessionRequest);
     }
 
     //
@@ -181,7 +185,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorsResponse getCollectors(GetCollectorsRequest request) {
-        return collectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(getConnectionConfig(), request);
     }
 
     /**
@@ -200,7 +204,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public GetCollectorResponse getCollector(GetCollectorRequest request) {
-        return collectorsClient.get(protocol, hostname, port, credentials, request);
+        return collectorsClient.get(getConnectionConfig(), request);
     }
 
     /**
@@ -220,7 +224,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public UpdateCollectorResponse updateCollector(UpdateCollectorRequest request) {
-        return collectorsClient.update(protocol, hostname, port, credentials, request);
+        return collectorsClient.update(getConnectionConfig(), request);
     }
 
     /**
@@ -240,7 +244,7 @@ public class SumoLogicClient implements SumoLogic {
      * @return The response
      */
     public DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request) {
-        return collectorsClient.delete(protocol, hostname, port, credentials, request);
+        return collectorsClient.delete(getConnectionConfig(), request);
     }
 
     /**
@@ -251,6 +255,114 @@ public class SumoLogicClient implements SumoLogic {
      */
     public DeleteCollectorResponse deleteCollector(Long id) {
         return deleteCollector(new DeleteCollectorRequest(id));
+    }
+
+    /**
+     * Gets all sources for a Sumo Logic collector matching the request.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public GetSourcesResponse getSources(GetSourcesRequest request) {
+        return collectorsClient.getSources(getConnectionConfig(), request);
+    }
+
+    /**
+     * Convenience method: takes a collector id as argument.
+     *
+     * @param collectorId The collector id
+     * @return The response
+     */
+    public GetSourcesResponse getSources(Long collectorId) {
+        return getSources(new GetSourcesRequest(collectorId));
+    }
+
+    /**
+     * Gets a single source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public GetSourceResponse getSource(GetSourceRequest request) {
+        return collectorsClient.getSource(getConnectionConfig(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source id as arguments.
+     *
+     * @param collectorId The collector id
+     * @param sourceId The source id
+     * @return The response
+     */
+    public GetSourceResponse getSource(Long collectorId, Long sourceId) {
+        return getSource(new GetSourceRequest(collectorId, sourceId));
+    }
+
+    /**
+     * Creates a source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public CreateSourceResponse createSource(CreateSourceRequest request) {
+        return collectorsClient.createSource(getConnectionConfig(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source as arguments.
+     *
+     * @param collectorId The collector id
+     * @param source The source
+     * @return The response
+     */
+    public CreateSourceResponse createSource(Long collectorId, Source source) {
+        return createSource(new CreateSourceRequest(collectorId, source));
+    }
+
+    /**
+     * Updates a source for a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public UpdateSourceResponse updateSource(UpdateSourceRequest request) {
+        return collectorsClient.updateSource(getConnectionConfig(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source as arguments.
+     *
+     * @param collectorId The collector id
+     * @param source The source
+     * @return The response
+     */
+    public UpdateSourceResponse updateSource(Long collectorId, Source source) {
+        return updateSource(new UpdateSourceRequest(collectorId, source.getId(), source));
+    }
+
+    /**
+     * Deletes a source from a Sumo Logic collector.
+     *
+     * @param request The request
+     * @return The response
+     */
+    public DeleteSourceResponse deleteSource(DeleteSourceRequest request) {
+        return collectorsClient.deleteSource(getConnectionConfig(), request);
+    }
+
+    /**
+     * Convenience method: takes collector id and source id as arguments.
+     *
+     * @param collectorId The collector id
+     * @param sourceId The source id
+     * @return The response
+     */
+    public DeleteSourceResponse deleteSource(Long collectorId, Long sourceId) {
+        return deleteSource(new DeleteSourceRequest(collectorId, sourceId));
+    }
+
+    private ConnectionConfig getConnectionConfig() {
+        return new ConnectionConfig(protocol, hostname, port, credentials);
     }
 
     // Private Implementation.

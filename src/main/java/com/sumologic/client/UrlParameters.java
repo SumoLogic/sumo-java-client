@@ -30,6 +30,11 @@ public interface UrlParameters {
     public static String COLLECTORS_SERVICE = "collectors";
 
     /**
+     * Sources sub-tasks
+     */
+    public static String SOURCES_SERVICE = "sources";
+
+    /**
      * Limit for pagination
      */
     public static String LIMIT = "limit";

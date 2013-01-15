@@ -9,8 +9,6 @@ import com.sumologic.client.model.HttpPostRequest;
 import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIUtils;
@@ -20,6 +18,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,14 +32,15 @@ public class HttpUtils {
     // Public HTTP request methods
 
     public static <Request extends HttpGetRequest, Response> Response
-    get(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+    get(ConnectionConfig config, String endpoint,
         Request request, Map<String, String> requestHeaders,
         ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            String encodedParams = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
-            HttpGet get = new HttpGet(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), encodedParams, null));
+            String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), params, null);
+            HttpGet get = new HttpGet(uri);
 
             // Set the request headers.
             for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
@@ -48,20 +48,21 @@ public class HttpUtils {
             }
 
             return doRequest(
-                    hostname, port, credentials, get, request, handler, expectedStatusCode);
+                    config, get, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         }
     }
 
     public static <Request extends HttpPostRequest, Response> Response
-    post(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+    post(ConnectionConfig config, String endpoint,
          Request request, Map<String, String> requestHeaders,
          ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            HttpPost post = new HttpPost(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), null, null));
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), null, null);
+            HttpPost post = new HttpPost(uri);
 
             // Set the request headers.
             for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
@@ -74,7 +75,7 @@ public class HttpUtils {
             post.setEntity(entity);
 
             return doRequest(
-                    hostname, port, credentials, post, request, handler, expectedStatusCode);
+                    config, post, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
@@ -89,12 +90,13 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpPutRequest, Response> Response
-    put(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+    put(ConnectionConfig config, String endpoint,
         Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            HttpPut put = new HttpPut(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), null, null));
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), null, null);
+            HttpPut put = new HttpPut(uri);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
@@ -102,7 +104,7 @@ public class HttpUtils {
             put.setEntity(entity);
 
             return doRequest(
-                    hostname, port, credentials, put, request, handler, expectedStatusCode);
+                    config, put, request, handler, expectedStatusCode);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
@@ -117,15 +119,16 @@ public class HttpUtils {
     }
 
     public static <Request extends HttpDeleteRequest, Response> Response
-    delete(String protocol, String hostname, int port, Credentials credentials, String endpoint,
+    delete(ConnectionConfig config, String endpoint,
            Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            HttpDelete delete = new HttpDelete(URIUtils.createURI(protocol, hostname + ":" + port,
-                    -1, getEndpointURI(endpoint), null, null));
+            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
+                    config.getPort(), getEndpointURI(endpoint), null, null);
+            HttpDelete delete = new HttpDelete(uri);
 
             return doRequest(
-                    hostname, port, credentials, delete, request, handler, expectedStatusCode);
+                    config, delete, request, handler, expectedStatusCode);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         }
@@ -141,10 +144,10 @@ public class HttpUtils {
 
     // Private methods
 
-    private static HttpClient getHttpClient(String hostname, int port, Credentials credentials) {
+    private static HttpClient getHttpClient(ConnectionConfig config) {
         DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getCredentialsProvider().setCredentials(new AuthScope(hostname, port),
-                new UsernamePasswordCredentials(credentials.getEmail(), credentials.getPassword()));
+        httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
+                config.getUsernamePasswordCredentials());
         return httpClient;
     }
 
@@ -155,10 +158,10 @@ public class HttpUtils {
     }
 
     private static <Request, Response> Response
-    doRequest(String hostname, int port, Credentials credentials, HttpUriRequest method,
+    doRequest(ConnectionConfig config, HttpUriRequest method,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
-        HttpClient httpClient = getHttpClient(hostname, port, credentials);
+        HttpClient httpClient = getHttpClient(config);
 
         InputStream httpStream = null;
         try {
@@ -211,5 +214,4 @@ public class HttpUtils {
             }
         }
     }
-
 }

@@ -1,5 +1,7 @@
-package com.sumologic.client;
+package com.sumologic.client.searchsession;
 
+import com.sumologic.client.Credentials;
+import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.searchsession.model.CreateSearchSessionRequest;
 import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;

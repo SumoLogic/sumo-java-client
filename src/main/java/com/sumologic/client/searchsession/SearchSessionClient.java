@@ -1,5 +1,6 @@
 package com.sumologic.client.searchsession;
 
+import com.sumologic.client.ConnectionConfig;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.collectors.model.*;
@@ -22,16 +23,17 @@ public class SearchSessionClient {
     private static final String GET_MESSAGES_FOR_SEARCH_SESSION_ENDPOINT =
             UrlParameters.SEARCH_SERVICE +
                     "/" + UrlParameters.MESSAGES_SEARCH_SESSIONS_SERVICE;
-    
+
     // Implementation.
 
     public String createSearchSession(
-            String protocol, String hostname, int port, Credentials credentials,
+            ConnectionConfig connection,
             CreateSearchSessionRequest createSearchSessionRequest) {
 
+        String uri = CREATE_SEARCH_SESSION_ENDPOINT;
         return HttpUtils.post(
-                protocol, hostname, port, credentials,
-                CREATE_SEARCH_SESSION_ENDPOINT,
+                connection,
+                uri,
                 createSearchSessionRequest,
                 HttpUtils.toRequestHeaders(
                         "Content-type", "application/json",
@@ -42,12 +44,14 @@ public class SearchSessionClient {
     }
 
     public GetSearchSessionStatusResponse getSearchSessionStatus(
-            String protocol, String hostname, int port, Credentials credentials,
+            ConnectionConfig connection,
             GetSearchSessionStatusRequest getSearchSessionStatusRequest) {
 
+        String uri = GET_SEARCH_SESSION_STATUS_ENDPOINT +
+                "/" + getSearchSessionStatusRequest.getId();
         return HttpUtils.get(
-                protocol, hostname, port, credentials,
-                GET_SEARCH_SESSION_STATUS_ENDPOINT + "/" + getSearchSessionStatusRequest.getId(),
+                connection,
+                uri,
                 getSearchSessionStatusRequest,
                 HttpUtils.toRequestHeaders(
                         "Accept", "application/json"),
@@ -57,13 +61,14 @@ public class SearchSessionClient {
     }
 
     public GetMessagesForSearchSessionResponse getMessagesForSearchSession(
-            String protocol, String hostname, int port, Credentials credentials,
+            ConnectionConfig connection,
             GetMessagesForSearchSessionRequest getMessagesForSearchSessionRequest) {
 
+        String uri = GET_MESSAGES_FOR_SEARCH_SESSION_ENDPOINT +
+                "/" + getMessagesForSearchSessionRequest.getId();
         return HttpUtils.get(
-                protocol, hostname, port, credentials,
-                GET_MESSAGES_FOR_SEARCH_SESSION_ENDPOINT +
-                        "/" + getMessagesForSearchSessionRequest.getId(),
+                connection,
+                uri,
                 getMessagesForSearchSessionRequest,
                 HttpUtils.toRequestHeaders(
                         "Accept", "application/json"),
