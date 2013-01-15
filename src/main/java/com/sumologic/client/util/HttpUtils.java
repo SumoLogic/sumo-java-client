@@ -145,7 +145,8 @@ public class HttpUtils {
             httpStream = entity.getContent();
 
             // Request was ok? yes -> handle http response
-            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            if (statusCode >= 200 && statusCode < 300) {
                 return handler.handle(httpResponse, httpStream, request);
             }
 
