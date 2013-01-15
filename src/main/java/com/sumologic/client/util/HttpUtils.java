@@ -98,6 +98,10 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPut put = new HttpPut(uri);
 
+            if (request.getETag() != null) {
+                put.setHeader("If-Match", request.getETag());
+            }
+
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
@@ -171,7 +175,7 @@ public class HttpUtils {
 
             // Request was ok? yes -> handle http response
             if (httpResponse.getStatusLine().getStatusCode() == expectedStatusCode) {
-                return handler.handle(httpStream, request);
+                return handler.handle(httpResponse, httpStream, request);
             }
 
             // no -> get json error and throw exception

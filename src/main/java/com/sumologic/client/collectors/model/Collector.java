@@ -2,6 +2,7 @@ package com.sumologic.client.collectors.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.sumologic.client.model.SumoEntity;
 
 /**
  * A collector in the Sumo Logic system.
@@ -14,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = InstallableCollector.class, name = "Installable"),
         @JsonSubTypes.Type(value = HostedCollector.class, name = "Hosted")
 })
-public abstract class Collector {
+public abstract class Collector extends SumoEntity {
 
     private Long id;
     private String name;

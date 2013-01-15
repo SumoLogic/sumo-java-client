@@ -2,6 +2,7 @@ package com.sumologic.client.collectors.model;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.sumologic.client.model.SumoEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
  * @author Jeffrey Wang
  * @version 1.1
  */
-public class Source {
+public class Source extends SumoEntity {
 
     private Long id;
     private String name;

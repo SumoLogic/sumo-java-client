@@ -36,4 +36,9 @@ public class UpdateCollectorRequest implements HttpPutRequest {
     public Collector getCollector() {
         return collector;
     }
+
+    @Override
+    public String getETag() {
+        return collector.getETag();
+    }
 }

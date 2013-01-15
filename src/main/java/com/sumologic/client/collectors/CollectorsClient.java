@@ -7,6 +7,7 @@ import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.PassingResponseHandler;
 import org.apache.http.HttpStatus;
+import com.sumologic.client.util.SumoEntityResponseHandler;
 
 public class CollectorsClient {
 
@@ -21,14 +22,14 @@ public class CollectorsClient {
     public GetCollectorResponse get(ConnectionConfig config, GetCollectorRequest request) {
         return HttpUtils.get(config, getCollectorEndpoint(request.getId()), request,
                 HttpUtils.toRequestHeaders(),
-                new DeserializingResponseHandler<GetCollectorRequest,
+                new SumoEntityResponseHandler<GetCollectorRequest,
                         GetCollectorResponse>(GetCollectorResponse.class),
                 HttpStatus.SC_OK);
     }
 
     public UpdateCollectorResponse update(ConnectionConfig config, UpdateCollectorRequest request) {
         return HttpUtils.put(config, getCollectorEndpoint(request.getId()), request,
-                new DeserializingResponseHandler<UpdateCollectorRequest,
+                new SumoEntityResponseHandler<UpdateCollectorRequest,
                         UpdateCollectorResponse>(UpdateCollectorResponse.class),
                 HttpStatus.SC_OK);
     }
@@ -52,7 +53,7 @@ public class CollectorsClient {
         String sourceEndpoint = getSourceEndpoint(request.getCollectorId(), request.getSourceId());
         return HttpUtils.get(config, sourceEndpoint, request,
                 HttpUtils.toRequestHeaders(),
-                new DeserializingResponseHandler<GetSourceRequest,
+                new SumoEntityResponseHandler<GetSourceRequest,
                         GetSourceResponse>(GetSourceResponse.class),
                 HttpStatus.SC_OK);
     }
@@ -60,7 +61,7 @@ public class CollectorsClient {
     public CreateSourceResponse createSource(ConnectionConfig config, CreateSourceRequest request) {
         return HttpUtils.post(config, getSourcesEndpoint(request.getCollectorId()), request,
                 HttpUtils.toRequestHeaders(),
-                new DeserializingResponseHandler<CreateSourceRequest,
+                new SumoEntityResponseHandler<CreateSourceRequest,
                         CreateSourceResponse>(CreateSourceResponse.class),
                 HttpStatus.SC_OK);
     }
@@ -68,7 +69,7 @@ public class CollectorsClient {
     public UpdateSourceResponse updateSource(ConnectionConfig config, UpdateSourceRequest request) {
         String sourceEndpoint = getSourceEndpoint(request.getCollectorId(), request.getSourceId());
         return HttpUtils.put(config, sourceEndpoint, request,
-                new DeserializingResponseHandler<UpdateSourceRequest,
+                new SumoEntityResponseHandler<UpdateSourceRequest,
                         UpdateSourceResponse>(UpdateSourceResponse.class),
                 HttpStatus.SC_OK);
     }
