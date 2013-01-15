@@ -9,6 +9,7 @@ import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.JacksonUtils;
 import com.sumologic.client.util.ResponseHandler;
+import org.apache.http.HttpStatus;
 import org.apache.http.HttpResponse;
 
 import java.io.IOException;
@@ -18,7 +19,8 @@ import java.util.List;
 public class SearchClient {
 
     public SearchResponse search(ConnectionConfig config, SearchRequest request) {
-        return HttpUtils.get(config, getSearchEndpoint(), request, new SearchHandler());
+        return HttpUtils.get(config, getSearchEndpoint(), request,
+                HttpUtils.toRequestHeaders(), new SearchHandler(), HttpStatus.SC_OK);
     }
 
     private static String getSearchEndpoint() {
@@ -32,7 +34,8 @@ public class SearchClient {
                                      SearchRequest request) throws IOException {
 
             List<LogMessage> messages = JacksonUtils.MAPPER.readValue(httpStream,
-                    new TypeReference<List<LogMessage>>() {});
+                    new TypeReference<List<LogMessage>>() {
+                    });
             return new SearchResponse(request, messages);
         }
     }
