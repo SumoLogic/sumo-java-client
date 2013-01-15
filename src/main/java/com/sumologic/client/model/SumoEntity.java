@@ -1,5 +1,7 @@
 package com.sumologic.client.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public abstract class SumoEntity {
 
     private String eTag;
@@ -9,7 +11,7 @@ public abstract class SumoEntity {
      *
      * @return The ETag.
      */
-    public String getETag() {
+    @JsonIgnore public String getETag() {
         return eTag;
     }
 

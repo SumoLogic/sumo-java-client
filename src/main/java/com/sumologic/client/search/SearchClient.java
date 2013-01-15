@@ -9,6 +9,7 @@ import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.JacksonUtils;
 import com.sumologic.client.util.ResponseHandler;
+import org.apache.http.HttpResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ public class SearchClient {
     private static class SearchHandler implements ResponseHandler<SearchRequest, SearchResponse> {
 
         @Override
-        public SearchResponse handle(InputStream httpStream,
+        public SearchResponse handle(HttpResponse response, InputStream httpStream,
                                      SearchRequest request) throws IOException {
 
             List<LogMessage> messages = JacksonUtils.MAPPER.readValue(httpStream,

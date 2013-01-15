@@ -24,7 +24,7 @@ public class CollectorsClient {
 
     public UpdateCollectorResponse update(ConnectionConfig config, UpdateCollectorRequest request) {
         return HttpUtils.put(config, getCollectorEndpoint(request.getId()), request,
-                new DeserializingResponseHandler<UpdateCollectorRequest,
+                new SumoEntityResponseHandler<UpdateCollectorRequest,
                         UpdateCollectorResponse>(UpdateCollectorResponse.class));
     }
 
@@ -49,14 +49,14 @@ public class CollectorsClient {
 
     public CreateSourceResponse createSource(ConnectionConfig config, CreateSourceRequest request) {
         return HttpUtils.post(config, getSourcesEndpoint(request.getCollectorId()), request,
-                new DeserializingResponseHandler<CreateSourceRequest,
+                new SumoEntityResponseHandler<CreateSourceRequest,
                         CreateSourceResponse>(CreateSourceResponse.class));
     }
 
     public UpdateSourceResponse updateSource(ConnectionConfig config, UpdateSourceRequest request) {
         String sourceEndpoint = getSourceEndpoint(request.getCollectorId(), request.getSourceId());
         return HttpUtils.put(config, sourceEndpoint, request,
-                new DeserializingResponseHandler<UpdateSourceRequest,
+                new SumoEntityResponseHandler<UpdateSourceRequest,
                         UpdateSourceResponse>(UpdateSourceResponse.class));
     }
 

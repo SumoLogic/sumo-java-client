@@ -81,7 +81,10 @@ public class HttpUtils {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPut put = new HttpPut(uri);
-            put.setHeader("If-Match", request.getETag());
+
+            if (request.getETag() != null) {
+                put.setHeader("If-Match", request.getETag());
+            }
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
