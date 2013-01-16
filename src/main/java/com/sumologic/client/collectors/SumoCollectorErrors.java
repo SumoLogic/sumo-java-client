@@ -10,8 +10,10 @@ import com.sumologic.client.SumoServerError;
 public enum SumoCollectorErrors implements SumoServerError {
     INVALID_COLLECTOR("collector.invalid"),
     INVALID_SOURCE("source.invalid"),
+    CANNOT_MODIFY_COLLECTOR("collector.forbidden"),
     BAD_COLLECTOR_ID("collector.request.id.invalid"),
-    BAD_SOURCE_ID("source.request.id.invalid");
+    BAD_SOURCE_ID("source.request.id.invalid"),
+    DUPLICATE_RESOURCE_NAME("duplicate.name");
 
     private String id;
 
