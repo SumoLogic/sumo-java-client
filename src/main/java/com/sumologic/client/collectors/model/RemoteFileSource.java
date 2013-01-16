@@ -69,6 +69,15 @@ public class RemoteFileSource extends Source {
     }
 
     /**
+     * Returns the remote password (hidden in server response).
+     *
+     * @return The remote password.
+     */
+    public String getRemotePassword() {
+        return getProperty(REMOTE_PASSWORD);
+    }
+
+    /**
      * Sets the remote password.
      */
     public void setRemotePassword(String remotePassword) {
@@ -89,6 +98,15 @@ public class RemoteFileSource extends Source {
      */
     public void setKeyPath(String keyPath) {
         setProperty(KEY_PATH, keyPath);
+    }
+
+    /**
+     * Returns the key password (hidden in server response).
+     *
+     * @return The key password.
+     */
+    public String getKeyPassword() {
+        return getProperty(KEY_PASSWORD);
     }
 
     /**
