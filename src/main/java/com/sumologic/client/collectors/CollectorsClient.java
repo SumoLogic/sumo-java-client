@@ -63,7 +63,7 @@ public class CollectorsClient {
                 HttpUtils.toRequestHeaders(),
                 new SumoEntityResponseHandler<CreateSourceRequest,
                         CreateSourceResponse>(CreateSourceResponse.class),
-                HttpStatus.SC_OK);
+                HttpStatus.SC_CREATED);
     }
 
     public UpdateSourceResponse updateSource(ConnectionConfig config, UpdateSourceRequest request) {
