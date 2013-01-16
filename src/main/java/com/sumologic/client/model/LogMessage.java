@@ -11,7 +11,6 @@ import java.util.*;
  * a map of keys and values of type string.
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public class LogMessage {
 

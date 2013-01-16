@@ -6,7 +6,6 @@ import com.sumologic.client.UrlParameters;
  * The search order which is either ascending or descending (default)
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public enum SearchOrder {
     ASCENDING(UrlParameters.SEARCH_ORDER_ASC),

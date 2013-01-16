@@ -4,7 +4,6 @@ package com.sumologic.client;
  * The base class for all sumo logic API exceptions.
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public class SumoException extends RuntimeException {
 

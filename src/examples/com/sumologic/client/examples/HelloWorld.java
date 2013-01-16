@@ -1,6 +1,7 @@
 package com.sumologic.client.examples;
 
 import com.sumologic.client.SumoException;
+import com.sumologic.client.SumoLogic;
 import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.model.SearchResponse;
 
@@ -8,7 +9,7 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         // Create a client
-        SumoLogicClient client = new SumoLogicClient("user@demo.com", "password");
+        SumoLogic client = new SumoLogicClient("user@demo.com", "password");
 
         try {
             // Search for log lines containing "error"

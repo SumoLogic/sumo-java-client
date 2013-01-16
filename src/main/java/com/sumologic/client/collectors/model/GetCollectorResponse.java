@@ -7,7 +7,6 @@ import com.sumologic.client.model.SumoEntityResponse;
  * A response containing the requested collector.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class GetCollectorResponse extends SumoEntityResponse {
 

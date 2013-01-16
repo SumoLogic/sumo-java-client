@@ -6,7 +6,6 @@ import java.util.List;
  * A response containing a list of collectors.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class GetCollectorsResponse {
 

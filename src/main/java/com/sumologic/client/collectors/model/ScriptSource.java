@@ -4,7 +4,6 @@ package com.sumologic.client.collectors.model;
  * A source that executes a script and collects its output.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class ScriptSource extends BaseScriptSource {
 

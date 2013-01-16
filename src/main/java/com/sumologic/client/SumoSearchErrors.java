@@ -4,7 +4,6 @@ package com.sumologic.client;
  * API errors that might occur during a search.
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public enum SumoSearchErrors implements SumoServerError {
     EMPTY_FIELD_LIST("no.fields"),

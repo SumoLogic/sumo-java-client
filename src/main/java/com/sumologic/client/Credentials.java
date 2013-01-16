@@ -5,7 +5,6 @@ package com.sumologic.client;
  *
  * @author Daphne Hsieh
  * @author Sebastian Mies
- * @version 1.0
  */
 public class Credentials {
     private String email;

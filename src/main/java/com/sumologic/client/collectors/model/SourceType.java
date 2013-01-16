@@ -7,7 +7,6 @@ import java.util.Map;
  * Enumeration of available source types (not necessarily comprehensive).
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public enum SourceType {
     LOCAL_FILE("LocalFile", LocalFileSource.class),

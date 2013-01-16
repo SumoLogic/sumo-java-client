@@ -5,7 +5,6 @@ package com.sumologic.client;
  * Contains all magic numbers/strings for performing the HTTP requests.
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public interface UrlParameters {
 

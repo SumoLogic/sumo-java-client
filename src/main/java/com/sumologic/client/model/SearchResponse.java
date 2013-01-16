@@ -8,7 +8,6 @@ import java.util.List;
  * information, e.g., the search query URI.
  *
  * @author Sebastian Mies
- * @version 1.0
  */
 public final class SearchResponse {
 

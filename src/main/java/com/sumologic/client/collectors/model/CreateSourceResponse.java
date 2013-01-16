@@ -9,7 +9,6 @@ import com.sumologic.client.util.SourceDeserializer;
  * A response containing the created source.
  *
  * @author Jeffrey Wang
- * @version 1.1
  */
 public class CreateSourceResponse extends SumoEntityResponse {
 
