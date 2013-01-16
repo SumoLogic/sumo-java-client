@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.sumologic.client.model.SumoEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +31,7 @@ public class Source extends SumoEntity {
     private String sourceType;
     private Boolean alive;
     private String status;
+    private List<Filter> filters = new ArrayList<Filter>();
     private Map<String, Object> properties = new HashMap<String, Object>();
 
     /**
@@ -255,6 +258,22 @@ public class Source extends SumoEntity {
      */
     public String getStatus() {
         return status;
+    }
+
+    /**
+     * Returns the filters.
+     *
+     * @return The filters.
+     */
+    public List<Filter> getFilters() {
+        return filters;
+    }
+
+    /**
+     * Sets the filters.
+     */
+    public void setFilter(List<Filter> filters) {
+        this.filters = filters;
     }
 
     /**
