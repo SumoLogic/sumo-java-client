@@ -3,6 +3,7 @@ package com.sumologic.client.searchsession;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.model.LogMessage;
+import com.sumologic.client.searchsession.model.CancelSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
 
@@ -58,12 +59,6 @@ public class SearchSessionExample {
                 getMessagesForSearchSessionResponse);
         List<LogMessage> messages = getMessagesForSearchSessionResponse.getMessages();
         for (LogMessage message : messages) {
-//            System.out.printf("  %s, %s, %s, %s, %s\n",
-//                    new Date(message.getMessageTime()),
-//                    message.getSourceHost(),
-//                    message.getSourceName(),
-//                    message.getSourceCategory(),
-//                    message.getRaw());
             System.out.printf("  %s, %s, %s, %s, %s\n",
                     message.getTime(),
                     message.getSourceHost(),
@@ -71,5 +66,9 @@ public class SearchSessionExample {
                     message.getSourceCategory(),
                     message.getLogLine());
         }
+
+        // Delete the session.
+        CancelSearchSessionResponse cancelSearchSessionResponse =
+                sumoClient.cancelSearchSession(searchSessionId);
     }
 }

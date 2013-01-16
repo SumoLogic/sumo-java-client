@@ -174,6 +174,20 @@ public class SumoLogicClient implements SumoLogic {
                 getConnectionConfig(), getMessagesForSearchSessionRequest);
     }
 
+    /**
+     * Cancels a search session.
+     *
+     * @param searchSessionId The search session ID
+     * @return
+     */
+    @Override
+    public CancelSearchSessionResponse cancelSearchSession(String searchSessionId) {
+        CancelSearchSessionRequest cancelSearchSessionRequest =
+                new CancelSearchSessionRequest(searchSessionId);
+        return searchSessionClient.deleteSearchSession(
+                getConnectionConfig(), cancelSearchSessionRequest);
+    }
+
     //
     // Collectors.
     //

@@ -24,6 +24,9 @@ public class SearchSessionClient {
     private static final String GET_MESSAGES_FOR_SEARCH_SESSION_ENDPOINT =
             UrlParameters.SEARCH_SERVICE +
                     "/" + UrlParameters.MESSAGES_SEARCH_SESSIONS_SERVICE;
+    private static final String CANCEL_SEARCH_SESSION_ENDPOINT =
+            UrlParameters.SEARCH_SERVICE +
+                    "/" + UrlParameters.SEARCH_SESSIONS_SERVICE;
 
     // Implementation.
 
@@ -41,7 +44,7 @@ public class SearchSessionClient {
                         "Accept", "application/json"),
                 new DeserializingResponseHandler<CreateSearchSessionRequest,
                         CreateSearchSessionResponse>(CreateSearchSessionResponse.class),
-                HttpStatus.SC_CREATED).getId();
+                HttpStatus.SC_ACCEPTED).getId();
     }
 
     public GetSearchSessionStatusResponse getSearchSessionStatus(
@@ -75,6 +78,21 @@ public class SearchSessionClient {
                         "Accept", "application/json"),
                 new DeserializingResponseHandler<GetMessagesForSearchSessionRequest,
                         GetMessagesForSearchSessionResponse>(GetMessagesForSearchSessionResponse.class),
+                HttpStatus.SC_OK);
+    }
+
+    public CancelSearchSessionResponse deleteSearchSession(
+            ConnectionConfig connection,
+            CancelSearchSessionRequest cancelSearchSessionRequest) {
+
+        String uri = CANCEL_SEARCH_SESSION_ENDPOINT +
+                "/" + cancelSearchSessionRequest.getId();
+        return HttpUtils.delete(
+                connection,
+                uri,
+                cancelSearchSessionRequest,
+                new DeserializingResponseHandler<CancelSearchSessionRequest,
+                        CancelSearchSessionResponse>(CancelSearchSessionResponse.class),
                 HttpStatus.SC_OK);
     }
 }

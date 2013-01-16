@@ -1,5 +1,6 @@
 package com.sumologic.client;
 
+import com.sumologic.client.searchsession.model.CancelSearchSessionResponse;
 import com.sumologic.client.searchsession.model.CreateSearchSessionRequest;
 import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
@@ -54,4 +55,12 @@ public interface SumoLogic {
      */
     GetMessagesForSearchSessionResponse getMessagesForSearchSession(
             String searchSessionId, int offset, int length);
+
+    /**
+     * Cancels a search session.
+     *
+     * @param searchSessionId The search session ID
+     * @return
+     */
+    CancelSearchSessionResponse cancelSearchSession(String searchSessionId);
 }
