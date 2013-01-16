@@ -9,6 +9,7 @@ public enum SumoServerErrors implements SumoServerError {
     INTERNAL_SERVER_ERROR("internal.error"),
     UNAUTHORIZED("unauthorized"),
     UNAVAILABLE("service.unavailable"),
+    NOT_FOUND("notfound"),
 
     ETAG_MISMATCH("service.etagid.mismatch"),
     MISSING_PRECONDITION("service.ifthen.missing"),

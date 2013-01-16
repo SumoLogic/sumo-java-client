@@ -42,13 +42,8 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), params, null);
             HttpGet get = new HttpGet(uri);
 
-            // Set the request headers.
-            for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
-                get.setHeader(header.getKey(), header.getValue());
-            }
-
             return doRequest(
-                    config, get, request, handler, expectedStatusCode);
+                    config, get, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         }
@@ -64,18 +59,13 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPost post = new HttpPost(uri);
 
-            // Set the request headers.
-            for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
-                post.setHeader(header.getKey(), header.getValue());
-            }
-
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             post.setEntity(entity);
 
             return doRequest(
-                    config, post, request, handler, expectedStatusCode);
+                    config, post, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
@@ -98,8 +88,9 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPut put = new HttpPut(uri);
 
+            Map<String, String> requestHeaders = new HashMap<String, String>();
             if (request.getETag() != null) {
-                put.setHeader("If-Match", request.getETag());
+                requestHeaders.put("If-Match", request.getETag());
             }
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
@@ -108,7 +99,7 @@ public class HttpUtils {
             put.setEntity(entity);
 
             return doRequest(
-                    config, put, request, handler, expectedStatusCode);
+                    config, put, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
@@ -131,8 +122,10 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpDelete delete = new HttpDelete(uri);
 
+            Map<String, String> requestHeaders = HttpUtils.toRequestHeaders();
+
             return doRequest(
-                    config, delete, request, handler, expectedStatusCode);
+                    config, delete, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException ex) {
             throw new SumoClientException("URI cannot be generated", ex);
         }
@@ -162,8 +155,13 @@ public class HttpUtils {
     }
 
     private static <Request, Response> Response
-    doRequest(ConnectionConfig config, HttpUriRequest method,
+    doRequest(ConnectionConfig config, HttpUriRequest method, Map<String, String> requestHeaders,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
+
+        // Set headers
+        for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
+            method.setHeader(header.getKey(), header.getValue());
+        }
 
         HttpClient httpClient = getHttpClient(config);
 
