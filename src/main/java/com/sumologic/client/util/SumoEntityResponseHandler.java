@@ -9,6 +9,8 @@ import java.io.InputStream;
 public class SumoEntityResponseHandler<Request, Response extends SumoEntityResponse>
         implements ResponseHandler<Request, Response> {
 
+    private static String ETAG_HEADER = "ETag";
+
     private Class<Response> clazz;
 
     public SumoEntityResponseHandler(Class<Response> clazz) {
@@ -20,7 +22,9 @@ public class SumoEntityResponseHandler<Request, Response extends SumoEntityRespo
             throws IOException {
 
         Response response = JacksonUtils.MAPPER.readValue(httpStream, clazz);
-        response.setETag(httpResponse.getFirstHeader("ETag").getValue());
+        if (httpResponse.containsHeader(ETAG_HEADER)) {
+            response.setETag(httpResponse.getFirstHeader(ETAG_HEADER).getValue());
+        }
         return response;
     }
 }
