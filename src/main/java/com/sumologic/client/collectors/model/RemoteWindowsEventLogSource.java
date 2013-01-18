@@ -51,6 +51,15 @@ public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
     }
 
     /**
+     * Returns the password (hidden in server response).
+     *
+     * @return The password.
+     */
+    public String getPassword() {
+        return getProperty(PASSWORD);
+    }
+
+    /**
      * Sets the password.
      */
     public void setPassword(String password) {
