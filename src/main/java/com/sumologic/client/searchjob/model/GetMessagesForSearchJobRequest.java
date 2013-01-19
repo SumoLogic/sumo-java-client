@@ -1,4 +1,4 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import com.sumologic.client.model.HttpGetRequest;
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public final class GetRecordsForSearchSessionRequest implements HttpGetRequest {
+public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
 
     // Instance fields.
 
@@ -22,31 +22,31 @@ public final class GetRecordsForSearchSessionRequest implements HttpGetRequest {
     // Implementation.
 
     /**
-     * Creates a new messages for search session request.
+     * Creates a new messages for search job request.
      *
-     * @param id     The search session ID.
+     * @param id     The search job ID.
      * @param offset The offset.
      * @param length The length.
      */
-    public GetRecordsForSearchSessionRequest(String id, int offset, int length) {
+    public GetMessagesForSearchJobRequest(String id, int offset, int length) {
         this.id = id;
         this.offset = offset;
         this.length = length;
     }
 
     /**
-     * Return the search session ID.
+     * Return the search job ID.
      *
-     * @return The search session ID.
+     * @return The search job ID.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Sets the search session ID.
+     * Sets the search job ID.
      *
-     * @param id The search session ID.
+     * @param id The search job ID.
      */
     public void setId(String id) {
         this.id = id;

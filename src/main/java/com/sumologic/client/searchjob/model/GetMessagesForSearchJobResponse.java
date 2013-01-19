@@ -1,4 +1,4 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 import java.util.List;
 
@@ -7,11 +7,11 @@ import com.sumologic.client.model.LogMessage;
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public class GetMessagesForSearchSessionResponse {
+public class GetMessagesForSearchJobResponse {
 
     // Instance fields.
 
-    private List<SearchSessionField> fields;
+    private List<SearchJobField> fields;
     private List<LogMessage> messages;
 
     // Implementation.
@@ -21,7 +21,7 @@ public class GetMessagesForSearchSessionResponse {
      *
      * @return The fields.
      */
-    public List<SearchSessionField> getFields() {
+    public List<SearchJobField> getFields() {
         return fields;
     }
 
@@ -30,7 +30,7 @@ public class GetMessagesForSearchSessionResponse {
      *
      * @param fields The fields.
      */
-    public void setFields(List<SearchSessionField> fields) {
+    public void setFields(List<SearchJobField> fields) {
         this.fields = fields;
     }
 
@@ -40,7 +40,7 @@ public class GetMessagesForSearchSessionResponse {
      * @param fields The fields.
      * @return This object.
      */
-    public GetMessagesForSearchSessionResponse withFields(List<SearchSessionField> fields) {
+    public GetMessagesForSearchJobResponse withFields(List<SearchJobField> fields) {
         setFields(fields);
         return this;
     }
@@ -64,11 +64,12 @@ public class GetMessagesForSearchSessionResponse {
     }
 
     /**
+     * Sets the messages
      *
-     * @param messages
-     * @return
+     * @param messages The messages.
+     * @return This object.
      */
-    public GetMessagesForSearchSessionResponse withMessages(List<LogMessage> messages) {
+    public GetMessagesForSearchJobResponse withMessages(List<LogMessage> messages) {
         setMessages(messages);
         return this;
     }
@@ -77,7 +78,7 @@ public class GetMessagesForSearchSessionResponse {
 
     @Override
     public String toString() {
-        StringBuffer result = new StringBuffer(128);
+        StringBuilder result = new StringBuilder(128);
         result.append("fields: ");
         result.append(fields);
         result.append(", message count: '");

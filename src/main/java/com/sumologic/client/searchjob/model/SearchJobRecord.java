@@ -1,4 +1,4 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 import java.util.Collections;
 import java.util.Map;
@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public class SearchSessionRecord {
+public class SearchJobRecord {
 
     // Instance fields.
 
@@ -98,7 +98,7 @@ public class SearchSessionRecord {
      * @param map The key-value map.
      * @return This object.
      */
-    public SearchSessionRecord withMap(Map<String, String> map) {
+    public SearchJobRecord withMap(Map<String, String> map) {
         setMap(map);
         return this;
     }

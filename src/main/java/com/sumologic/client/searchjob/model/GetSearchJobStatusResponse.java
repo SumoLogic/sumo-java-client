@@ -1,9 +1,9 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public final class GetSearchSessionStatusResponse {
+public final class GetSearchJobStatusResponse {
 
     // Instance fields.
 
@@ -39,7 +39,7 @@ public final class GetSearchSessionStatusResponse {
      * @param state The state.
      * @return This object.
      */
-    public GetSearchSessionStatusResponse withState(String state) {
+    public GetSearchJobStatusResponse withState(String state) {
         setState(state);
         return this;
     }
@@ -68,7 +68,7 @@ public final class GetSearchSessionStatusResponse {
      * @param messageCount The number of messages.
      * @return This object.
      */
-    public GetSearchSessionStatusResponse withMessageCount(int messageCount) {
+    public GetSearchJobStatusResponse withMessageCount(int messageCount) {
         setMessageCount(messageCount);
         return this;
     }
@@ -97,7 +97,7 @@ public final class GetSearchSessionStatusResponse {
      * @param recordCount The number of records.
      * @return This object.
      */
-    public GetSearchSessionStatusResponse withRecordCount(int recordCount) {
+    public GetSearchJobStatusResponse withRecordCount(int recordCount) {
         setRecordCount(recordCount);
         return this;
     }
