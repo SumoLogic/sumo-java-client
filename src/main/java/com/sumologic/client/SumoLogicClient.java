@@ -1,31 +1,11 @@
 package com.sumologic.client;
 
 import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.sumologic.client.model.HttpGetRequest;
-import com.sumologic.client.searchsession.*;
-import com.sumologic.client.searchsession.model.*;
-import com.sumologic.client.util.DeserializingResponseHandler;
-import com.sumologic.client.util.HttpUtils;
-import com.sumologic.client.util.JacksonUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
 
-import java.io.*;
+import com.sumologic.client.searchjob.*;
+import com.sumologic.client.searchjob.model.*;
+
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
 import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
@@ -34,9 +14,6 @@ import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * The Sumo Logic API client implementation.
@@ -57,7 +34,7 @@ public class SumoLogicClient implements SumoLogic {
 
     private SearchClient searchClient = new SearchClient();
     private CollectorsClient collectorsClient = new CollectorsClient();
-    private SearchSessionClient searchSessionClient = new SearchSessionClient();
+    private SearchJobClient searchJobClient = new SearchJobClient();
 
     // Implementation.
 
@@ -121,57 +98,87 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     //
-    // Session-based search.
+    // Search jobs.
     //
 
     /**
-     * Start a search session and receive a session ID for subsequent
+     * Starts a search job and receives a job ID for subsequent
      * polling of the search status.
      *
      * @param query          The query.
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
-     * @return The search session ID.
+     * @return The search job ID
      */
     @Override
-    public String createSearchSession(
+    public String createSearchJob(
             String query, String fromExpression, String toExpression, String timeZone) {
-        CreateSearchSessionRequest createSearchSessionRequest =
-                new CreateSearchSessionRequest(query, fromExpression, toExpression, timeZone);
-        return searchSessionClient.createSearchSession(
-                getConnectionConfig(), createSearchSessionRequest);
+        CreateSearchJobRequest createSearchJobRequest =
+                new CreateSearchJobRequest(query, fromExpression, toExpression, timeZone);
+        return searchJobClient.createSearchJob(
+                getConnectionConfig(), createSearchJobRequest);
     }
 
     /**
-     * Returns the current status of a search session.
+     * Returns the current status of a search job.
      *
-     * @param searchSessionId The search session ID
-     * @return The status.
+     * @param searchJobId The search job ID
+     * @return The status
      */
     @Override
-    public GetSearchSessionStatusResponse getSearchSessionStatus(String searchSessionId) {
-        GetSearchSessionStatusRequest getSearchSessionStatusRequest =
-                new GetSearchSessionStatusRequest(searchSessionId);
-        return searchSessionClient.getSearchSessionStatus(
-                getConnectionConfig(), getSearchSessionStatusRequest);
+    public GetSearchJobStatusResponse getSearchJobStatus(String searchJobId) {
+        GetSearchJobStatusRequest getSearchJobStatusRequest =
+                new GetSearchJobStatusRequest(searchJobId);
+        return searchJobClient.getSearchJobStatus(
+                getConnectionConfig(), getSearchJobStatusRequest);
     }
 
     /**
-     * Returns search session result messages.
+     * Returns messages for the specified search job.
      *
-     * @param searchSessionId The search session ID.
-     * @param offset          The offset.
-     * @param length          The length.
+     * @param searchJobId The search job ID.
+     * @param offset      The offset.
+     * @param length      The length.
      * @return The messages.
      */
     @Override
-    public GetMessagesForSearchSessionResponse getMessagesForSearchSession(
-            String searchSessionId, int offset, int length) {
-        GetMessagesForSearchSessionRequest getMessagesForSearchSessionRequest =
-                new GetMessagesForSearchSessionRequest(searchSessionId, offset, length);
-        return searchSessionClient.getMessagesForSearchSession(
-                getConnectionConfig(), getMessagesForSearchSessionRequest);
+    public GetMessagesForSearchJobResponse getMessagesForSearchJob(
+            String searchJobId, int offset, int length) {
+        GetMessagesForSearchJobRequest getMessagesForSearchJobRequest =
+                new GetMessagesForSearchJobRequest(searchJobId, offset, length);
+        return searchJobClient.getMessagesForSearchJob(
+                getConnectionConfig(), getMessagesForSearchJobRequest);
+    }
+
+    /**
+     * Returns records for the specified search job.
+     *
+     * @param searchJobId The search job ID.
+     * @param offset      The offset.
+     * @param length      The length.
+     * @return The records.
+     */
+    @Override
+    public GetRecordsForSearchJobResponse getRecordsForSearchJob(String searchJobId, int offset, int length) {
+        GetRecordsForSearchJobRequest getRecordsForSearchJobRequest =
+                new GetRecordsForSearchJobRequest(searchJobId, offset, length);
+        return searchJobClient.getRecordsForSearchJob(
+                getConnectionConfig(), getRecordsForSearchJobRequest);
+    }
+
+    /**
+     * Cancels a search job.
+     *
+     * @param searchJobId The search job ID
+     * @return
+     */
+    @Override
+    public CancelSearchJobResponse cancelSearchJob(String searchJobId) {
+        CancelSearchJobRequest cancelSearchJobRequest =
+                new CancelSearchJobRequest(searchJobId);
+        return searchJobClient.deleteSearchJob(
+                getConnectionConfig(), cancelSearchJobRequest);
     }
 
     //
@@ -291,7 +298,7 @@ public class SumoLogicClient implements SumoLogic {
      * Convenience method: takes collector id and source id as arguments.
      *
      * @param collectorId The collector id
-     * @param sourceId The source id
+     * @param sourceId    The source id
      * @return The response
      */
     public GetSourceResponse getSource(Long collectorId, Long sourceId) {
@@ -312,7 +319,7 @@ public class SumoLogicClient implements SumoLogic {
      * Convenience method: takes collector id and source as arguments.
      *
      * @param collectorId The collector id
-     * @param source The source
+     * @param source      The source
      * @return The response
      */
     public CreateSourceResponse createSource(Long collectorId, Source source) {
@@ -333,7 +340,7 @@ public class SumoLogicClient implements SumoLogic {
      * Convenience method: takes collector id and source as arguments.
      *
      * @param collectorId The collector id
-     * @param source The source
+     * @param source      The source
      * @return The response
      */
     public UpdateSourceResponse updateSource(Long collectorId, Source source) {
@@ -354,7 +361,7 @@ public class SumoLogicClient implements SumoLogic {
      * Convenience method: takes collector id and source id as arguments.
      *
      * @param collectorId The collector id
-     * @param sourceId The source id
+     * @param sourceId    The source id
      * @return The response
      */
     public DeleteSourceResponse deleteSource(Long collectorId, Long sourceId) {

@@ -1,11 +1,11 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 import com.sumologic.client.model.HttpPostRequest;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public final class CreateSearchSessionRequest implements HttpPostRequest {
+public final class CreateSearchJobRequest implements HttpPostRequest {
 
     // Instance fields.
 
@@ -17,17 +17,17 @@ public final class CreateSearchSessionRequest implements HttpPostRequest {
     // Implementation.
 
     /**
-     * Creates a search session request.
+     * Creates a search job request.
      *
      * @param query          The query.
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
      */
-    public CreateSearchSessionRequest(String query,
-                                      String fromExpression,
-                                      String toExpression,
-                                      String timeZone) {
+    public CreateSearchJobRequest(String query,
+                                  String fromExpression,
+                                  String toExpression,
+                                  String timeZone) {
         this.query = query;
         this.fromExpression = fromExpression;
         this.toExpression = toExpression;
@@ -55,7 +55,7 @@ public final class CreateSearchSessionRequest implements HttpPostRequest {
      *
      * @return This object.
      */
-    public CreateSearchSessionRequest withQuery(String query) {
+    public CreateSearchJobRequest withQuery(String query) {
         setQuery(query);
         return this;
     }
@@ -81,7 +81,7 @@ public final class CreateSearchSessionRequest implements HttpPostRequest {
      *
      * @return This object.
      */
-    public CreateSearchSessionRequest withFromExpresssion(String fromExpression) {
+    public CreateSearchJobRequest withFromExpresssion(String fromExpression) {
         setFromExpression(fromExpression);
         return this;
     }
@@ -107,7 +107,7 @@ public final class CreateSearchSessionRequest implements HttpPostRequest {
      *
      * @return This object.
      */
-    public CreateSearchSessionRequest withToTime(String toExpression) {
+    public CreateSearchJobRequest withToTime(String toExpression) {
         setToExpression(toExpression);
         return this;
     }
@@ -133,7 +133,7 @@ public final class CreateSearchSessionRequest implements HttpPostRequest {
      *
      * @return This object.
      */
-    public CreateSearchSessionRequest withTimeZone(String timeZone) {
+    public CreateSearchJobRequest withTimeZone(String timeZone) {
         setTimeZone(timeZone);
         return this;
     }

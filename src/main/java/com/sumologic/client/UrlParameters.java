@@ -146,20 +146,15 @@ public interface UrlParameters {
     /**
      * Search sub-tasks
      */
-    public static String SEARCH_SERVICE ="search";
+    public static String SEARCH_JOBS_SERVICE ="search/jobs";
 
     /**
-     * Search sessions sub-tasks
+     * Search job messages
      */
-    public static String SEARCH_SESSIONS_SERVICE ="sessions";
+    public static String SEARCH_JOBS_SERVICE_MESSAGES ="messages";
 
     /**
-     * Search session messages
+     * Search job records
      */
-    public static String MESSAGES_SEARCH_SESSIONS_SERVICE ="messages";
-
-    /**
-     * Search session records
-     */
-    public static String RECORDS_SEARCH_SESSIONS_SERVICE ="records";
+    public static String SEARCH_JOBS_SERVICE_RECORDS ="records";
 }
