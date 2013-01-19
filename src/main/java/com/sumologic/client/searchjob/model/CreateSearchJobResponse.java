@@ -1,9 +1,9 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public final class CreateSearchSessionResponse {
+public final class CreateSearchJobResponse {
 
     // Instance fields.
 
@@ -12,18 +12,18 @@ public final class CreateSearchSessionResponse {
     // Implementation.
 
     /**
-     * Returns the ID of the session.
+     * Returns the ID of the search job.
      *
-     * @return The ID of the session.
+     * @return The ID of the search job.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Sets the ID of the session.
+     * Sets the ID of the search job.
      *
-     * @param id The ID of the session.
+     * @param id The ID of the search job.
      */
     public void setId(String id) {
         this.id = id;

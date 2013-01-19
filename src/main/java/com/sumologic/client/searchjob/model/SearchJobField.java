@@ -1,15 +1,15 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public class SearchSessionField {
+public class SearchJobField {
 
     // Instance fields.
 
     private String name;
-    private String type;
-    private boolean isKeyField;
+    private String fieldType;
+    private boolean keyField;
 
     // Implementation.
 
@@ -37,37 +37,37 @@ public class SearchSessionField {
      * @param name The name.
      * @return The name.
      */
-    public SearchSessionField withName(String name) {
+    public SearchJobField withName(String name) {
         setName(name);
         return this;
     }
 
     /**
-     * Returns the type.
+     * Returns the fieldType.
      *
-     * @return The type.
+     * @return The fieldType.
      */
-    public String getType() {
-        return type;
+    public String getFieldType() {
+        return fieldType;
     }
 
     /**
-     * Sets the type.
+     * Sets the fieldType.
      *
-     * @param type The type.
+     * @param fieldType The fieldType.
      */
-    public void setType(String type) {
-        this.type = type;
+    public void setFieldType(String fieldType) {
+        this.fieldType = fieldType;
     }
 
     /**
-     * Sets the type.
+     * Sets the field type.
      *
-     * @param type The type.
+     * @param fieldType The field type.
      * @return This object.
      */
-    public SearchSessionField withType(String type) {
-        setType(type);
+    public SearchJobField withFieldType(String fieldType) {
+        setFieldType(fieldType);
         return this;
     }
 
@@ -77,7 +77,7 @@ public class SearchSessionField {
      * @return Whether this is a key field.
      */
     public boolean isKeyField() {
-        return isKeyField;
+        return keyField;
     }
 
     /**
@@ -86,7 +86,7 @@ public class SearchSessionField {
      * @param isKeyField Whether this is a key field.
      */
     public void setKeyField(boolean isKeyField) {
-        this.isKeyField = isKeyField;
+        this.keyField = isKeyField;
     }
 
     /**
@@ -95,7 +95,7 @@ public class SearchSessionField {
      * @param isKeyField Whether this is a key field.
      * @return This object.
      */
-    public SearchSessionField withKeyField(boolean isKeyField) {
+    public SearchJobField withKeyField(boolean isKeyField) {
         setKeyField(isKeyField);
         return this;
     }
@@ -107,10 +107,10 @@ public class SearchSessionField {
         StringBuffer result = new StringBuffer(128);
         result.append("name: '");
         result.append(name);
-        result.append("', type: '");
-        result.append(type);
-        result.append("', isKeyField: '");
-        result.append(isKeyField);
+        result.append("', fieldType: '");
+        result.append(fieldType);
+        result.append("', keyField: '");
+        result.append(keyField);
         result.append("'");
         return result.toString();
     }
