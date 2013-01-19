@@ -3,9 +3,7 @@ package com.sumologic.client.searchsession;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.model.LogMessage;
-import com.sumologic.client.searchsession.model.CancelSearchSessionResponse;
-import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
-import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
+import com.sumologic.client.searchsession.model.*;
 
 import java.util.List;
 
@@ -26,14 +24,15 @@ public class SearchSessionExample {
 
         // Create a search session.
         String searchSessionId = sumoClient.createSearchSession(
-                "*",
-                "2013-01-13T00:00:00",
-                "2013-01-15T00:00:00",
-                "UTC");
+                "| parse \"[Classification: *]\" as classification | count classification",
+                "2013-01-18T20:00:00",
+                "2013-01-18T21:00:00",
+                "PST");
         System.out.printf("Search session ID: '%s'\n", searchSessionId);
 
         // Poll the search session status.
         int messageCount = 0;
+        int recordCount = 0;
         GetSearchSessionStatusResponse getSearchSessionStatusResponse = null;
         while (getSearchSessionStatusResponse == null ||
                 (!getSearchSessionStatusResponse.getState().equals("DONE GATHERING RESULTS") &&
@@ -42,6 +41,7 @@ public class SearchSessionExample {
             getSearchSessionStatusResponse =
                     sumoClient.getSearchSessionStatus(searchSessionId);
             messageCount = getSearchSessionStatusResponse.getMessageCount();
+            recordCount = getSearchSessionStatusResponse.getRecordCount();
             System.out.printf(
                     "Search session ID: '%s', %s\n",
                     searchSessionId,
@@ -49,12 +49,12 @@ public class SearchSessionExample {
         }
 
         // Get some messages.
-        int offset = 0;
-        int length = Math.min(messageCount, 10);
+        int messageOffset = 0;
+        int messageLength = Math.min(messageCount, 10);
         GetMessagesForSearchSessionResponse getMessagesForSearchSessionResponse =
-                sumoClient.getMessagesForSearchSession(searchSessionId, offset, length);
+                sumoClient.getMessagesForSearchSession(searchSessionId, messageOffset, messageLength);
         System.out.printf(
-                "Search session ID: '%s', %s\n",
+                "Messages for search session ID: '%s', %s\n",
                 searchSessionId,
                 getMessagesForSearchSessionResponse);
         List<LogMessage> messages = getMessagesForSearchSessionResponse.getMessages();
@@ -65,6 +65,22 @@ public class SearchSessionExample {
                     message.getSourceName(),
                     message.getSourceCategory(),
                     message.getLogLine());
+        }
+
+        // Get some records.
+        int recordOffset = 0;
+        int recordLength = Math.min(recordCount, 10);
+        GetRecordsForSearchSessionResponse getRecordsForSearchSessionResponse =
+                sumoClient.getRecordsForSearchSession(searchSessionId, recordOffset, recordLength);
+        System.out.printf(
+                "Records for search session ID: '%s', %s\n",
+                searchSessionId,
+                getRecordsForSearchSessionResponse);
+        List<SearchSessionRecord> records = getRecordsForSearchSessionResponse.getRecords();
+        for (SearchSessionRecord record : records) {
+            System.out.printf("  %s, %d\n",
+                    record.stringField("classification"),
+                    record.intField("_count"));
         }
 
         // Delete the session.

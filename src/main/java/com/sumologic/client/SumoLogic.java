@@ -3,6 +3,7 @@ package com.sumologic.client;
 import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.searchsession.model.CancelSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
+import com.sumologic.client.searchsession.model.GetRecordsForSearchSessionResponse;
 import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
@@ -62,6 +63,17 @@ public interface SumoLogic {
      * @return The messages.
      */
     GetMessagesForSearchSessionResponse getMessagesForSearchSession(
+            String searchSessionId, int offset, int length);
+
+    /**
+     * Returns search session result records.
+     *
+     * @param searchSessionId The search session ID.
+     * @param offset          The offset.
+     * @param length          The length.
+     * @return The messages.
+     */
+    GetRecordsForSearchSessionResponse getRecordsForSearchSession(
             String searchSessionId, int offset, int length);
 
     /**

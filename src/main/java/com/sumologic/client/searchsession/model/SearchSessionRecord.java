@@ -1,6 +1,8 @@
 package com.sumologic.client.searchsession.model;
 
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
@@ -12,6 +14,15 @@ public class SearchSessionRecord {
     private Map<String, String> map;
 
     // Implementation.
+
+    /**
+     * Returns the names of the fields.
+     *
+     * @return A set of field names.
+     */
+    public final Set<String> getFieldNames() {
+        return Collections.unmodifiableSet(map.keySet());
+    }
 
     /**
      * Returns whether the specified field exists.
@@ -29,22 +40,38 @@ public class SearchSessionRecord {
      * @param fieldName The field name.
      * @return The value of the field, or null.
      */
-    public String getFieldValue(String fieldName) {
+    public String stringField(String fieldName) {
         return map.get(fieldName);
     }
 
     /**
-     * Returns the field value for the specified field as a int.
+     * Returns the value for the specified as an integer.
+     *
+     * @param fieldName The field name.
+     * @return The value for the specified field as an integer.
      */
-    public long getFieldValueAsInt(String fieldName) {
-        return Integer.parseInt(getFieldValue(fieldName));
+    public long intField(String fieldName) {
+        return Integer.parseInt(stringField(fieldName));
     }
 
     /**
-     * Returns the field value for the specified field as a long.
+     * Returns the value for the specified as a long.
+     *
+     * @param fieldName The field name.
+     * @return The value for the specified field as a long.
      */
-    public long getFieldValueAsLong(String fieldName) {
-        return Long.parseLong(getFieldValue(fieldName));
+    public long longField(String fieldName) {
+        return Long.parseLong(stringField(fieldName));
+    }
+
+    /**
+     * Returns the value for the specified as a double.
+     *
+     * @param fieldName The field name.
+     * @return The value for the specified field as a double.
+     */
+    public double doubleField(String fieldName) {
+        return Double.parseDouble(fieldName);
     }
 
     /**

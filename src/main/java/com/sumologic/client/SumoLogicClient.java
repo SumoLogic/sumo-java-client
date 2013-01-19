@@ -175,6 +175,22 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     /**
+     * Returns search session result records.
+     *
+     * @param searchSessionId The search session ID.
+     * @param offset          The offset.
+     * @param length          The length.
+     * @return The messages.
+     */
+    @Override
+    public GetRecordsForSearchSessionResponse getRecordsForSearchSession(String searchSessionId, int offset, int length) {
+        GetRecordsForSearchSessionRequest getRecordsForSearchSessionRequest =
+                new GetRecordsForSearchSessionRequest(searchSessionId, offset, length);
+        return searchSessionClient.getRecordsForSearchSession(
+                getConnectionConfig(), getRecordsForSearchSessionRequest);
+    }
+
+    /**
      * Cancels a search session.
      *
      * @param searchSessionId The search session ID
