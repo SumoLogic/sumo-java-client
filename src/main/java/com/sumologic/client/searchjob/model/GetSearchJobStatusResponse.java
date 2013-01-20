@@ -1,5 +1,7 @@
 package com.sumologic.client.searchjob.model;
 
+import java.util.List;
+
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
@@ -8,10 +10,11 @@ public final class GetSearchJobStatusResponse {
     // Instance fields.
 
     private String state;
+    private List<SearchJobHistogramBucket> histogramBuckets;
     private int messageCount;
     private int recordCount;
-    // TODO: Warnings
-    // TODO: Errors
+    private List<String> pendingWarnings;
+    private List<String> pendingErrors;
 
     // Implementation.
 
@@ -31,6 +34,24 @@ public final class GetSearchJobStatusResponse {
      */
     public void setState(String state) {
         this.state = state;
+    }
+
+    /**
+     * Returns the histogram buckets.
+     *
+     * @return The histogram buckets.
+     */
+    public List<SearchJobHistogramBucket> getHistogramBuckets() {
+        return histogramBuckets;
+    }
+
+    /**
+     * Sets the histogram buckets.
+     *
+     * @param histogramBuckets The histogram buckets.
+     */
+    public void setHistogramBuckets(List<SearchJobHistogramBucket> histogramBuckets) {
+        this.histogramBuckets = histogramBuckets;
     }
 
     /**
@@ -102,6 +123,64 @@ public final class GetSearchJobStatusResponse {
         return this;
     }
 
+    /**
+     * Returns the pending warnings.
+     *
+     * @return The pending warnings.
+     */
+    public List<String> getPendingWarnings() {
+        return pendingWarnings;
+    }
+
+    /**
+     * Sets the pending warnings.
+     *
+     * @param pendingWarnings The pending warnings.
+     */
+    public void setPendingWarnings(List<String> pendingWarnings) {
+        this.pendingWarnings = pendingWarnings;
+    }
+
+    /**
+     * Sets the pending warnings.
+     *
+     * @param pendingWarnings The pending warnings.
+     * @return This object.
+     */
+    public GetSearchJobStatusResponse withPendingWarnings(List<String> pendingWarnings) {
+        setPendingWarnings(pendingWarnings);
+        return this;
+    }
+
+    /**
+     * Returns the pending errors.
+     *
+     * @return The pending errors.
+     */
+    public List<String> getPendingErrors() {
+        return pendingErrors;
+    }
+
+    /**
+     * Sets the pending errors.
+     *
+     * @param pendingErrors The pending errors.
+     */
+    public void setPendingErrors(List<String> pendingErrors) {
+        this.pendingErrors = pendingErrors;
+    }
+
+    /**
+     * Sets the pending errors.
+     *
+     * @param pendingErrors The pending errors.
+     * @return This object.
+     */
+    public GetSearchJobStatusResponse withPendingErrors(List<String> pendingErrors) {
+        setPendingErrors(pendingErrors);
+        return this;
+    }
+
     // Object implementation.
 
     @Override
@@ -109,11 +188,16 @@ public final class GetSearchJobStatusResponse {
         StringBuffer result = new StringBuffer(128);
         result.append("state: '");
         result.append(state);
-        result.append("', message count: '");
+        result.append("', histogram buckets: ");
+        result.append(histogramBuckets);
+        result.append(", message count: '");
         result.append(messageCount);
         result.append("', record count: '");
         result.append(recordCount);
-        result.append("'");
+        result.append("', pending warnings: ");
+        result.append(pendingWarnings);
+        result.append(", pending errors: ");
+        result.append(pendingErrors);
         return result.toString();
     }
 }
