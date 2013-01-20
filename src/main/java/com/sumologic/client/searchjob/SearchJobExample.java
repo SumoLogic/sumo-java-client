@@ -25,8 +25,8 @@ public class SearchJobExample {
         // Create a search job.
         String searchJobId = sumoClient.createSearchJob(
                 "| parse \"[Classification: *]\" as classification | count classification",
-                "2013-01-18T20:00:00",
-                "2013-01-18T21:00:00",
+                "2013-01-19T18:00:00",
+                "2013-01-19T19:00:00",
                 "PST");
         System.out.printf("Search job ID: '%s'\n", searchJobId);
 
