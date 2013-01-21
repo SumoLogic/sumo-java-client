@@ -10,6 +10,8 @@ public enum SumoServerErrors implements SumoServerError {
     UNAUTHORIZED("unauthorized"),
     UNAVAILABLE("service.unavailable"),
     NOT_FOUND("notfound"),
+    UNSUPPORTED_METHOD("method.unsupported"),
+    INVALID_CONTENT_TYPE("contenttype.invalid"),
 
     ETAG_MISMATCH("service.etagid.mismatch"),
     MISSING_PRECONDITION("service.ifthen.missing"),

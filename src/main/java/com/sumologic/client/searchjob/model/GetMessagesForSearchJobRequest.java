@@ -1,4 +1,4 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,42 +11,42 @@ import com.sumologic.client.model.HttpGetRequest;
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public final class GetMessagesForSearchSessionRequest implements HttpGetRequest {
+public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
 
     // Instance fields.
 
     private String id;
     private int offset;
-    private int length;
+    private int limit;
 
     // Implementation.
 
     /**
-     * Creates a new messages for search session request.
+     * Creates a new messages for search job request.
      *
-     * @param id     The search session ID.
+     * @param id     The search job ID.
      * @param offset The offset.
-     * @param length The length.
+     * @param limit The limit.
      */
-    public GetMessagesForSearchSessionRequest(String id, int offset, int length) {
+    public GetMessagesForSearchJobRequest(String id, int offset, int limit) {
         this.id = id;
         this.offset = offset;
-        this.length = length;
+        this.limit = limit;
     }
 
     /**
-     * Return the search session ID.
+     * Return the search job ID.
      *
-     * @return The search session ID.
+     * @return The search job ID.
      */
     public String getId() {
         return id;
     }
 
     /**
-     * Sets the search session ID.
+     * Sets the search job ID.
      *
-     * @param id The search session ID.
+     * @param id The search job ID.
      */
     public void setId(String id) {
         this.id = id;
@@ -71,21 +71,21 @@ public final class GetMessagesForSearchSessionRequest implements HttpGetRequest 
     }
 
     /**
-     * Returns the length.
+     * Returns the limit.
      *
-     * @return The length.
+     * @return The limit.
      */
-    public int getLength() {
-        return length;
+    public int getLimit() {
+        return limit;
     }
 
     /**
-     * Sets the length.
+     * Sets the limit.
      *
-     * @param length The length.
+     * @param limit The limit.
      */
-    public void setLength(int length) {
-        this.length = length;
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 
     // HttpGetRequest implementation.
@@ -94,7 +94,7 @@ public final class GetMessagesForSearchSessionRequest implements HttpGetRequest 
     public List<NameValuePair> toUrlParams() {
         List<NameValuePair> result = new ArrayList<NameValuePair>(2);
         result.add(new BasicNameValuePair("offset", Integer.toString(offset)));
-        result.add(new BasicNameValuePair("length", Integer.toString(length)));
+        result.add(new BasicNameValuePair("limit", Integer.toString(limit)));
         return result;
     }
 }

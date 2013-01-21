@@ -155,7 +155,7 @@ public class LogMessage {
 
     /**
      * Returns the map of properties.
-     * This is needed to support the search session API.
+     * This is needed to support the search job API.
      *
      * @return The map of properties.
      */
@@ -165,7 +165,7 @@ public class LogMessage {
 
     /**
      * Sets the map of properties.
-     * This is needed to support the search session API.
+     * This is needed to support the search job API.
      *
      * @param map The map of properties.
      */

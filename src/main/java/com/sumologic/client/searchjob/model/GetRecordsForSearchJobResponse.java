@@ -1,4 +1,4 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 
 import java.util.List;
@@ -6,12 +6,12 @@ import java.util.List;
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public class GetRecordsForSearchSessionResponse {
+public class GetRecordsForSearchJobResponse {
 
     // Instance fields.
 
-    private List<SearchSessionField> fields;
-    private List<SearchSessionRecord> records;
+    private List<SearchJobField> fields;
+    private List<SearchJobRecord> records;
 
     // Implementation.
 
@@ -20,7 +20,7 @@ public class GetRecordsForSearchSessionResponse {
      *
      * @return The fields.
      */
-    public List<SearchSessionField> getFields() {
+    public List<SearchJobField> getFields() {
         return fields;
     }
 
@@ -29,7 +29,7 @@ public class GetRecordsForSearchSessionResponse {
      *
      * @param fields The fields.
      */
-    public void setFields(List<SearchSessionField> fields) {
+    public void setFields(List<SearchJobField> fields) {
         this.fields = fields;
     }
 
@@ -39,7 +39,7 @@ public class GetRecordsForSearchSessionResponse {
      * @param fields The fields.
      * @return This object.
      */
-    public GetRecordsForSearchSessionResponse withFields(List<SearchSessionField> fields) {
+    public GetRecordsForSearchJobResponse withFields(List<SearchJobField> fields) {
         setFields(fields);
         return this;
     }
@@ -49,7 +49,7 @@ public class GetRecordsForSearchSessionResponse {
      *
      * @return The records.
      */
-    public List<SearchSessionRecord> getRecords() {
+    public List<SearchJobRecord> getRecords() {
         return records;
     }
 
@@ -58,7 +58,7 @@ public class GetRecordsForSearchSessionResponse {
      *
      * @param records The records.
      */
-    public void setRecords(List<SearchSessionRecord> records) {
+    public void setRecords(List<SearchJobRecord> records) {
         this.records = records;
     }
 
@@ -68,7 +68,7 @@ public class GetRecordsForSearchSessionResponse {
      * @param messages The records.
      * @return This object.
      */
-    public GetRecordsForSearchSessionResponse withMessages(List<SearchSessionRecord> messages) {
+    public GetRecordsForSearchJobResponse withMessages(List<SearchJobRecord> messages) {
         setRecords(messages);
         return this;
     }

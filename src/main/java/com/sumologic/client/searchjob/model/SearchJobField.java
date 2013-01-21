@@ -1,9 +1,9 @@
-package com.sumologic.client.searchsession.model;
+package com.sumologic.client.searchjob.model;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
  */
-public class SearchSessionField {
+public class SearchJobField {
 
     // Instance fields.
 
@@ -37,7 +37,7 @@ public class SearchSessionField {
      * @param name The name.
      * @return The name.
      */
-    public SearchSessionField withName(String name) {
+    public SearchJobField withName(String name) {
         setName(name);
         return this;
     }
@@ -66,7 +66,7 @@ public class SearchSessionField {
      * @param fieldType The field type.
      * @return This object.
      */
-    public SearchSessionField withFieldType(String fieldType) {
+    public SearchJobField withFieldType(String fieldType) {
         setFieldType(fieldType);
         return this;
     }
@@ -95,7 +95,7 @@ public class SearchSessionField {
      * @param isKeyField Whether this is a key field.
      * @return This object.
      */
-    public SearchSessionField withKeyField(boolean isKeyField) {
+    public SearchJobField withKeyField(boolean isKeyField) {
         setKeyField(isKeyField);
         return this;
     }

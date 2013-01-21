@@ -1,9 +1,10 @@
 package com.sumologic.client;
 
 import com.sumologic.client.collectors.model.*;
-import com.sumologic.client.searchsession.model.CancelSearchSessionResponse;
-import com.sumologic.client.searchsession.model.GetMessagesForSearchSessionResponse;
-import com.sumologic.client.searchsession.model.GetSearchSessionStatusResponse;
+import com.sumologic.client.searchjob.model.CancelSearchJobResponse;
+import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
+import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
+import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 
@@ -15,6 +16,10 @@ import com.sumologic.client.model.SearchResponse;
  * @author Christian Beedgen
  */
 public interface SumoLogic {
+
+    //
+    // One-shot search.
+    //
 
     /**
      * Issues a search query using the Sumo Logic's search engine.
@@ -32,45 +37,64 @@ public interface SumoLogic {
      */
     SearchResponse search(String query);
 
+    //
+    // Search jobs.
+    //
+
     /**
-     * Start a search session and receive a session ID for subsequent
+     * Starts a search job and receive a job ID for subsequent
      * polling of the search status.
      *
      * @param query          The query.
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
-     * @return The search session ID
+     * @return The search job ID
      */
-    String createSearchSession(
+    String createSearchJob(
             String query, String fromExpression, String toExpression, String timeZone);
 
     /**
-     * Returns the current status of a search session.
+     * Returns the current status of a search job.
      *
-     * @param searchSessionId The search session ID
+     * @param searchJobId The search job ID
      * @return The status
      */
-    GetSearchSessionStatusResponse getSearchSessionStatus(String searchSessionId);
+    GetSearchJobStatusResponse getSearchJobStatus(String searchJobId);
 
     /**
-     * Returns search session result messages.
+     * Returns messages for the specified search job.
      *
-     * @param searchSessionId The search session ID.
-     * @param offset          The offset.
-     * @param length          The length.
+     * @param searchJobId The search job ID.
+     * @param offset      The offset.
+     * @param limit       The length.
      * @return The messages.
      */
-    GetMessagesForSearchSessionResponse getMessagesForSearchSession(
-            String searchSessionId, int offset, int length);
+    GetMessagesForSearchJobResponse getMessagesForSearchJob(
+            String searchJobId, int offset, int limit);
 
     /**
-     * Cancels a search session.
+     * Returns records for the specified search job.
      *
-     * @param searchSessionId The search session ID
+     * @param searchJobId The search job ID.
+     * @param offset      The offset.
+     * @param limit       The length.
+     * @return The records.
+     */
+    GetRecordsForSearchJobResponse getRecordsForSearchJob(
+            String searchJobId, int offset, int limit);
+
+    /**
+     * Cancels a search job.
+     *
+     * @param searchJobId The search job ID
      * @return
      */
-    CancelSearchSessionResponse cancelSearchSession(String searchSessionId);
+    CancelSearchJobResponse cancelSearchJob(String searchJobId);
+
+    //
+    // Collectors.
+    //
 
     /**
      * Gets all available Sumo Logic collectors matching the request.
@@ -163,7 +187,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source id as arguments.
      *
      * @param collectorId The collector id
-     * @param sourceId The source id
+     * @param sourceId    The source id
      * @return The response
      */
     GetSourceResponse getSource(Long collectorId, Long sourceId);
@@ -180,7 +204,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source as arguments.
      *
      * @param collectorId The collector id
-     * @param source The source
+     * @param source      The source
      * @return The response
      */
     CreateSourceResponse createSource(Long collectorId, Source source);
@@ -197,7 +221,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source as arguments.
      *
      * @param collectorId The collector id
-     * @param source The source
+     * @param source      The source
      * @return The response
      */
     UpdateSourceResponse updateSource(Long collectorId, Source source);
@@ -214,7 +238,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source id as arguments.
      *
      * @param collectorId The collector id
-     * @param sourceId The source id
+     * @param sourceId    The source id
      * @return The response
      */
     DeleteSourceResponse deleteSource(Long collectorId, Long sourceId);
