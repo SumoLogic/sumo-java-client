@@ -272,7 +272,7 @@ public class Source extends SumoEntity {
     /**
      * Sets the filters.
      */
-    public void setFilter(List<Filter> filters) {
+    public void setFilters(List<Filter> filters) {
         this.filters = filters;
     }
 
