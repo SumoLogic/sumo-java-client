@@ -139,14 +139,14 @@ public class SumoLogicClient implements SumoLogic {
      *
      * @param searchJobId The search job ID.
      * @param offset      The offset.
-     * @param length      The length.
+     * @param limit      The length.
      * @return The messages.
      */
     @Override
     public GetMessagesForSearchJobResponse getMessagesForSearchJob(
-            String searchJobId, int offset, int length) {
+            String searchJobId, int offset, int limit) {
         GetMessagesForSearchJobRequest getMessagesForSearchJobRequest =
-                new GetMessagesForSearchJobRequest(searchJobId, offset, length);
+                new GetMessagesForSearchJobRequest(searchJobId, offset, limit);
         return searchJobClient.getMessagesForSearchJob(
                 getConnectionConfig(), getMessagesForSearchJobRequest);
     }
@@ -156,13 +156,13 @@ public class SumoLogicClient implements SumoLogic {
      *
      * @param searchJobId The search job ID.
      * @param offset      The offset.
-     * @param length      The length.
+     * @param limit      The length.
      * @return The records.
      */
     @Override
-    public GetRecordsForSearchJobResponse getRecordsForSearchJob(String searchJobId, int offset, int length) {
+    public GetRecordsForSearchJobResponse getRecordsForSearchJob(String searchJobId, int offset, int limit) {
         GetRecordsForSearchJobRequest getRecordsForSearchJobRequest =
-                new GetRecordsForSearchJobRequest(searchJobId, offset, length);
+                new GetRecordsForSearchJobRequest(searchJobId, offset, limit);
         return searchJobClient.getRecordsForSearchJob(
                 getConnectionConfig(), getRecordsForSearchJobRequest);
     }

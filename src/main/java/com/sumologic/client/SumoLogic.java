@@ -66,23 +66,23 @@ public interface SumoLogic {
      * Returns messages for the specified search job.
      *
      * @param searchJobId The search job ID.
-     * @param offset          The offset.
-     * @param length          The length.
+     * @param offset      The offset.
+     * @param limit       The length.
      * @return The messages.
      */
     GetMessagesForSearchJobResponse getMessagesForSearchJob(
-            String searchJobId, int offset, int length);
+            String searchJobId, int offset, int limit);
 
     /**
      * Returns records for the specified search job.
      *
      * @param searchJobId The search job ID.
-     * @param offset          The offset.
-     * @param length          The length.
+     * @param offset      The offset.
+     * @param limit       The length.
      * @return The records.
      */
     GetRecordsForSearchJobResponse getRecordsForSearchJob(
-            String searchJobId, int offset, int length);
+            String searchJobId, int offset, int limit);
 
     /**
      * Cancels a search job.
@@ -187,7 +187,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source id as arguments.
      *
      * @param collectorId The collector id
-     * @param sourceId The source id
+     * @param sourceId    The source id
      * @return The response
      */
     GetSourceResponse getSource(Long collectorId, Long sourceId);
@@ -204,7 +204,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source as arguments.
      *
      * @param collectorId The collector id
-     * @param source The source
+     * @param source      The source
      * @return The response
      */
     CreateSourceResponse createSource(Long collectorId, Source source);
@@ -221,7 +221,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source as arguments.
      *
      * @param collectorId The collector id
-     * @param source The source
+     * @param source      The source
      * @return The response
      */
     UpdateSourceResponse updateSource(Long collectorId, Source source);
@@ -238,7 +238,7 @@ public interface SumoLogic {
      * Convenience method: takes collector id and source id as arguments.
      *
      * @param collectorId The collector id
-     * @param sourceId The source id
+     * @param sourceId    The source id
      * @return The response
      */
     DeleteSourceResponse deleteSource(Long collectorId, Long sourceId);

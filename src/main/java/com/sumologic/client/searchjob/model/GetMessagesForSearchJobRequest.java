@@ -17,7 +17,7 @@ public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
 
     private String id;
     private int offset;
-    private int length;
+    private int limit;
 
     // Implementation.
 
@@ -26,12 +26,12 @@ public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
      *
      * @param id     The search job ID.
      * @param offset The offset.
-     * @param length The length.
+     * @param limit The limit.
      */
-    public GetMessagesForSearchJobRequest(String id, int offset, int length) {
+    public GetMessagesForSearchJobRequest(String id, int offset, int limit) {
         this.id = id;
         this.offset = offset;
-        this.length = length;
+        this.limit = limit;
     }
 
     /**
@@ -71,21 +71,21 @@ public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
     }
 
     /**
-     * Returns the length.
+     * Returns the limit.
      *
-     * @return The length.
+     * @return The limit.
      */
-    public int getLength() {
-        return length;
+    public int getLimit() {
+        return limit;
     }
 
     /**
-     * Sets the length.
+     * Sets the limit.
      *
-     * @param length The length.
+     * @param limit The limit.
      */
-    public void setLength(int length) {
-        this.length = length;
+    public void setLimit(int limit) {
+        this.limit = limit;
     }
 
     // HttpGetRequest implementation.
@@ -94,7 +94,7 @@ public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
     public List<NameValuePair> toUrlParams() {
         List<NameValuePair> result = new ArrayList<NameValuePair>(2);
         result.add(new BasicNameValuePair("offset", Integer.toString(offset)));
-        result.add(new BasicNameValuePair("length", Integer.toString(length)));
+        result.add(new BasicNameValuePair("limit", Integer.toString(limit)));
         return result;
     }
 }
