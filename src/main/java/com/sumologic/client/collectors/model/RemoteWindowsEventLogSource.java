@@ -81,4 +81,5 @@ public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
     public void setHosts(List<String> hosts) {
         setProperty(HOSTS, hosts);
     }
+
 }

@@ -15,7 +15,8 @@ public enum SumoCollectorErrors implements SumoServerError {
     BAD_SOURCE_ID("source.request.id.invalid"),
     DUPLICATE_RESOURCE_NAME("validation.name.duplicate"),
     MISSING_FIELDS("validation.fields.missing"),
-    INVALID_FIELD_VALUE("validation.fields.invalid");
+    INVALID_FIELD_VALUE("validation.fields.invalid"),
+    INVALID_SOURCE_TYPE("source.type.invalid");
 
     private String id;
 

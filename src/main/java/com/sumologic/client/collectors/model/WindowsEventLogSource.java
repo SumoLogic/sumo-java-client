@@ -9,27 +9,10 @@ import java.util.List;
  */
 public class WindowsEventLogSource extends Source {
 
-    private static String INCLUDE_ALL = "includeAll";
     private static String LOG_NAMES = "logNames";
 
     public WindowsEventLogSource() {
         setSourceType(SourceType.LOCAL_WINDOWS_EVENT_LOG.getType());
-    }
-
-    /**
-     * Returns whether all event types should be included.
-     *
-     * @return Whether all event types should be included.
-     */
-    public Boolean isIncludeAll() {
-        return getProperty(INCLUDE_ALL);
-    }
-
-    /**
-     * Sets whether all event types should be included.
-     */
-    public void setIncludeAll(Boolean includeAll) {
-        setProperty(INCLUDE_ALL, includeAll);
     }
 
     /**
