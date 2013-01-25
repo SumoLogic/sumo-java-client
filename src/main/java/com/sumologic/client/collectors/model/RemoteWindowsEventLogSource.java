@@ -13,7 +13,6 @@ public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
     private static String USERNAME = "username";
     private static String PASSWORD = "password";
     private static String HOSTS = "hosts";
-    private static String LOG_NAMES = "logNames";
 
     public RemoteWindowsEventLogSource() {
         setSourceType(SourceType.REMOTE_WINDOWS_EVENT_LOG.getType());
@@ -81,22 +80,6 @@ public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
      */
     public void setHosts(List<String> hosts) {
         setProperty(HOSTS, hosts);
-    }
-
-    /**
-     * Returns the list of event types (empty if includeAll = true).
-     *
-     * @return The list of event types.
-     */
-    public List<String> getLogNames() {
-        return getProperty(LOG_NAMES);
-    }
-
-    /**
-     * Sets the list of event types.
-     */
-    public void setLogNames(List<String> logNames) {
-        setProperty(LOG_NAMES, logNames);
     }
 
 }
