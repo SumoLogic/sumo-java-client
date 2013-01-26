@@ -24,9 +24,9 @@ public class SearchJobExample {
 
         // Create a search job.
         String searchJobId = sumoClient.createSearchJob(
-                "| parse \"[Classification: *]\" as classification | count classification",
-                "2013-01-19T18:00:00",
-                "2013-01-19T19:00:00",
+                "| count _sourceCategory",
+                "2013-01-26T15:00:00",
+                "2013-01-26T16:00:00",
                 "PST");
         System.out.printf("Search job ID: '%s'\n", searchJobId);
 
@@ -79,12 +79,11 @@ public class SearchJobExample {
         List<SearchJobRecord> records = getRecordsForSearchJobResponse.getRecords();
         for (SearchJobRecord record : records) {
             System.out.printf("  %s, %d\n",
-                    record.stringField("classification"),
+                    record.stringField("_sourcecategory"),
                     record.intField("_count"));
         }
 
         // Delete the search job.
-        CancelSearchJobResponse cancelSearchJobResponse =
-                sumoClient.cancelSearchJob(searchJobId);
+        CancelSearchJobResponse cancelSearchJobResponse = sumoClient.cancelSearchJob(searchJobId);
     }
 }
