@@ -23,12 +23,19 @@ public class SearchJobExample {
         sumoClient.setURL(apiUrl);
 
         // Create a search job.
+        long endTimestamp = System.currentTimeMillis();
+        long startTimestamp = endTimestamp - 24 * 60 * 60 * 1000;
         String searchJobId = sumoClient.createSearchJob(
                 "| count _sourceCategory",
-//                "| parse goo",
-                "2013-01-26T15:00:00",
-                "2013-01-26T16:00:00",
-                "PST");
+                Long.toString(startTimestamp),
+                Long.toString(endTimestamp),
+                "UTC");
+//        String searchJobId = sumoClient.createSearchJob(
+//                "| count _sourceCategory",
+////                "| parse goo",
+//                "2013-01-26T15:00:00",
+//                "2013-01-26T16:00:00",
+//                "PST");
         System.out.printf("Search job ID: '%s'\n", searchJobId);
 
         // Poll the search job status.
