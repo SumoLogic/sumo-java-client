@@ -23,11 +23,19 @@ public class SearchJobExample {
         sumoClient.setURL(apiUrl);
 
         // Create a search job.
+        long endTimestamp = System.currentTimeMillis();
+        long startTimestamp = endTimestamp - 24 * 60 * 60 * 1000;
         String searchJobId = sumoClient.createSearchJob(
-                "| parse \"[Classification: *]\" as classification | count classification",
-                "2013-01-19T18:00:00",
-                "2013-01-19T19:00:00",
-                "PST");
+                "| count _sourceCategory",
+                Long.toString(startTimestamp),
+                Long.toString(endTimestamp),
+                "UTC");
+//        String searchJobId = sumoClient.createSearchJob(
+//                "| count _sourceCategory",
+////                "| parse goo",
+//                "2013-01-26T15:00:00",
+//                "2013-01-26T16:00:00",
+//                "PST");
         System.out.printf("Search job ID: '%s'\n", searchJobId);
 
         // Poll the search job status.
@@ -79,12 +87,11 @@ public class SearchJobExample {
         List<SearchJobRecord> records = getRecordsForSearchJobResponse.getRecords();
         for (SearchJobRecord record : records) {
             System.out.printf("  %s, %d\n",
-                    record.stringField("classification"),
+                    record.stringField("_sourcecategory"),
                     record.intField("_count"));
         }
 
         // Delete the search job.
-        CancelSearchJobResponse cancelSearchJobResponse =
-                sumoClient.cancelSearchJob(searchJobId);
+        CancelSearchJobResponse cancelSearchJobResponse = sumoClient.cancelSearchJob(searchJobId);
     }
 }

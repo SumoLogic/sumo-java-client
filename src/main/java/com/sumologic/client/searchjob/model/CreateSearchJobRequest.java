@@ -10,8 +10,8 @@ public final class CreateSearchJobRequest implements HttpPostRequest {
     // Instance fields.
 
     private String query;
-    private String fromExpression;
-    private String toExpression;
+    private String from;
+    private String to;
     private String timeZone;
 
     // Implementation.
@@ -19,18 +19,18 @@ public final class CreateSearchJobRequest implements HttpPostRequest {
     /**
      * Creates a search job request.
      *
-     * @param query          The query.
-     * @param fromExpression The from expression.
-     * @param toExpression   The toExpression.
-     * @param timeZone       The time zone.
+     * @param query    The query.
+     * @param from     The start of the time range.
+     * @param to       The end of the time range.
+     * @param timeZone The time zone.
      */
     public CreateSearchJobRequest(String query,
-                                  String fromExpression,
-                                  String toExpression,
+                                  String from,
+                                  String to,
                                   String timeZone) {
         this.query = query;
-        this.fromExpression = fromExpression;
-        this.toExpression = toExpression;
+        this.from = from;
+        this.to = to;
         this.timeZone = timeZone;
     }
 
@@ -61,54 +61,56 @@ public final class CreateSearchJobRequest implements HttpPostRequest {
     }
 
     /**
-     * Returns the from expression.
+     * Returns the start of the time range.
      *
-     * @return The from expression.
+     * @return The start of the time range.
      */
-    public String getFromExpression() {
-        return fromExpression;
+    public String getFrom() {
+        return from;
     }
 
     /**
-     * Sets the from expression.
+     * Sets the start of the time range.
      */
-    public void setFromExpression(String fromExpression) {
-        this.fromExpression = fromExpression;
+    public void setFrom(String from) {
+        this.from = from;
     }
 
     /**
-     * Sets the from expression.
+     * Sets the start of the time range.
      *
+     * @param from The start of the time range.
      * @return This object.
      */
-    public CreateSearchJobRequest withFromExpresssion(String fromExpression) {
-        setFromExpression(fromExpression);
+    public CreateSearchJobRequest withFrom(String from) {
+        setFrom(from);
         return this;
     }
 
     /**
-     * Returns the to expression.
+     * Returns the end of the time range.
      *
-     * @return The to expression.
+     * @return The end of the time range.
      */
-    public String getToExpression() {
-        return toExpression;
+    public String getTo() {
+        return to;
     }
 
     /**
-     * Sets the to expression.
+     * Sets the end of the time range.
      */
-    public void setToExpression(String toExpression) {
-        this.toExpression = toExpression;
+    public void setTo(String to) {
+        this.to = to;
     }
 
     /**
-     * Sets the to expression.
+     * Sets the end of the time range.
      *
+     * @param to The end of the time range.
      * @return This object.
      */
-    public CreateSearchJobRequest withToTime(String toExpression) {
-        setToExpression(toExpression);
+    public CreateSearchJobRequest withTo(String to) {
+        setTo(to);
         return this;
     }
 
