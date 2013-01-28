@@ -43,12 +43,14 @@ public class HelloWorld {
 ```
 
 For information how to create sophisticated queries visit (TODO: LINK). You can find the documentation of the Java API here (TODO: link to JavaDoc) (HTML JavaDoc).
-Current Limitations and Known Bugs
+
+## Current Limitations and Known Bugs
 
 The search API has currently has the following limitations:
-A maximum of 100k log lines are returned at once. If you need more data you can issue subsequent queries covering a smaller time frame.
-Queries need to complete in 60 seconds. Otherwise the session will timeout and no results are returned.
-License
+  * A maximum of 100k log lines are returned at once. If you need more data you can issue subsequent queries covering a smaller time frame.
+  * Queries need to complete in 60 seconds. Otherwise the session will timeout and no results are returned.
+
+## License
 
 The Sumo Logic client library is published under the Apache Software License, Version 2.0. Please visit http://www.apache.org/licenses/LICENSE-2.0.txt for details.
 
