@@ -1,9 +1,10 @@
 ## Introduction
 
 Sumo Logic provides a cloud-based log management solution. It can process and analyze log files in peta-byte scale. This library provides a Java client to execute searches on the data collected by the Sumo Logic service.
-News
 
-12/09/12: Version 1.0 updated
+## News
+
+  * 12/09/12: Version 1.0 updated
 
 ## How to use
 
