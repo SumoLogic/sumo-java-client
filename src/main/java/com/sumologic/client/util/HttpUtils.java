@@ -11,10 +11,14 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.cookie.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.cookie.BrowserCompatSpec;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
 import java.io.*;
@@ -145,6 +149,23 @@ public class HttpUtils {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
                 config.getUsernamePasswordCredentials());
+
+        CookieSpecFactory csf = new CookieSpecFactory() {
+            public CookieSpec newInstance(HttpParams params) {
+                return new BrowserCompatSpec() {
+                    @Override
+                    public void validate(Cookie cookie, CookieOrigin origin)
+                            throws MalformedCookieException {
+                        System.out.println(cookie);
+                    }
+                };
+            }
+        };
+
+        httpClient.getCookieSpecs().register("easy", csf);
+        httpClient.getParams().setParameter(
+                ClientPNames.COOKIE_POLICY, "easy");
+
         return httpClient;
     }
 
