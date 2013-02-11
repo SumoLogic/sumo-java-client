@@ -59,7 +59,9 @@ public class SearchJobExample {
         //        http://localhost:23667
         //
         // is a good choice as well.
-        String url = "http://localhost:23667";
+//        String url = "http://localhost:23667";
+        String url = "https://api.sumologic.com";
+//        String url = "https://long-api.sumologic.net";
 
         // Read the user name and the password from
         // the commandline so we don't have to
@@ -79,10 +81,10 @@ public class SearchJobExample {
         // specify a query, a time range, and a
         // time zone.
         String searchJobId = sumoClient.createSearchJob(
-                "*",                    // This query will return all messages
-                "2013-01-28T10:00:00",  // between this start time and
-                "2013-01-28T11:00:00",  // this end time, specified in ISO 8601 format
-                "PST");                 // and assuming Pacific Standard Time.
+                "* | count _sourceHost",                    // This query will return all messages
+                "2013-02-07T00:00:00",  // between this start time and
+                "2013-02-07T00:01:00",  // this end time, specified in ISO 8601 format
+                "UTC");                 // and assuming Pacific Standard Time.
 
         // Note - above we are specifying the time
         // range using the ISO 8601 timestamp format.
@@ -225,16 +227,28 @@ public class SearchJobExample {
             //                     record.intField("_count"));
             //         }
 
+        } catch (Throwable t) {
+
+            // Yikes. We has an error.
+            t.printStackTrace();
+
         } finally {
 
-            // We are done, so let's cancel the
-            // search job. Note that it will otherwise
-            // hang around the Sumo Logic service
-            // until some session timeout kicks in.
-            // Proactively cancelling a search job
-            // when we are done with it proves that we
-            // are a good citizen.
-            sumoClient.cancelSearchJob(searchJobId);
+            try {
+
+                // We are done, so let's cancel the
+                // search job. Note that it will otherwise
+                // hang around the Sumo Logic service
+                // until some session timeout kicks in.
+                // Proactively cancelling a search job
+                // when we are done with it proves that we
+                // are a good citizen.
+                sumoClient.cancelSearchJob(searchJobId);
+
+            } catch (Throwable t) {
+                System.out.printf("Error cancelling search job: '%s'", t.getMessage());
+                t.printStackTrace();
+            }
         }
     }
 
