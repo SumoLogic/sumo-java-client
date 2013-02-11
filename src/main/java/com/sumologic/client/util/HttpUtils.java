@@ -9,6 +9,7 @@ import com.sumologic.client.model.HttpPostRequest;
 import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.params.ClientPNames;
@@ -16,6 +17,7 @@ import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.cookie.*;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.cookie.BrowserCompatSpec;
 import org.apache.http.params.HttpParams;
@@ -32,6 +34,8 @@ public class HttpUtils {
     public static final int API_VERSION = 1;
 
     private static final String JSON_CONTENT_TYPE = "application/json";
+
+    private static final CookieStore cookieStore = new BasicCookieStore();
 
     // Public HTTP request methods
 
@@ -147,25 +151,9 @@ public class HttpUtils {
 
     private static HttpClient getHttpClient(ConnectionConfig config) {
         DefaultHttpClient httpClient = new DefaultHttpClient();
+        httpClient.setCookieStore(cookieStore);
         httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
                 config.getUsernamePasswordCredentials());
-
-        CookieSpecFactory csf = new CookieSpecFactory() {
-            public CookieSpec newInstance(HttpParams params) {
-                return new BrowserCompatSpec() {
-                    @Override
-                    public void validate(Cookie cookie, CookieOrigin origin)
-                            throws MalformedCookieException {
-                        System.out.println(cookie);
-                    }
-                };
-            }
-        };
-
-        httpClient.getCookieSpecs().register("easy", csf);
-        httpClient.getParams().setParameter(
-                ClientPNames.COOKIE_POLICY, "easy");
-
         return httpClient;
     }
 

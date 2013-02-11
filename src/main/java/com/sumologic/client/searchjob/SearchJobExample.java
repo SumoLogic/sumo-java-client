@@ -81,9 +81,9 @@ public class SearchJobExample {
         // specify a query, a time range, and a
         // time zone.
         String searchJobId = sumoClient.createSearchJob(
-                "*",                    // This query will return all messages
+                "* | count _sourceHost",                    // This query will return all messages
                 "2013-02-07T00:00:00",  // between this start time and
-                "2013-02-07T00:05:00",  // this end time, specified in ISO 8601 format
+                "2013-02-07T00:01:00",  // this end time, specified in ISO 8601 format
                 "UTC");                 // and assuming Pacific Standard Time.
 
         // Note - above we are specifying the time
