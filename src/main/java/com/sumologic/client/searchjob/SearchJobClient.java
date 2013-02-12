@@ -15,12 +15,18 @@ public class SearchJobClient {
 
     // Implementation.
 
+    private HttpUtils httpUtils;
+
+    public SearchJobClient(HttpUtils httpUtils) {
+        this.httpUtils = httpUtils;
+    }
+
     public String createSearchJob(
             ConnectionConfig connection,
             CreateSearchJobRequest createSearchJobRequest) {
 
         String uri = UrlParameters.SEARCH_JOBS_SERVICE;
-        return HttpUtils.post(
+        return httpUtils.post(
                 connection,
                 uri,
                 createSearchJobRequest,
@@ -38,7 +44,7 @@ public class SearchJobClient {
 
         String uri = UrlParameters.SEARCH_JOBS_SERVICE +
                 "/" + getSearchJobStatusRequest.getId();
-        return HttpUtils.get(
+        return httpUtils.get(
                 connection,
                 uri,
                 getSearchJobStatusRequest,
@@ -56,7 +62,7 @@ public class SearchJobClient {
         String uri = UrlParameters.SEARCH_JOBS_SERVICE +
                 "/" + getMessagesForSearchJobRequest.getId() +
                 "/" + UrlParameters.SEARCH_JOBS_SERVICE_MESSAGES;
-        return HttpUtils.get(
+        return httpUtils.get(
                 connection,
                 uri,
                 getMessagesForSearchJobRequest,
@@ -74,7 +80,7 @@ public class SearchJobClient {
         String uri = UrlParameters.SEARCH_JOBS_SERVICE +
                 "/" + getRecordsForSearchJobRequest.getId() +
                 "/" + UrlParameters.SEARCH_JOBS_SERVICE_RECORDS;
-        return HttpUtils.get(
+        return httpUtils.get(
                 connection,
                 uri,
                 getRecordsForSearchJobRequest,
@@ -91,7 +97,7 @@ public class SearchJobClient {
 
         String uri = UrlParameters.SEARCH_JOBS_SERVICE +
                 "/" + cancelSearchJobRequest.getId();
-        return HttpUtils.delete(
+        return httpUtils.delete(
                 connection,
                 uri,
                 cancelSearchJobRequest,
