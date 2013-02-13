@@ -35,11 +35,11 @@ public class HttpUtils {
 
     private static final String JSON_CONTENT_TYPE = "application/json";
 
-    private static final CookieStore cookieStore = new BasicCookieStore();
+    private final CookieStore cookieStore = new BasicCookieStore();
 
     // Public HTTP request methods
 
-    public static <Request extends HttpGetRequest, Response> Response
+    public <Request extends HttpGetRequest, Response> Response
     get(ConnectionConfig config, String endpoint,
         Request request, Map<String, String> requestHeaders,
         ResponseHandler<Request, Response> handler, int expectedStatusCode) {
@@ -57,7 +57,7 @@ public class HttpUtils {
         }
     }
 
-    public static <Request extends HttpPostRequest, Response> Response
+    public <Request extends HttpPostRequest, Response> Response
     post(ConnectionConfig config, String endpoint,
          Request request, Map<String, String> requestHeaders,
          ResponseHandler<Request, Response> handler, int expectedStatusCode) {
@@ -87,7 +87,7 @@ public class HttpUtils {
         }
     }
 
-    public static <Request extends HttpPutRequest, Response> Response
+    public <Request extends HttpPutRequest, Response> Response
     put(ConnectionConfig config, String endpoint,
         Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
@@ -121,7 +121,7 @@ public class HttpUtils {
         }
     }
 
-    public static <Request extends HttpDeleteRequest, Response> Response
+    public <Request extends HttpDeleteRequest, Response> Response
     delete(ConnectionConfig config, String endpoint,
            Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
@@ -149,7 +149,7 @@ public class HttpUtils {
 
     // Private methods
 
-    private static HttpClient getHttpClient(ConnectionConfig config) {
+    private HttpClient getHttpClient(ConnectionConfig config) {
         DefaultHttpClient httpClient = new DefaultHttpClient();
         httpClient.setCookieStore(cookieStore);
         httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
@@ -163,7 +163,7 @@ public class HttpUtils {
                 "/" + endpoint;
     }
 
-    private static <Request, Response> Response
+    private <Request, Response> Response
     doRequest(ConnectionConfig config, HttpUriRequest method, Map<String, String> requestHeaders,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 

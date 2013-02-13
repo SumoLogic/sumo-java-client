@@ -12,6 +12,7 @@ import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
+import com.sumologic.client.util.HttpUtils;
 
 import java.net.URL;
 
@@ -25,6 +26,7 @@ import java.net.URL;
 public class SumoLogicClient implements SumoLogic {
 
     // Instance fields.
+    private HttpUtils httpUtils = new HttpUtils();
 
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
@@ -32,9 +34,9 @@ public class SumoLogicClient implements SumoLogic {
     private Credentials credentials;
     private static JsonFactory jsonFactory = new JsonFactory();
 
-    private SearchClient searchClient = new SearchClient();
-    private CollectorsClient collectorsClient = new CollectorsClient();
-    private SearchJobClient searchJobClient = new SearchJobClient();
+    private SearchClient searchClient = new SearchClient(httpUtils);
+    private CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
+    private SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
 
     // Implementation.
 

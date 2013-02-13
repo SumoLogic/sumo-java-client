@@ -18,8 +18,14 @@ import java.util.List;
 
 public class SearchClient {
 
+    private HttpUtils httpUtils;
+
+    public SearchClient(HttpUtils httpUtils) {
+        this.httpUtils = httpUtils;
+    }
+
     public SearchResponse search(ConnectionConfig config, SearchRequest request) {
-        return HttpUtils.get(config, getSearchEndpoint(), request,
+        return httpUtils.get(config, getSearchEndpoint(), request,
                 HttpUtils.toRequestHeaders(), new SearchHandler(), HttpStatus.SC_OK);
     }
 
