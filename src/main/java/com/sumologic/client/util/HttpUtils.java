@@ -206,7 +206,11 @@ public class HttpUtils {
 
         // Handle runtime exceptions
         catch (RuntimeException ex) {
-            throw new SumoClientException("Runtime error reading server response", ex);
+            if (ex instanceof SumoServerException) {
+                throw ex;
+            } else {
+                throw new SumoClientException("Runtime error reading server response", ex);
+            }
         }
 
         // Clean-up
