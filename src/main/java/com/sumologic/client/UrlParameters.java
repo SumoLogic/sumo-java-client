@@ -131,7 +131,7 @@ public interface UrlParameters {
     /**
      * The log message receipt source name field's key
      */
-    public static String LOG_MESSAGE_SOURCE_NAME = "_blade";
+    public static String LOG_MESSAGE_SOURCE_NAME = "_sourcename";
 
     /**
      * The log message count field's key (when results are aggregated)
