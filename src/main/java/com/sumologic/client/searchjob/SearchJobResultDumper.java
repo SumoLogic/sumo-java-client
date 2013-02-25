@@ -1,15 +1,12 @@
 package com.sumologic.client.searchjob;
 
-import com.sumologic.client.Credentials;
-import com.sumologic.client.SumoLogicClient;
+import java.util.List;
+
 import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.List;
+import com.sumologic.client.Credentials;
+import com.sumologic.client.SumoLogicClient;
 
 /**
  * @author Christian Beedgen (christian@sumologic.com)
@@ -78,8 +75,8 @@ public class SearchJobResultDumper {
                 }
 
                 long endMillis = System.currentTimeMillis();
-                long delta = endMillis - startMillis;
-                long waitMillis = Math.min(delta, 5000);
+                long delta = Math.max(0, endMillis - startMillis);
+                long waitMillis = Math.min(delta, 0);
                 System.err.printf(
                         "Search job ID: '%s', sleeping for: '%d' milliseconds\n",
                         searchJobId, waitMillis);
