@@ -49,7 +49,7 @@ public interface SumoLogic {
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
-     * @return The search job ID
+     * @return The search job ID.
      */
     String createSearchJob(
             String query, String fromExpression, String toExpression, String timeZone);
@@ -57,8 +57,8 @@ public interface SumoLogic {
     /**
      * Returns the current status of a search job.
      *
-     * @param searchJobId The search job ID
-     * @return The status
+     * @param searchJobId The search job ID.
+     * @return The status.
      */
     GetSearchJobStatusResponse getSearchJobStatus(String searchJobId);
 
@@ -87,8 +87,8 @@ public interface SumoLogic {
     /**
      * Cancels a search job.
      *
-     * @param searchJobId The search job ID
-     * @return
+     * @param searchJobId The search job ID.
+     * @return The response.
      */
     CancelSearchJobResponse cancelSearchJob(String searchJobId);
 
@@ -99,147 +99,163 @@ public interface SumoLogic {
     /**
      * Gets all available Sumo Logic collectors matching the request.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     GetCollectorsResponse getCollectors(GetCollectorsRequest request);
 
     /**
      * Gets all available Sumo Logic collectors.
      *
-     * @return The response
+     * @return The response.
      */
     GetCollectorsResponse getCollectors();
 
     /**
      * Gets a single Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     GetCollectorResponse getCollector(GetCollectorRequest request);
 
     /**
      * Convenience method: takes an id as argument.
      *
-     * @param id The id
-     * @return The response
+     * @param id The id.
+     * @return The response.
      */
     GetCollectorResponse getCollector(Long id);
 
     /**
+     * Creates a Sumo Logic collector.
+     *
+     * @param request The request.
+     * @return The response.
+     */
+    CreateCollectorResponse createCollector(CreateCollectorRequest request);
+
+    /**
+     * Convenience method; takes a collector as argument.
+     *
+     * @param collector The collector.
+     * @return The response.
+     */
+    CreateCollectorResponse createCollector(Collector collector);
+
+    /**
      * Updates a Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     UpdateCollectorResponse updateCollector(UpdateCollectorRequest request);
 
     /**
      * Convenience method: takes a collector as argument.
      *
-     * @param collector The collector
-     * @return The response
+     * @param collector The collector.
+     * @return The response.
      */
     UpdateCollectorResponse updateCollector(Collector collector);
 
     /**
      * Deletes a Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     DeleteCollectorResponse deleteCollector(DeleteCollectorRequest request);
 
     /**
      * Convenience method: takes an id as argument.
      *
-     * @param id The id
-     * @return The response
+     * @param id The id.
+     * @return The response.
      */
     DeleteCollectorResponse deleteCollector(Long id);
 
     /**
      * Gets all sources for a Sumo Logic collector matching the request.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     GetSourcesResponse getSources(GetSourcesRequest request);
 
     /**
      * Convenience method: takes a collector id as argument.
      *
-     * @param collectorId The collector id
-     * @return The response
+     * @param collectorId The collector id.
+     * @return The response.
      */
     GetSourcesResponse getSources(Long collectorId);
 
     /**
      * Gets a single source for a Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     GetSourceResponse getSource(GetSourceRequest request);
 
     /**
      * Convenience method: takes collector id and source id as arguments.
      *
-     * @param collectorId The collector id
-     * @param sourceId    The source id
-     * @return The response
+     * @param collectorId The collector id.
+     * @param sourceId    The source id.
+     * @return The response.
      */
     GetSourceResponse getSource(Long collectorId, Long sourceId);
 
     /**
      * Creates a source for a Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     CreateSourceResponse createSource(CreateSourceRequest request);
 
     /**
      * Convenience method: takes collector id and source as arguments.
      *
-     * @param collectorId The collector id
-     * @param source      The source
-     * @return The response
+     * @param collectorId The collector id.
+     * @param source      The source.
+     * @return The response.
      */
     CreateSourceResponse createSource(Long collectorId, Source source);
 
     /**
      * Updates a source for a Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     UpdateSourceResponse updateSource(UpdateSourceRequest request);
 
     /**
      * Convenience method: takes collector id and source as arguments.
      *
-     * @param collectorId The collector id
-     * @param source      The source
-     * @return The response
+     * @param collectorId The collector id.
+     * @param source      The source.
+     * @return The response.
      */
     UpdateSourceResponse updateSource(Long collectorId, Source source);
 
     /**
      * Deletes a source from a Sumo Logic collector.
      *
-     * @param request The request
-     * @return The response
+     * @param request The request.
+     * @return The response.
      */
     DeleteSourceResponse deleteSource(DeleteSourceRequest request);
 
     /**
      * Convenience method: takes collector id and source id as arguments.
      *
-     * @param collectorId The collector id
-     * @param sourceId    The source id
-     * @return The response
+     * @param collectorId The collector id.
+     * @param sourceId    The source id.
+     * @return The response.
      */
     DeleteSourceResponse deleteSource(Long collectorId, Long sourceId);
 }

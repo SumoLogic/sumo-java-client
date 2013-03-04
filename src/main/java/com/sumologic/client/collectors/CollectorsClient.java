@@ -17,7 +17,6 @@ public class CollectorsClient {
         this.httpUtils = httpUtils;
     }
 
-
     public GetCollectorsResponse get(ConnectionConfig config, GetCollectorsRequest request) {
         return httpUtils.get(config, UrlParameters.COLLECTORS_SERVICE, request,
                 HttpUtils.toRequestHeaders(),
@@ -32,6 +31,14 @@ public class CollectorsClient {
                 new SumoEntityResponseHandler<GetCollectorRequest,
                         GetCollectorResponse>(GetCollectorResponse.class),
                 HttpStatus.SC_OK);
+    }
+
+    public CreateCollectorResponse create(ConnectionConfig config, CreateCollectorRequest request) {
+        return httpUtils.post(config, UrlParameters.COLLECTORS_SERVICE, request,
+                HttpUtils.toRequestHeaders(),
+                new DeserializingResponseHandler<CreateCollectorRequest,
+                        CreateCollectorResponse>(CreateCollectorResponse.class),
+                HttpStatus.SC_CREATED);
     }
 
     public UpdateCollectorResponse update(ConnectionConfig config, UpdateCollectorRequest request) {
