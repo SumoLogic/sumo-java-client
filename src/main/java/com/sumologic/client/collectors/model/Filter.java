@@ -2,6 +2,11 @@ package com.sumologic.client.collectors.model;
 
 public class Filter {
 
+    public static String EXCLUDE = "Exclude";
+    public static String INCLUDE = "Include";
+    public static String HASH = "Hash";
+    public static String MASK = "Mask";
+
     private String filterType;
     private String name;
     private String regexp;
