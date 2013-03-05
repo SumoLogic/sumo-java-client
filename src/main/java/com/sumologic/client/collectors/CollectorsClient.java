@@ -36,7 +36,7 @@ public class CollectorsClient {
     public CreateCollectorResponse create(ConnectionConfig config, CreateCollectorRequest request) {
         return httpUtils.post(config, UrlParameters.COLLECTORS_SERVICE, request,
                 HttpUtils.toRequestHeaders(),
-                new DeserializingResponseHandler<CreateCollectorRequest,
+                new SumoEntityResponseHandler<CreateCollectorRequest,
                         CreateCollectorResponse>(CreateCollectorResponse.class),
                 HttpStatus.SC_CREATED);
     }
