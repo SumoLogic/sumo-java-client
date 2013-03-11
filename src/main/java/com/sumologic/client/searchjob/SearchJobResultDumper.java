@@ -44,54 +44,37 @@ public class SearchJobResultDumper {
             int messageOffset = 0;
             GetSearchJobStatusResponse getSearchJobStatusResponse = null;
             while (getSearchJobStatusResponse == null ||
-                    (!getSearchJobStatusResponse.getState().equals("DONE GATHERING RESULTS") &&
-                            !getSearchJobStatusResponse.getState().equals("CANCELLED"))) {
-
+                    (!isDone(getSearchJobStatusResponse) &&
+                            !isCancelled(getSearchJobStatusResponse))) {
                 long startMillis = System.currentTimeMillis();
 
+                // Get the job status and the latest counts from the status.
                 getSearchJobStatusResponse = sumoClient.getSearchJobStatus(searchJobId);
+                if (isCancelled(getSearchJobStatusResponse)) {
+                    System.err.println("Ugh. Search job was cancelled. Exiting...");
+                    System.err.flush();
+                    return;
+                }
                 messageCount = getSearchJobStatusResponse.getMessageCount();
                 recordCount = getSearchJobStatusResponse.getRecordCount();
                 System.err.printf(
                         "Search job ID: '%s', messages: '%d', records: '%d'\n",
                         searchJobId, messageCount, recordCount);
 
-                int messageLength = 0;
-                while ((messageLength = messageCount - messageOffset) > 0) {
-                    messageLength = Math.min(messageLength, 1000);
-                    if (messageLength > 0) {
-                        System.err.printf(
-                                "Search job ID: '%s', messages: '%s', getting offset: '%d', length: '%d'\n",
-                                searchJobId, messageCount, messageOffset, messageLength);
-                        GetMessagesForSearchJobResponse getMessagesForSearchJobResponse =
-                                sumoClient.getMessagesForSearchJob(
-                                        searchJobId, messageOffset, messageLength);
-                        messageOffset += messageLength;
-                        List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
-                        for (LogMessage message : messages) {
-                            System.out.println(message.getLogLine());
-                        }
-                    }
-                }
+                // Catch up with the messages.
+                messageOffset = getMessages(sumoClient, searchJobId, messageCount, messageOffset);
 
+                // Wait if necessary.
                 long endMillis = System.currentTimeMillis();
-                long delta = Math.max(0, endMillis - startMillis);
-                long waitMillis = Math.min(delta, 0);
-                System.err.printf(
-                        "Search job ID: '%s', sleeping for: '%d' milliseconds\n",
-                        searchJobId, waitMillis);
-                Thread.sleep(waitMillis);
+                if (!isDone(getSearchJobStatusResponse)) {
+                    gracePeriod(searchJobId, startMillis, endMillis);
+                }
             }
-
-            if (getSearchJobStatusResponse.getState().equals("CANCELLED")) {
-                System.err.println("Ugh. Search job was cancelled. Exiting...");
-                return;
-            }
-
         } catch (Throwable t) {
 
             // Yikes. We has an error.
             t.printStackTrace(System.err);
+            System.err.flush();
 
         } finally {
 
@@ -102,6 +85,51 @@ public class SearchJobResultDumper {
                 t.printStackTrace(System.err);
             }
         }
+    }
+
+    private static boolean isCancelled(GetSearchJobStatusResponse getSearchJobStatusResponse) {
+        return getSearchJobStatusResponse.getState().equals("CANCELLED");
+    }
+
+    private static boolean isDone(GetSearchJobStatusResponse getSearchJobStatusResponse) {
+        return getSearchJobStatusResponse.getState().equals("DONE GATHERING RESULTS");
+    }
+
+    private static int getMessages(SumoLogicClient sumoClient,
+                                   String searchJobId,
+                                   int messageCount,
+                                   int messageOffset) {
+        int messageLength = 0;
+        while ((messageLength = messageCount - messageOffset) > 0) {
+            messageLength = Math.min(messageLength, 1000);
+            if (messageLength > 0) {
+                System.err.printf(
+                        "Search job ID: '%s', messages: '%s', getting offset: '%d', length: '%d'\n",
+                        searchJobId, messageCount, messageOffset, messageLength);
+                System.err.flush();
+                GetMessagesForSearchJobResponse getMessagesForSearchJobResponse =
+                        sumoClient.getMessagesForSearchJob(
+                                searchJobId, messageOffset, messageLength);
+                messageOffset += messageLength;
+                List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
+                for (LogMessage message : messages) {
+                    System.out.println(message.getLogLine());
+                }
+            }
+        }
+        return messageOffset;
+    }
+
+    private static void gracePeriod(String searchJobId, long startMillis, long endMillis)
+            throws InterruptedException {
+        long maxWaitMillis = 5000;
+        long delta = endMillis - startMillis;
+        long waitMillis = Math.max(0, Math.min(maxWaitMillis - delta, maxWaitMillis));
+        System.err.printf(
+                "Search job ID: '%s', sleeping for: '%d' milliseconds\n",
+                searchJobId, waitMillis);
+        System.err.flush();
+        Thread.sleep(waitMillis);
     }
 }
 

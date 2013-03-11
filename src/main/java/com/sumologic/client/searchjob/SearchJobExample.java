@@ -59,8 +59,8 @@ public class SearchJobExample {
         //        http://localhost:23667
         //
         // is a good choice as well.
-//        String url = "http://localhost:23667";
-        String url = "https://api.sumologic.com";
+        String url = "http://localhost:23667";
+//        String url = "https://api.sumologic.com";
 //        String url = "https://long-api.sumologic.net";
 
         // Read the user name and the password from
@@ -81,10 +81,10 @@ public class SearchJobExample {
         // specify a query, a time range, and a
         // time zone.
         String searchJobId = sumoClient.createSearchJob(
-                "*",                    // This query will return all messages
-                "2013-02-19T00:00:00",  // between this start time and
-                "2013-02-20T00:00:00",  // this end time, specified in ISO 8601 format
-                "EST");                 // and assuming Pacific Standard Time.
+                "* | count _sourceHost",  // This query will return all messages
+                "2013-03-10T13:10:00",    // between this start time and
+                "2013-03-10T13:11:00",    // this end time, specified in ISO 8601 format
+                "america/los_angeles");   // and assuming we are in California.
 
         // Note - above we are specifying the time
         // range using the ISO 8601 timestamp format.
