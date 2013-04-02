@@ -2,6 +2,7 @@ package com.sumologic.client.search;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.sumologic.client.ConnectionConfig;
+import com.sumologic.client.Defaults;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.model.SearchRequest;
@@ -25,7 +26,11 @@ public class SearchClient {
     }
 
     public SearchResponse search(ConnectionConfig config, SearchRequest request) {
-        return httpUtils.get(config, getSearchEndpoint(), request,
+      return search(config, request, Defaults.DEFAULT_HTTP_SEARCH_TIMEOUT);
+    }
+
+    public SearchResponse search(ConnectionConfig config, SearchRequest request, int timeout) {
+        return httpUtils.get(config, getSearchEndpoint(), request, timeout,
                 HttpUtils.toRequestHeaders(), new SearchHandler(), HttpStatus.SC_OK);
     }
 
