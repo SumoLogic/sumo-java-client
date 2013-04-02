@@ -170,7 +170,7 @@ public class HttpUtils {
     private <Request, Response> Response
     doRequest(ConnectionConfig config, HttpUriRequest method, Map<String, String> requestHeaders,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
-        return doRequest(config, 60000, method, requestHeaders, request, handler, expectedStatusCode);
+        return doRequest(config, Defaults.DEFAULT_HTTP_TIMEOUT, method, requestHeaders, request, handler, expectedStatusCode);
     }
 
     private <Request, Response> Response
