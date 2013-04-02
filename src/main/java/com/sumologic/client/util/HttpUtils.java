@@ -12,14 +12,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
-import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.cookie.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.cookie.BrowserCompatSpec;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 
@@ -43,6 +41,13 @@ public class HttpUtils {
     get(ConnectionConfig config, String endpoint,
         Request request, Map<String, String> requestHeaders,
         ResponseHandler<Request, Response> handler, int expectedStatusCode) {
+        return get(config, endpoint, request, Defaults.DEFAULT_HTTP_TIMEOUT, requestHeaders, handler, expectedStatusCode);
+    }
+
+    public <Request extends HttpGetRequest, Response> Response
+    get(ConnectionConfig config, String endpoint,
+        Request request, int timeout, Map<String, String> requestHeaders,
+        ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
             String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
@@ -50,8 +55,7 @@ public class HttpUtils {
                     config.getPort(), getEndpointURI(endpoint), params, null);
             HttpGet get = new HttpGet(uri);
 
-            return doRequest(
-                    config, get, requestHeaders, request, handler, expectedStatusCode);
+            return doRequest(config, timeout, get, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
             throw new SumoClientException("URI cannot be generated", e);
         }
@@ -166,6 +170,12 @@ public class HttpUtils {
     private <Request, Response> Response
     doRequest(ConnectionConfig config, HttpUriRequest method, Map<String, String> requestHeaders,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
+        return doRequest(config, Defaults.DEFAULT_HTTP_TIMEOUT, method, requestHeaders, request, handler, expectedStatusCode);
+    }
+
+    private <Request, Response> Response
+    doRequest(ConnectionConfig config, int timeout, HttpUriRequest method, Map<String, String> requestHeaders,
+              Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         // Set headers
         for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
@@ -173,6 +183,9 @@ public class HttpUtils {
         }
 
         HttpClient httpClient = getHttpClient(config);
+        HttpParams params = httpClient.getParams();
+        HttpConnectionParams.setConnectionTimeout(params, timeout);
+        HttpConnectionParams.setSoTimeout(params, timeout);
 
         InputStream httpStream = null;
         try {
