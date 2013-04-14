@@ -208,7 +208,13 @@ public class HttpUtils {
                     writer.write(s + "\n");
                 }
 
-                throw new SumoServerException(method.getURI().toString(), writer.toString());
+                String json = writer.toString();
+                if (JacksonUtils.isValidJson(json))
+                    throw new SumoServerException(method.getURI().toString(), writer.toString());
+                else
+                    throw new SumoServerException(
+                        method.getURI().toString(),
+                        httpResponse.getStatusLine().getStatusCode());
             }
         }
 

@@ -2,7 +2,10 @@ package com.sumologic.client.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 
 public class JacksonUtils {
 
@@ -30,4 +33,14 @@ public class JacksonUtils {
         }
         return ((Number) value).doubleValue();
     }
+
+    public static boolean isValidJson(String json) {
+        try {
+            MAPPER.readValue(json, JsonNode.class);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
 }
