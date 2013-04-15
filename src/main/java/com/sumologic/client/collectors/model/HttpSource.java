@@ -3,7 +3,7 @@ package com.sumologic.client.collectors.model;
 public class HttpSource extends Source {
 
     public static String ENCODING = "encoding";
-    public static String ENDPOINT = "endPoint";
+    public static String ENDPOINT = "url";
     public static String MESSAGE_PER_REQUEST = "messagePerRequest";
 
     public HttpSource() {

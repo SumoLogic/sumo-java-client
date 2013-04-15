@@ -18,9 +18,26 @@ public class SumoServerException extends SumoException {
 
     private String uri;
     private int status;
+    // (message, id, code) == null if the server doesn't respond with a nice JSON
     private String message;
     private String id;
     private String code;
+
+    /**
+     * Constructs a server exception when a JSON error message is not available.
+     *
+     * @param uri The URI that caused the exception
+     * @param status The HTTP status
+     */
+    public SumoServerException(String uri, int status) {
+        super("The server responded with HTTP Status: " + status);
+        this.uri = uri;
+        this.status = status;
+        this.message = null;
+        this.id = null;
+        this.code = null;
+    }
+
 
     /**
      * Constructs a server exception from a JSON error message
@@ -103,6 +120,7 @@ public class SumoServerException extends SumoException {
      * @return True, if the exception equals the given server error
      */
     public boolean equals(SumoServerError error) {
-        return error.getId().equals(id.toLowerCase().trim());
+        return id != null &&
+               error.getId().equals(id.toLowerCase().trim());
     }
 }
