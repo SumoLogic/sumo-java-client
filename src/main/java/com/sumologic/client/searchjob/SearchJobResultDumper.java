@@ -1,11 +1,13 @@
 package com.sumologic.client.searchjob;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -111,7 +113,7 @@ public class SearchJobResultDumper {
         long thisHour =
             ((long) Math.floor(System.currentTimeMillis() / 60 / 60 / 1000d))
                 * (60 * 60 * 1000L);
-        startTimestamp = Long.toString(thisHour  - (catchupHours * 60 * 60 * 1000L));
+        startTimestamp = Long.toString(thisHour - (catchupHours * 60 * 60 * 1000L));
         endTimestamp = Long.toString(thisHour);
         timezone = "UTC";
 
@@ -333,7 +335,8 @@ public class SearchJobResultDumper {
   }
 
   private static String readQueryStringFromFile(String fileName) throws IOException {
-    BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(fileName)));
+
+    BufferedReader in = new BufferedReader(new InputStreamReader(new URL(fileName).openStream()));
     String line = null;
     StringBuilder sb = new StringBuilder(1024);
     while ((line = in.readLine()) != null) {
