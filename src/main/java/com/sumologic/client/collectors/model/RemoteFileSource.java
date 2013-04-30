@@ -1,11 +1,11 @@
 package com.sumologic.client.collectors.model;
 
 /**
- * A source that reads from remote files over SSH matching a path expression.
+ * A source that reads from a remote file over SSH.
  *
  * @author Jeffrey Wang
  */
-public class RemoteFileSource extends BaseFileSource {
+public class RemoteFileSource extends Source {
 
     private static String REMOTE_HOST = "remoteHost";
     private static String REMOTE_PORT = "remotePort";
@@ -13,6 +13,7 @@ public class RemoteFileSource extends BaseFileSource {
     private static String REMOTE_PASSWORD = "remotePassword";
     private static String KEY_PATH = "keyPath";
     private static String KEY_PASSWORD = "keyPassword";
+    private static String REMOTE_PATH = "remotePath";
     private static String AUTH_METHOD = "authMethod";
 
     public RemoteFileSource() {
@@ -113,6 +114,22 @@ public class RemoteFileSource extends BaseFileSource {
      */
     public void setKeyPassword(String keyPassword) {
         setProperty(KEY_PASSWORD, keyPassword);
+    }
+
+    /**
+     * Returns the remote file path.
+     *
+     * @return The remote file path.
+     */
+    public String getRemotePath() {
+        return getProperty(REMOTE_PATH);
+    }
+
+    /**
+     * Sets the remote file path.
+     */
+    public void setRemotePath(String remotePath) {
+        setProperty(REMOTE_PATH, remotePath);
     }
 
     /**

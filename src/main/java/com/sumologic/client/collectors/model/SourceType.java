@@ -10,15 +10,14 @@ import java.util.Map;
  */
 public enum SourceType {
     LOCAL_FILE("LocalFile", LocalFileSource.class),
-    REMOTE_FILE_LEGACY("RemoteFileLegacy", RemoteFileLegacySource.class),
+    REMOTE_FILE("RemoteFile", RemoteFileSource.class),
     SYSLOG("Syslog", SyslogSource.class),
     LOCAL_WINDOWS_EVENT_LOG("LocalWindowsEventLog", WindowsEventLogSource.class),
     REMOTE_WINDOWS_EVENT_LOG("RemoteWindowsEventLog", RemoteWindowsEventLogSource.class),
     SCRIPT("Script", ScriptSource.class),
     ALERT("Alert", AlertSource.class),
     AMAZON_S3("AmazonS3", AmazonS3Source.class),
-    HTTP("HTTP", HttpSource.class),
-    REMOTE_FILE("RemoteFile", RemoteFileSource.class);
+    HTTP("HTTP", HttpSource.class);
 
     private String type;
     private Class<? extends Source> sourceClass;
