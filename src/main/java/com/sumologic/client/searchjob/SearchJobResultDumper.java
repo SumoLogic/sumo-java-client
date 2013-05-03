@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
@@ -336,7 +337,13 @@ public class SearchJobResultDumper {
 
   private static String readQueryStringFromFile(String fileName) throws IOException {
 
-    BufferedReader in = new BufferedReader(new InputStreamReader(new URL(fileName).openStream()));
+    InputStream is = null;
+    if (fileName.startsWith("http")) {
+      is = new URL(fileName).openStream();
+    } else {
+      is = new FileInputStream(fileName);
+    }
+    BufferedReader in = new BufferedReader(new InputStreamReader(is));
     String line = null;
     StringBuilder sb = new StringBuilder(1024);
     while ((line = in.readLine()) != null) {
@@ -383,6 +390,27 @@ public class SearchJobResultDumper {
           System.err.flush();
           return;
         }
+
+        // Get any pending warnings.
+        List<String> warnings = getSearchJobStatusResponse.getPendingWarnings();
+        if (warnings.size() > 0) {
+          System.err.println("WARNINGS:");
+          for (String warning : warnings) {
+            System.err.println(warning);
+          }
+        }
+
+        // Get any pending errors.
+        List<String> errors = getSearchJobStatusResponse.getPendingErrors();
+        if (errors.size() > 0) {
+          System.err.println("ERROR:");
+          for (String error : errors) {
+            System.err.println(error);
+          }
+          System.err.flush();
+          return;
+        }
+
         messageCount = getSearchJobStatusResponse.getMessageCount();
         recordCount = getSearchJobStatusResponse.getRecordCount();
         System.err.printf(
