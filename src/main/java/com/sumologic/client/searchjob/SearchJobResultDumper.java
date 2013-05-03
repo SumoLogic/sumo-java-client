@@ -388,7 +388,7 @@ public class SearchJobResultDumper {
         if (isCancelled(getSearchJobStatusResponse)) {
           System.err.println("Ugh. Search job was cancelled. Exiting...");
           System.err.flush();
-          return;
+          System.exit(1);
         }
 
         // Get any pending warnings.
@@ -408,7 +408,7 @@ public class SearchJobResultDumper {
             System.err.println(error);
           }
           System.err.flush();
-          return;
+          System.exit(1);
         }
 
         messageCount = getSearchJobStatusResponse.getMessageCount();
@@ -460,6 +460,9 @@ public class SearchJobResultDumper {
       t.printStackTrace(System.err);
       System.err.flush();
 
+      // Exit with error.
+      System.exit(1);
+
     } finally {
 
       try {
@@ -467,7 +470,11 @@ public class SearchJobResultDumper {
       } catch (Throwable t) {
         System.err.printf("Error cancelling search job: '%s'", t.getMessage());
         t.printStackTrace(System.err);
+        System.err.flush();
       }
+
+      // Exit without error.
+      System.exit(0);
     }
   }
 
