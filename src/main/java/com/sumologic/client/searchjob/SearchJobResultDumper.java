@@ -472,9 +472,6 @@ public class SearchJobResultDumper {
         t.printStackTrace(System.err);
         System.err.flush();
       }
-
-      // Exit without error.
-      System.exit(0);
     }
   }
 
