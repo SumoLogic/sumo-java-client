@@ -489,21 +489,23 @@ public class SearchJobResultDumper {
     while ((messageLength = messageCount - messageOffset) > 0) {
 
       // Did we print the headers already?
-      if (!headerWritten.get()) {
+      if (outputFormat == OutputFormat.CSV) {
+        if (!headerWritten.get()) {
 
-        // Get the first record so we get the schema.
-        GetMessagesForSearchJobResponse getMessagesForSearchJobResponse =
-            sumoClient.getMessagesForSearchJob(searchJobId, 0, 1);
-        List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
-        List<String> fieldNames = new ArrayList<String>(messages.get(0).getFieldNames());
-        Collections.sort(fieldNames);
-        String[] headers = new String[fieldNames.size()];
-        for (int i = 0; i < fieldNames.size(); i++) {
-          String fieldName = fieldNames.get(i);
-          headers[i] = fieldName;
+          // Get the first record so we get the schema.
+          GetMessagesForSearchJobResponse getMessagesForSearchJobResponse =
+              sumoClient.getMessagesForSearchJob(searchJobId, 0, 1);
+          List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
+          List<String> fieldNames = new ArrayList<String>(messages.get(0).getFieldNames());
+          Collections.sort(fieldNames);
+          String[] headers = new String[fieldNames.size()];
+          for (int i = 0; i < fieldNames.size(); i++) {
+            String fieldName = fieldNames.get(i);
+            headers[i] = fieldName;
+          }
+          csvWriter.writeNext(headers);
+          headerWritten.set(true);
         }
-        csvWriter.writeNext(headers);
-        headerWritten.set(true);
       }
 
       messageLength = Math.min(messageLength, 1000);
@@ -516,19 +518,34 @@ public class SearchJobResultDumper {
             sumoClient.getMessagesForSearchJob(
                 searchJobId, messageOffset, messageLength);
         messageOffset += messageLength;
-        List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
-        for (LogMessage message : messages) {
-//          System.out.println(message.getLogLine());
-          Map<String, String> fields = message.getMap();
-          List<String> fieldNames = new ArrayList<String>(message.getFieldNames());
-          Collections.sort(fieldNames);
-          String[] csv = new String[fields.size()];
-          for (int i = 0; i < fieldNames.size(); i++) {
-            String fieldName = fieldNames.get(i);
-            String fieldValue = fields.get(fieldName);
-            csv[i] = fieldValue;
+
+        try {
+          List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
+          for (LogMessage message : messages) {
+            Map<String, String> fields = message.getMap();
+            List<String> fieldNames = new ArrayList<String>(message.getFieldNames());
+            Collections.sort(fieldNames);
+
+            // Write as CSV.
+            if (outputFormat == OutputFormat.CSV) {
+              String[] csv = new String[fields.size()];
+              for (int i = 0; i < fieldNames.size(); i++) {
+                String fieldName = fieldNames.get(i);
+                String fieldValue = fields.get(fieldName);
+                csv[i] = fieldValue;
+              }
+              csvWriter.writeNext(csv);
+            }
+
+            // Write as JSON.
+            if (outputFormat == OutputFormat.JSON) {
+              String json = objectMapper.writeValueAsString(fields);
+              System.out.println(json);
+            }
           }
-          csvWriter.writeNext(csv);
+        } catch (IOException ioe) {
+          System.err.printf("Error writing JSON: '%s'", ioe.getMessage());
+          ioe.printStackTrace(System.err);
         }
       }
     }
