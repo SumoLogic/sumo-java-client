@@ -1,13 +1,13 @@
 package com.sumologic.client.searchjob;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -94,6 +94,13 @@ public class SearchJobResultDumper {
     // dumped. Setting this to "true" will instead dump the records.
     boolean dumpAggregates = false;
 
+    // The name of the file to which to write the end timestamp
+    // of the last successful run.
+    String lastEndFile = null;
+
+    // How many times to retry if the query fails.
+    int retry = 1;
+
     // Create the command line options.
     Options options = createOptions();
 
@@ -109,14 +116,37 @@ public class SearchJobResultDumper {
 
       if (commandLine.hasOption("catchup")) {
 
-        // Figure out the catch-up time range.
-        Long catchupHours = Long.parseLong(commandLine.getOptionValue("catchup"));
         long thisHour =
             ((long) Math.floor(System.currentTimeMillis() / 60 / 60 / 1000d))
                 * (60 * 60 * 1000L);
-        startTimestamp = Long.toString(thisHour - (catchupHours * 60 * 60 * 1000L));
         endTimestamp = Long.toString(thisHour);
         timezone = "UTC";
+
+        if (commandLine.hasOption("catchup-file")) {
+
+          String catchupFile = commandLine.getOptionValue("catchup-file");
+          try {
+
+            // Read the timestamp from the file.
+            startTimestamp = readTimestampFromFile(catchupFile);
+
+          } catch (IOException ioe) {
+            if (!commandLine.hasOption("ignore-missing-catchup-file")) {
+              throw new ParseException(String.format(
+                  "Error reading catchup file: '%s' ('%s')", catchupFile, ioe.getMessage()));
+            } else {
+              System.err.printf(
+                  "Ignoring missing catchup file: '%s' ('%s')\n", catchupFile, ioe.getMessage());
+            }
+          }
+
+          if (startTimestamp == null) {
+
+            // Figure out the catch-up time range.
+            Long catchupHours = Long.parseLong(commandLine.getOptionValue("catchup"));
+            startTimestamp = Long.toString(thisHour - (catchupHours * 60 * 60 * 1000L));
+          }
+        }
 
       } else {
 
@@ -148,6 +178,15 @@ public class SearchJobResultDumper {
 
       if (searchQuery == null && searchQueryFilename == null) {
         throw new ParseException("Either -q/--query or --file needs to be specified");
+      }
+
+      if (commandLine.hasOption("last-end-file")) {
+        lastEndFile = commandLine.getOptionValue("last-end-file");
+      }
+
+      if (commandLine.hasOption("retry")) {
+        String retryValue = commandLine.getOptionValue("retry");
+        retry = Integer.parseInt(retryValue);
       }
 
     } catch (ParseException exp) {
@@ -214,7 +253,7 @@ public class SearchJobResultDumper {
         String prefix = String.format("Chunk from: '%s' to: '%s'",
             new Date(chunkStartMillis), new Date(chunkEndMillis));
         System.err.printf("--> %s\n", prefix);
-        executeSearchJob(
+        executeSearchJobWithRetry(
             csvWriter,
             headerWritten,
             objectMapper,
@@ -225,7 +264,9 @@ public class SearchJobResultDumper {
             dumpAggregates,
             "" + chunkStartMillis,
             "" + chunkEndMillis,
-            timezone);
+            timezone,
+            retry,
+            lastEndFile);
 
         // Set the next start milliseconds since the epoch based
         // on the chunk increment.
@@ -306,6 +347,17 @@ public class SearchJobResultDumper {
             .hasArg()
             .create("c"));
     options.addOption(
+        OptionBuilder.withLongOpt("catchup-file")
+            .withArgName("catchup-file")
+            .withDescription("The file containing the timestamp from which to catch up from")
+            .hasArg()
+            .create("cf"));
+    options.addOption(
+        OptionBuilder.withLongOpt("ignore-missing-catchup-file")
+            .withArgName("ignore-missing-catchup-file")
+            .withDescription("If the specified catchup file is missing, ignore and use the --catchup value")
+            .create("imcf"));
+    options.addOption(
         OptionBuilder.withLongOpt("query")
             .withArgName("query")
             .withDescription("The query to execute")
@@ -332,6 +384,18 @@ public class SearchJobResultDumper {
             .withArgName("json")
             .withDescription("Format the output as JSON")
             .create());
+    options.addOption(
+        OptionBuilder.withLongOpt("last-end-file")
+            .withArgName("last-end-file")
+            .withDescription("Name of the file to write the end timestamp of the last successful run")
+            .hasArg()
+            .create("le"));
+    options.addOption(
+        OptionBuilder.withLongOpt("retry")
+            .withArgName("retry")
+            .withDescription("Number of times to retry a query in case of an error")
+            .hasArg()
+            .create("r"));
     return options;
   }
 
@@ -352,7 +416,59 @@ public class SearchJobResultDumper {
     return sb.toString();
   }
 
-  private static void executeSearchJob(CSVWriter csvWriter,
+  private static String readTimestampFromFile(String filename) throws IOException {
+    BufferedReader reader =
+        new BufferedReader(new InputStreamReader(new FileInputStream(filename)));
+    try {
+      return reader.readLine();
+    } finally {
+      reader.close();
+    }
+  }
+
+  private static void executeSearchJobWithRetry(CSVWriter csvWriter,
+                                                AtomicBoolean headerWritten,
+                                                ObjectMapper objectMapper,
+                                                OutputFormat outputFormat,
+                                                String prefix,
+                                                SumoLogicClient sumoClient,
+                                                String searchQuery,
+                                                boolean dumpAggregates,
+                                                String startTimestamp,
+                                                String endTimestamp,
+                                                String timeZone,
+                                                int retry,
+                                                String lastEndFile) {
+
+    int triesLeft = retry;
+    int attempt = 1;
+    boolean result = true;
+    while (triesLeft > 0 && result) {
+
+      // One less try...
+      triesLeft--;
+
+      // Execute the search.
+      result = executeSearch(csvWriter,
+          headerWritten,
+          objectMapper,
+          outputFormat,
+          prefix,
+          sumoClient,
+          searchQuery,
+          dumpAggregates,
+          startTimestamp,
+          endTimestamp,
+          timeZone,
+          attempt,
+          lastEndFile);
+
+      // Increment attempt number...
+      attempt++;
+    }
+  }
+
+  private static boolean executeSearch(CSVWriter csvWriter,
                                        AtomicBoolean headerWritten,
                                        ObjectMapper objectMapper,
                                        OutputFormat outputFormat,
@@ -362,15 +478,18 @@ public class SearchJobResultDumper {
                                        boolean dumpAggregates,
                                        String startTimestamp,
                                        String endTimestamp,
-                                       String timeZone) {
+                                       String timeZone,
+                                       int attempt,
+                                       String lastEndFile) {
 
+    // Create the search job.
     String searchJobId = sumoClient.createSearchJob(
         searchQuery,
         startTimestamp,
         endTimestamp,
         timeZone);
 
-    System.err.printf("%s - Search job ID: '%s'\n", prefix, searchJobId);
+    System.err.printf("%s - Search job ID: '%s', attempt: '%d'\n", prefix, searchJobId, attempt);
 
     try {
 
@@ -408,14 +527,14 @@ public class SearchJobResultDumper {
             System.err.println(error);
           }
           System.err.flush();
-          System.exit(1);
+          return true;
         }
 
         messageCount = getSearchJobStatusResponse.getMessageCount();
         recordCount = getSearchJobStatusResponse.getRecordCount();
         System.err.printf(
-            "%s - Search job ID: '%s', messages: '%d', records: '%d'\n",
-            prefix, searchJobId, messageCount, recordCount);
+            "%s - Search job ID: '%s',  attempt: '%d', messages: '%d', records: '%d'\n",
+            prefix, searchJobId, attempt, messageCount, recordCount);
 
         // Catch up with the raw messages, unless we should just dump aggregates.
         if (!dumpAggregates) {
@@ -453,6 +572,27 @@ public class SearchJobResultDumper {
             recordCount);
       }
 
+      if (lastEndFile != null) {
+
+        try {
+
+          BufferedWriter writer =
+              new BufferedWriter(new OutputStreamWriter(new FileOutputStream(lastEndFile)));
+          writer.write(endTimestamp);
+          writer.close();
+
+        } catch (IOException ioe) {
+
+          // Yikes. We has an error.
+          System.err.printf("Uncaught exception: '%s'", ioe.getMessage());
+          ioe.printStackTrace(System.err);
+          System.err.flush();
+        }
+      }
+
+      // No error.
+      return false;
+
     } catch (Throwable t) {
 
       // Yikes. We has an error.
@@ -461,7 +601,7 @@ public class SearchJobResultDumper {
       System.err.flush();
 
       // Exit with error.
-      System.exit(1);
+      return true;
 
     } finally {
 
