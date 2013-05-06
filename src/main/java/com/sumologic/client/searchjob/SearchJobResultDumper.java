@@ -139,13 +139,13 @@ public class SearchJobResultDumper {
                   "Ignoring missing catchup file: '%s' ('%s')\n", catchupFile, ioe.getMessage());
             }
           }
+        }
 
-          if (startTimestamp == null) {
+        if (startTimestamp == null) {
 
-            // Figure out the catch-up time range.
-            Long catchupHours = Long.parseLong(commandLine.getOptionValue("catchup"));
-            startTimestamp = Long.toString(thisHour - (catchupHours * 60 * 60 * 1000L));
-          }
+          // Figure out the catch-up time range.
+          Long catchupHours = Long.parseLong(commandLine.getOptionValue("catchup"));
+          startTimestamp = Long.toString(thisHour - (catchupHours * 60 * 60 * 1000L));
         }
 
       } else {
