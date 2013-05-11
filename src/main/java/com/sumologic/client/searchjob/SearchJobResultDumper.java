@@ -78,7 +78,7 @@ public class SearchJobResultDumper {
     String timezone = null;
 
     // In chunk mode, the number of hours to execute the search query in.
-    String chunkIncrementHours = null;
+    long chunkIncrementMillis = -1;
 
     // The search query.
     String searchQuery = null;
@@ -166,7 +166,19 @@ public class SearchJobResultDumper {
         timezone = commandLine.getOptionValue("timezone");
       }
 
-      chunkIncrementHours = commandLine.getOptionValue("hours");
+      if (commandLine.hasOption("hours") && commandLine.hasOption("minutes")) {
+        throw new ParseException("Please specify only one of --hours and --minutes");
+      }
+
+      if (commandLine.hasOption("hours")) {
+        chunkIncrementMillis =
+            1000L * 60 * 60 * Long.parseLong(commandLine.getOptionValue("hours"));
+      }
+      if (commandLine.hasOption("minutes")) {
+        chunkIncrementMillis =
+            1000L * 60 * Long.parseLong(commandLine.getOptionValue("minutes"));
+      }
+
       searchQuery = commandLine.getOptionValue("query");
       searchQueryFilename = commandLine.getOptionValue("file");
       if (commandLine.hasOption("json")) {
@@ -216,10 +228,9 @@ public class SearchJobResultDumper {
     // single search job, or if there's an argument telling us
     // to incrementally query in chunks of as many hours as
     // defined by the argument. This last argument is optional.
-    long chunkIncrementMillis = endMillis - startMillis;
-    try {
-      chunkIncrementMillis = Long.valueOf(chunkIncrementHours) * 60 * 60 * 1000L;
-    } catch (Throwable t) {
+    long chunkIncrementMillisToUse = endMillis - startMillis;
+    if (chunkIncrementMillis != -1) {
+      chunkIncrementMillisToUse = chunkIncrementMillis;
     }
 
     //
@@ -234,6 +245,8 @@ public class SearchJobResultDumper {
     // For JSON output, we need an object mapper.
     ObjectMapper objectMapper = new ObjectMapper();
 
+    long overallStartTimestamp = System.currentTimeMillis();
+    boolean failure = false;
     try {
 
       do {
@@ -243,17 +256,19 @@ public class SearchJobResultDumper {
         // specified, the first chunk is simply the difference
         // between the end timestamp and the start timestamp.
         long chunkStartMillis = startMillis;
-        long chunkEndMillis = startMillis + chunkIncrementMillis;
+        long chunkEndMillis = startMillis + chunkIncrementMillisToUse;
 
         // The chunk end milliseconds since the epoch should never
         // be further than the actual specified end timestamp.
         chunkEndMillis = Math.min(chunkEndMillis, endMillis);
 
         // Now we are ready to execute the search job.
-        String prefix = String.format("Chunk from: '%s' to: '%s'",
+        long executionStartMillis = System.currentTimeMillis();
+        String prefix = String.format("[%s] Chunk from: '%s' to: '%s'",
+            new Date(),
             new Date(chunkStartMillis), new Date(chunkEndMillis));
         System.err.printf("--> %s\n", prefix);
-        executeSearchJobWithRetry(
+        failure = executeSearchJobWithRetry(
             csvWriter,
             headerWritten,
             objectMapper,
@@ -267,6 +282,12 @@ public class SearchJobResultDumper {
             timezone,
             retry,
             lastEndFile);
+        if (failure) {
+          break;
+        }
+
+        long elapsed = System.currentTimeMillis() - executionStartMillis;
+        System.err.printf("-----> Done in millis: '%d'\n", elapsed);
 
         // Set the next start milliseconds since the epoch based
         // on the chunk increment.
@@ -289,6 +310,15 @@ public class SearchJobResultDumper {
         System.err.printf("Error closing CSV writer: '%s'", ioe.getMessage());
         ioe.printStackTrace(System.err);
       }
+    }
+
+    // Red Rover Red Rover All Over.
+    long overallElapsed = System.currentTimeMillis() - overallStartTimestamp;
+    System.err.printf("======> Done overall in millis: '%d'\n", overallElapsed);
+    if (failure) {
+      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      System.err.println("Finished with errors");
+      System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
     }
   }
 
@@ -340,6 +370,12 @@ public class SearchJobResultDumper {
             .withDescription("The number of hours to chunk the search query")
             .hasArg()
             .create("h"));
+    options.addOption(
+        OptionBuilder.withLongOpt("minutes")
+            .withArgName("minutes")
+            .withDescription("The number of minutes to chunk the search query")
+            .hasArg()
+            .create("m"));
     options.addOption(
         OptionBuilder.withLongOpt("catchup")
             .withArgName("catchup")
@@ -426,30 +462,30 @@ public class SearchJobResultDumper {
     }
   }
 
-  private static void executeSearchJobWithRetry(CSVWriter csvWriter,
-                                                AtomicBoolean headerWritten,
-                                                ObjectMapper objectMapper,
-                                                OutputFormat outputFormat,
-                                                String prefix,
-                                                SumoLogicClient sumoClient,
-                                                String searchQuery,
-                                                boolean dumpAggregates,
-                                                String startTimestamp,
-                                                String endTimestamp,
-                                                String timeZone,
-                                                int retry,
-                                                String lastEndFile) {
+  private static boolean executeSearchJobWithRetry(CSVWriter csvWriter,
+                                                   AtomicBoolean headerWritten,
+                                                   ObjectMapper objectMapper,
+                                                   OutputFormat outputFormat,
+                                                   String prefix,
+                                                   SumoLogicClient sumoClient,
+                                                   String searchQuery,
+                                                   boolean dumpAggregates,
+                                                   String startTimestamp,
+                                                   String endTimestamp,
+                                                   String timeZone,
+                                                   int retry,
+                                                   String lastEndFile) {
 
     int triesLeft = retry;
     int attempt = 1;
-    boolean result = true;
-    while (triesLeft > 0 && result) {
+    boolean failure = true;
+    while (triesLeft > 0 && failure) {
 
       // One less try...
       triesLeft--;
 
       // Execute the search.
-      result = executeSearch(csvWriter,
+      failure = executeSearch(csvWriter,
           headerWritten,
           objectMapper,
           outputFormat,
@@ -463,9 +499,16 @@ public class SearchJobResultDumper {
           attempt,
           lastEndFile);
 
+      if (failure) {
+        System.err.println(String.format(
+            "Got an error on attempt: '%d', tries left: '%d'", attempt, triesLeft));
+      }
+
       // Increment attempt number...
       attempt++;
     }
+
+    return failure;
   }
 
   private static boolean executeSearch(CSVWriter csvWriter,
