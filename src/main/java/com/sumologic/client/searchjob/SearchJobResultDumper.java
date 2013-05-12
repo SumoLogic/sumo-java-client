@@ -291,7 +291,7 @@ public class SearchJobResultDumper {
 
         // Set the next start milliseconds since the epoch based
         // on the chunk increment.
-        startMillis += chunkIncrementMillis;
+        startMillis += chunkIncrementMillisToUse;
 
       } while (startMillis < endMillis);
 
