@@ -558,7 +558,7 @@ public class SearchJobResultDumper {
 
         // Get any pending warnings.
         List<String> warnings = getSearchJobStatusResponse.getPendingWarnings();
-        if (warnings.size() > 0) {
+        if (warnings != null && warnings.size() > 0) {
           System.err.println("WARNINGS:");
           for (String warning : warnings) {
             System.err.println(warning);
@@ -567,7 +567,7 @@ public class SearchJobResultDumper {
 
         // Get any pending errors.
         List<String> errors = getSearchJobStatusResponse.getPendingErrors();
-        if (errors.size() > 0) {
+        if (errors != null && errors.size() > 0) {
           System.err.println("ERROR:");
           for (String error : errors) {
             System.err.println(error);
