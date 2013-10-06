@@ -10,6 +10,8 @@ import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.dashboard.DashboardClient;
 import com.sumologic.client.dashboard.model.GetDashboardDataRequest;
 import com.sumologic.client.dashboard.model.GetDashboardDataResponse;
+import com.sumologic.client.dashboard.model.GetDashboardRequest;
+import com.sumologic.client.dashboard.model.GetDashboardResponse;
 import com.sumologic.client.dashboard.model.GetDashboardsRequest;
 import com.sumologic.client.dashboard.model.GetDashboardsResponse;
 import com.sumologic.client.model.SearchRequest;
@@ -414,13 +416,24 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     /**
+     * Returns a dashboard.
+     *
+     * @param id The ID of the dashboard.
+     * @return The dashboard.
+     */
+    public GetDashboardDataResponse getDashboardData(long id) {
+        return dashboardClient.getDashboardData(
+                getConnectionConfig(), new GetDashboardDataRequest(id));
+    }
+
+    /**
      * Returns the data for a dashboard.
      *
      * @param id The ID of the dashboard.
      * @return The data for the dashboard.
      */
-    public GetDashboardDataResponse getDashboardData(long id) {
-        return dashboardClient.getDashboardData(
-                getConnectionConfig(), new GetDashboardDataRequest(id));
+    public GetDashboardResponse getDashboard(long id) {
+        return dashboardClient.getDashboard(
+                getConnectionConfig(), new GetDashboardRequest(id));
     }
 }

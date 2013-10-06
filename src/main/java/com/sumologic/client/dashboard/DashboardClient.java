@@ -6,6 +6,8 @@ import com.sumologic.client.ConnectionConfig;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.dashboard.model.GetDashboardDataRequest;
 import com.sumologic.client.dashboard.model.GetDashboardDataResponse;
+import com.sumologic.client.dashboard.model.GetDashboardRequest;
+import com.sumologic.client.dashboard.model.GetDashboardResponse;
 import com.sumologic.client.dashboard.model.GetDashboardsRequest;
 import com.sumologic.client.dashboard.model.GetDashboardsResponse;
 import com.sumologic.client.util.DeserializingResponseHandler;
@@ -37,6 +39,23 @@ public class DashboardClient {
                         "Accept", "application/json"),
                 new DeserializingResponseHandler<GetDashboardsRequest, GetDashboardsResponse>(
                         GetDashboardsResponse.class),
+                HttpStatus.SC_OK);
+    }
+
+    public GetDashboardResponse getDashboard(
+            ConnectionConfig connection,
+            GetDashboardRequest getDashboardRequest) {
+
+        String uri = UrlParameters.DASHBOARDS_SERVICE +
+                "/" + getDashboardRequest.getId();
+        return httpUtils.get(
+                connection,
+                uri,
+                getDashboardRequest,
+                HttpUtils.toRequestHeaders(
+                        "Accept", "application/json"),
+                new DeserializingResponseHandler<GetDashboardRequest, GetDashboardResponse>(
+                        GetDashboardResponse.class),
                 HttpStatus.SC_OK);
     }
 

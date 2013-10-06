@@ -24,9 +24,9 @@ public class DashboardExample {
 
     public static void main(String[] args) throws Exception {
 
-        String url = "http://localhost:23667";
-//        String url = "https://api.sumologic.com";
+//        String url = "http://localhost:23667";
 //        String url = "https://long-api.sumologic.net";
+        String url = "https://api.sumologic.com";
 
         String email = read("Email");
         String password = read("Password");
