@@ -1,5 +1,7 @@
 package com.sumologic.client.collectors.model;
 
+import java.util.List;
+
 /**
  * A source that reads from local files matching a path expression.
  *
@@ -35,14 +37,14 @@ public class LocalFileSource extends Source {
      *
      * @return The blacklist.
      */
-    public String getBlacklist() {
+    public List<String> getBlacklist() {
         return getProperty(BLACKLIST);
     }
 
     /**
      * Sets the blacklist.
      */
-    public void setBlacklist(String blacklist) {
+    public void setBlacklist(List<String> blacklist) {
         setProperty(BLACKLIST, blacklist);
     }
 }
