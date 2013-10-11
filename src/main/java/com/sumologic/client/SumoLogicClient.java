@@ -1,20 +1,25 @@
 package com.sumologic.client;
 
-import com.fasterxml.jackson.core.JsonFactory;
-
-import com.sumologic.client.searchjob.*;
-import com.sumologic.client.searchjob.model.*;
-
 import java.net.MalformedURLException;
+import java.net.URL;
+
+import com.fasterxml.jackson.core.JsonFactory;
 
 import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
+import com.sumologic.client.dashboard.DashboardClient;
+import com.sumologic.client.dashboard.model.GetDashboardDataRequest;
+import com.sumologic.client.dashboard.model.GetDashboardDataResponse;
+import com.sumologic.client.dashboard.model.GetDashboardRequest;
+import com.sumologic.client.dashboard.model.GetDashboardResponse;
+import com.sumologic.client.dashboard.model.GetDashboardsRequest;
+import com.sumologic.client.dashboard.model.GetDashboardsResponse;
 import com.sumologic.client.model.SearchRequest;
 import com.sumologic.client.model.SearchResponse;
 import com.sumologic.client.search.SearchClient;
+import com.sumologic.client.searchjob.*;
+import com.sumologic.client.searchjob.model.*;
 import com.sumologic.client.util.HttpUtils;
-
-import java.net.URL;
 
 /**
  * The Sumo Logic API client implementation.
@@ -37,6 +42,7 @@ public class SumoLogicClient implements SumoLogic {
     private SearchClient searchClient = new SearchClient(httpUtils);
     private CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
     private SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
+    private DashboardClient dashboardClient = new DashboardClient(httpUtils);
 
     // Implementation.
 
@@ -72,6 +78,10 @@ public class SumoLogicClient implements SumoLogic {
         this.port = (url.getPort() == -1) ?
                 (url.getDefaultPort() == -1 ? 80 : url.getDefaultPort()) : url.getPort();
         this.protocol = url.getProtocol();
+    }
+
+    private ConnectionConfig getConnectionConfig() {
+        return new ConnectionConfig(protocol, hostname, port, credentials);
     }
 
     //
@@ -141,7 +151,7 @@ public class SumoLogicClient implements SumoLogic {
      *
      * @param searchJobId The search job ID.
      * @param offset      The offset.
-     * @param limit      The length.
+     * @param limit       The length.
      * @return The messages.
      */
     @Override
@@ -158,7 +168,7 @@ public class SumoLogicClient implements SumoLogic {
      *
      * @param searchJobId The search job ID.
      * @param offset      The offset.
-     * @param limit      The length.
+     * @param limit       The length.
      * @return The records.
      */
     @Override
@@ -390,7 +400,40 @@ public class SumoLogicClient implements SumoLogic {
         return deleteSource(new DeleteSourceRequest(collectorId, sourceId));
     }
 
-    private ConnectionConfig getConnectionConfig() {
-        return new ConnectionConfig(protocol, hostname, port, credentials);
+    //
+    // Dashboards.
+    //
+
+    /**
+     * Returns all dashboards.
+     *
+     * @param includeMonitors Whether to include the monitors in the response.
+     * @return The dashboards.
+     */
+    public GetDashboardsResponse getDashboards(boolean includeMonitors) {
+        return dashboardClient.getDashboards(
+                getConnectionConfig(), new GetDashboardsRequest(includeMonitors));
+    }
+
+    /**
+     * Returns a dashboard.
+     *
+     * @param id The ID of the dashboard.
+     * @return The dashboard.
+     */
+    public GetDashboardDataResponse getDashboardData(long id) {
+        return dashboardClient.getDashboardData(
+                getConnectionConfig(), new GetDashboardDataRequest(id));
+    }
+
+    /**
+     * Returns the data for a dashboard.
+     *
+     * @param id The ID of the dashboard.
+     * @return The data for the dashboard.
+     */
+    public GetDashboardResponse getDashboard(long id) {
+        return dashboardClient.getDashboard(
+                getConnectionConfig(), new GetDashboardRequest(id));
     }
 }
