@@ -157,4 +157,14 @@ public interface UrlParameters {
      * Search job records
      */
     public static String SEARCH_JOBS_SERVICE_RECORDS ="records";
+
+    /**
+     * Dashboards sub-tasks
+     */
+    public static String DASHBOARDS_SERVICE = "dashboards";
+
+    /**
+     * Dashboards data
+     */
+    public static String DASHBOARDS_SERVICE_DATA = "data";
 }
