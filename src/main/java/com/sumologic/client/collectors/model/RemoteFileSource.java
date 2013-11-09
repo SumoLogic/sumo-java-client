@@ -1,5 +1,7 @@
 package com.sumologic.client.collectors.model;
 
+import java.util.List;
+
 /**
  * A source that reads from a remote file over SSH.
  *
@@ -7,7 +9,7 @@ package com.sumologic.client.collectors.model;
  */
 public class RemoteFileSource extends Source {
 
-    private static String REMOTE_HOST = "remoteHosts";
+    private static String REMOTE_HOSTS = "remoteHosts";
     private static String REMOTE_PORT = "remotePort";
     private static String REMOTE_USER = "remoteUser";
     private static String REMOTE_PASSWORD = "remotePassword";
@@ -25,15 +27,15 @@ public class RemoteFileSource extends Source {
      *
      * @return The remote host.
      */
-    public String getRemoteHost() {
-        return getProperty(REMOTE_HOST);
+    public List<String> getRemoteHosts() {
+        return getProperty(REMOTE_HOSTS);
     }
 
     /**
      * Sets the remote host.
      */
-    public void setRemoteHost(String remoteHost) {
-        setProperty(REMOTE_HOST, remoteHost);
+    public void setRemoteHosts(List<String> remoteHosts) {
+        setProperty(REMOTE_HOSTS, remoteHosts);
     }
 
     /**
