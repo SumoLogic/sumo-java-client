@@ -7,7 +7,7 @@ package com.sumologic.client.collectors.model;
  */
 public class RemoteFileSource extends Source {
 
-    private static String REMOTE_HOST = "remoteHost";
+    private static String REMOTE_HOST = "remoteHosts";
     private static String REMOTE_PORT = "remotePort";
     private static String REMOTE_USER = "remoteUser";
     private static String REMOTE_PASSWORD = "remotePassword";
