@@ -22,7 +22,7 @@ to your pom.xml
 
 ## Example
 
-The following code snippet issues are query for log line containing the word “error” and returns the results. Replace the email and password with the credentials you use to log on to the Sumo Logic web service. 
+The following code snippet issues a query for log line containing the word “error” and returns the results. Replace the email and password with the credentials you use to log on to the Sumo Logic web service. 
 
 ```
 import com.sumologic.client.SumoException;
