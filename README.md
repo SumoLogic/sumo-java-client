@@ -4,7 +4,8 @@ Sumo Logic provides a cloud-based log management solution. It can process and an
 
 ## News
 
-  * 12/09/12: Version 1.0 updated
+  * 2014-10-30: Version 2.0 released to maven central.
+  * 2012-09-12: Version 1.0 released to maven central.
 
 ## How to use
 
@@ -14,7 +15,7 @@ The Java client library is available on Maven central (http://search.maven.org/)
 <dependency>
   <groupId>com.sumologic.api.client</groupId>
   <artifactId>sumo-java-client</artifactId> 
-  <version>1.0</version>
+  <version>2.0</version>
 </dependency>
 ```
 
