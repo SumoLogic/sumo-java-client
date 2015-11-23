@@ -13,8 +13,8 @@
   <url>http://www.sumologic.com</url>
   <developers>
     <developer>
-      <name>Sebastian Mies</name>
-      <email>sebastian@sumologic.com</email>
+      <name>Jacek Migdal</name>
+      <email>jacek@sumologic.com</email>
     </developer>
   </developers>
 
@@ -90,7 +90,7 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
-      <version>4.1.3</version>
+      <version>4.5.1</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
