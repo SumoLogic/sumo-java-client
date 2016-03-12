@@ -60,8 +60,8 @@ public class LogMessage {
      * Returns a double number field to the given key
      *
      * @param key The key of the field
-     * @return A long number
-     * @throws NumberFormatException Thrown, if field does not contain a long number.
+     * @return A double
+     * @throws NumberFormatException Thrown, if field does not contain a double.
      */
     public final double doubleField(String key) throws NumberFormatException {
         return Double.parseDouble(properties.get(key));
