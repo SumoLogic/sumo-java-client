@@ -1,3 +1,5 @@
+[![Slack Status](https://slack.sumologic.com/badge.svg)](https://slack.sumologic.com)
+
 ## Introduction
 
 Sumo Logic provides a cloud-based log management solution. It can process and analyze log files in peta-byte scale. This library provides a Java client to execute searches on the data collected by the Sumo Logic service.
