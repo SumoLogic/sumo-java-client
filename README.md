@@ -1,4 +1,4 @@
-[![Slack Status](https://slack.sumologic.com/badge.svg)](https://slack.sumologic.com)
+[![Slack Status](http://slack.sumologic.com/badge.svg)](http://slack.sumologic.com)
 
 ## Introduction
 
