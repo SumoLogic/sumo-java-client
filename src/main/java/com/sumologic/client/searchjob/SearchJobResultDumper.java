@@ -264,8 +264,7 @@ public class SearchJobResultDumper {
 
         // Now we are ready to execute the search job.
         long executionStartMillis = System.currentTimeMillis();
-        String prefix = String.format("[%s] Chunk from: '%s' to: '%s'",
-            new Date(),
+        String prefix = String.format("Chunk from: '%s' to: '%s'",
             new Date(chunkStartMillis), new Date(chunkEndMillis));
         System.err.printf("--> %s\n", prefix);
         failure = executeSearchJobWithRetry(
@@ -535,7 +534,8 @@ public class SearchJobResultDumper {
         endTimestamp,
         timeZone);
 
-    System.err.printf("%s - Search job ID: '%s', attempt: '%d'\n", prefix, searchJobId, attempt);
+    System.err.printf("[%s] %s - Search job ID: '%s', attempt: '%d'\n",
+            new Date(), prefix, searchJobId, attempt);
 
     try {
 
@@ -579,8 +579,8 @@ public class SearchJobResultDumper {
         messageCount = getSearchJobStatusResponse.getMessageCount();
         recordCount = getSearchJobStatusResponse.getRecordCount();
         System.err.printf(
-            "%s - Search job ID: '%s',  attempt: '%d', messages: '%d', records: '%d'\n",
-            prefix, searchJobId, attempt, messageCount, recordCount);
+            "[%s] %s - Search job ID: '%s',  attempt: '%d', messages: '%d', records: '%d'\n",
+            new Date(), prefix, searchJobId, attempt, messageCount, recordCount);
 
         // Catch up with the raw messages, unless we should just dump aggregates.
         if (!dumpAggregates) {
@@ -697,8 +697,8 @@ public class SearchJobResultDumper {
       messageLength = Math.min(messageLength, 1000);
       if (messageLength > 0) {
         System.err.printf(
-            "%s - Search job ID: '%s', messages: '%s', getting offset: '%d', length: '%d'\n",
-            prefix, searchJobId, messageCount, messageOffset, messageLength);
+            "[%s] %s - Search job ID: '%s', messages: '%s', getting offset: '%d', length: '%d'\n",
+            new Date(), prefix, searchJobId, messageCount, messageOffset, messageLength);
         System.err.flush();
         GetMessagesForSearchJobResponse getMessagesForSearchJobResponse =
             sumoClient.getMessagesForSearchJob(
@@ -773,8 +773,8 @@ public class SearchJobResultDumper {
       recordLength = Math.min(recordLength, 1000);
       if (recordLength > 0) {
         System.err.printf(
-            "%s - Search job ID: '%s', records: '%s', getting offset: '%d', length: '%d'\n",
-            prefix, searchJobId, recordCount, recordOffset, recordLength);
+            "[%s] %s - Search job ID: '%s', records: '%s', getting offset: '%d', length: '%d'\n",
+            new Date(), prefix, searchJobId, recordCount, recordOffset, recordLength);
         System.err.flush();
         GetRecordsForSearchJobResponse getRecordsForSearchJobResponse =
             sumoClient.getRecordsForSearchJob(
@@ -873,8 +873,8 @@ public class SearchJobResultDumper {
     long delta = endMillis - startMillis;
     long waitMillis = Math.max(0, Math.min(maxWaitMillis - delta, maxWaitMillis));
     System.err.printf(
-        "%s - Search job ID: '%s', sleeping for: '%d' milliseconds\n",
-        prefix, searchJobId, waitMillis);
+        "[%s] %s - Search job ID: '%s', sleeping for: '%d' milliseconds\n",
+        new Date(), prefix, searchJobId, waitMillis);
     System.err.flush();
     Thread.sleep(waitMillis);
   }
