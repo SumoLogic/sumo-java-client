@@ -9,7 +9,7 @@ public class HelloWorld {
 
     public static void main(String[] args) {
         // Create a client
-        SumoLogic client = new SumoLogicClient("user@demo.com", "password");
+        SumoLogic client = new SumoLogicClient("accessId", "accessKey");
 
         try {
             // Search for log lines containing "error"

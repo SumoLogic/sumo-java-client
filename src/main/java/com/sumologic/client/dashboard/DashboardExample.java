@@ -28,10 +28,10 @@ public class DashboardExample {
 //        String url = "https://long-api.sumologic.net";
         String url = "https://api.sumologic.com";
 
-        String email = read("Email");
-        String password = read("Password");
+        String accessId = read("AccessId");
+        String accessKey = read("AccessKey");
 
-        Credentials credential = new Credentials(email, password);
+        Credentials credential = new Credentials(accessId, accessKey);
         SumoLogicClient sumoClient = new SumoLogicClient(credential);
         sumoClient.setURL(url);
 

@@ -65,8 +65,8 @@ public class SearchJobResultDumper {
     String url = null;
 
     // The credentials of the user for which to execute the query.
-    String email = null;
-    String password = null;
+    String accessId = null;
+    String accessKey = null;
 
     // The start timestamp and end timestamp for the search job.
     // This can either be an ISO8601 timestamp (without timezone),
@@ -111,8 +111,8 @@ public class SearchJobResultDumper {
       CommandLine commandLine = parser.parse(options, args);
 
       url = commandLine.getOptionValue("url");
-      email = commandLine.getOptionValue("email");
-      password = commandLine.getOptionValue("password");
+      accessId = commandLine.getOptionValue("accessid");
+      accessKey = commandLine.getOptionValue("accesskey");
 
       if (commandLine.hasOption("catchup")) {
 
@@ -211,7 +211,7 @@ public class SearchJobResultDumper {
 
 
     // Create the Sumo client.
-    Credentials credential = new Credentials(email, password);
+    Credentials credential = new Credentials(accessId, accessKey);
     SumoLogicClient sumoClient = new SumoLogicClient(credential);
     sumoClient.setURL(url);
 
@@ -335,19 +335,19 @@ public class SearchJobResultDumper {
             .isRequired()
             .create("u"));
     options.addOption(
-        OptionBuilder.withLongOpt("email")
-            .withArgName("email")
-            .withDescription("Email address of the user to login as")
+        OptionBuilder.withLongOpt("accessid")
+            .withArgName("accessid")
+            .withDescription("Access id of the user to login as")
             .hasArg()
             .isRequired()
-            .create("e"));
+            .create("i"));
     options.addOption(
-        OptionBuilder.withLongOpt("password")
-            .withArgName("password")
-            .withDescription("Password of the user to login as")
+        OptionBuilder.withLongOpt("accesskey")
+            .withArgName("accesskey")
+            .withDescription("Access key of the user to login as")
             .hasArg()
             .isRequired()
-            .create("p"));
+            .create("k"));
     options.addOption(
         OptionBuilder.withLongOpt("from")
             .withArgName("from")
