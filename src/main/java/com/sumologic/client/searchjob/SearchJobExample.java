@@ -63,16 +63,16 @@ public class SearchJobExample {
 //        String url = "https://api.sumologic.com";
 //        String url = "https://long-api.sumologic.net";
 
-        // Read the user name and the password from
+        // Read the accessId and the accessKey from
         // the commandline so we don't have to
         // hard-code credentials in this example.
-        String email = read("Email");
-        String password = read("Password");
+        String accessId = read("AccessId");
+        String accessKey = read("AccessKey");
 
-        // With url, email, and password in hand,
+        // With url, accessId, and accessKey in hand,
         // we can now construct a Suno Logic API
         // client instance.
-        Credentials credential = new Credentials(email, password);
+        Credentials credential = new Credentials(accessId, accessKey);
         SumoLogicClient sumoClient = new SumoLogicClient(credential);
         sumoClient.setURL(url);
 

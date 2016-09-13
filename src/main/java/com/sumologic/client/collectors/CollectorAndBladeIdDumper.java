@@ -31,9 +31,9 @@ public class CollectorAndBladeIdDumper {
     String url = args[0];
 
     // The credentials of the user for which to execute the query.
-    String email = args[1];
-    String password = args[2];
-    Credentials credential = new Credentials(email, password);
+    String accessId = args[1];
+    String accessKey = args[2];
+    Credentials credential = new Credentials(accessId, accessKey);
     SumoLogicClient sumoClient = new SumoLogicClient(credential);
     sumoClient.setURL(url);
 

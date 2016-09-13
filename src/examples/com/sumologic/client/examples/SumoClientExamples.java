@@ -16,10 +16,10 @@ public class SumoClientExamples {
 
     //    @BeforeClass
     public static void oneTimeSetUp() {
-        String userEmail = "username";
-        String userPassword = "password";
+        String userAccessId = "accessId";
+        String userAccessKey = "accessKey";
 
-        Credentials credential = new Credentials(userEmail, userPassword);
+        Credentials credential = new Credentials(userAccessId, userAccessKey);
         sumoClient = new SumoLogicClient(credential);
         try {
             sumoClient.setURL("https://api.sumologic.com");

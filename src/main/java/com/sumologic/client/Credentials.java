@@ -7,37 +7,62 @@ package com.sumologic.client;
  * @author Sebastian Mies
  */
 public class Credentials {
-    private String email;
-    private String password;
+    private String accessId;
+    private String accessKey;
 
     /**
-     * Constructs the credentials using email and password.
+     * Constructs the credentials using accessId and accessKey.
      *
-     * @param email Your email
-     * @param password Your password
+     * @param accessId Your access id
+     * @param accessKey Your access key
      */
-    public Credentials(String email, String password) {
-        this.email = email;
-        this.password = password;
+    public Credentials(String accessId, String accessKey) {
+        this.accessId = accessId;
+        this.accessKey = accessKey;
     }
 
     /**
      * Returns the user name
      *
      * @return The user name
+     *
+     * @deprecated Replaced by {@link #getAccessId()}
      */
+    @Deprecated
     public String getEmail() {
-        return this.email;
+        return getAccessId();
     }
 
     /**
      * Returns the password
      *
      * @return The password
+     *
+     * @deprecated Replaced by {@link #getAccessKey()}
      */
+    @Deprecated
     public String getPassword() {
-        return this.password;
+        return getAccessKey();
     }
+
+    /**
+     * Returns the access id
+     *
+     * @return The access id
+     */
+    public String getAccessId() {
+        return this.accessId;
+    }
+
+    /**
+     * Returns the access key
+     *
+     * @return The access key
+     */
+    public String getAccessKey() {
+        return this.accessKey;
+    }
+
 
 
 }

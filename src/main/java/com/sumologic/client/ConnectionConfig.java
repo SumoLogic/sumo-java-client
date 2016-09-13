@@ -38,6 +38,6 @@ public class ConnectionConfig {
     }
 
     public UsernamePasswordCredentials getUsernamePasswordCredentials() {
-        return new UsernamePasswordCredentials(getCredentials().getEmail(), getCredentials().getPassword());
+        return new UsernamePasswordCredentials(getCredentials().getAccessId(), getCredentials().getAccessKey());
     }
 }

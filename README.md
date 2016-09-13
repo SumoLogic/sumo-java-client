@@ -26,7 +26,7 @@ to your pom.xml
 
 ## Example
 
-The following code snippet issues a query for log line containing the word “error” and returns the results. Replace the email and password with the credentials you use to log on to the Sumo Logic web service. 
+The following code snippet issues a query for log line containing the word “error” and returns the results. Replace the accessId and accessKey with the credentials you use to log on to the Sumo Logic web service.
 
 ```
 import com.sumologic.client.SumoException;
@@ -36,7 +36,7 @@ import com.sumologic.client.model.SearchResponse;
 public class HelloWorld {
     public static void main(String[] args) {
         // Create a client
-        SumoLogicClient client = new SumoLogicClient("user@demo.com", "password");
+        SumoLogicClient client = new SumoLogicClient("accessId", "accessKey");
 
         // Search for log lines containing "error"
         SearchResponse response = client.search("error");

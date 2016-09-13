@@ -56,13 +56,13 @@ public class SumoLogicClient implements SumoLogic {
     }
 
     /**
-     * Convenience: constructs the credentials using email and password.
+     * Convenience: constructs the credentials using accessId and accessKey.
      *
-     * @param email    Your email.
-     * @param password Your password.
+     * @param accessId    Your access id.
+     * @param accessKey Your access key.
      */
-    public SumoLogicClient(String email, String password) {
-        this.credentials = new Credentials(email, password);
+    public SumoLogicClient(String accessId, String accessKey) {
+        this.credentials = new Credentials(accessId, accessKey);
     }
 
     /**
