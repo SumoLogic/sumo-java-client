@@ -6,7 +6,7 @@
 
   <groupId>com.sumologic.api.client</groupId>
   <artifactId>sumo-java-client</artifactId>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.3-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Sumo Logic Java Client Library</name>
   <description>The Java client for the Sumo Logic log management service</description>
