@@ -24,36 +24,12 @@ The Java client library is available on Maven central (http://search.maven.org/)
 
 to your pom.xml
 
-## Example
-
-The following code snippet issues a query for log line containing the word “error” and returns the results. Replace the accessId and accessKey with the credentials you use to log on to the Sumo Logic web service.
-
-```
-import com.sumologic.client.SumoException;
-import com.sumologic.client.SumoLogicClient;
-import com.sumologic.client.model.SearchResponse;
-
-public class HelloWorld {
-    public static void main(String[] args) {
-        // Create a client
-        SumoLogicClient client = new SumoLogicClient("accessId", "accessKey");
-
-        // Search for log lines containing "error"
-        SearchResponse response = client.search("error");
-
-        // Print raw log lines
-        System.out.println(response);
-    }
-}
-```
-
-For information how to create sophisticated queries visit (TODO: LINK). You can find the documentation of the Java API here (TODO: link to JavaDoc) (HTML JavaDoc).
-
 ## Current Limitations and Known Bugs
 
-The search API has currently has the following limitations:
+The older Search API has currently has the following limitations:
   * A maximum of 100k log lines are returned at once. If you need more data you can issue subsequent queries covering a smaller time frame.
   * Queries need to complete in 60 seconds. Otherwise the session will timeout and no results are returned.
+  * As a result, we strongly recommend you to use the Search Job API with the `SearchJobClient` class.
 
 ## License
 
