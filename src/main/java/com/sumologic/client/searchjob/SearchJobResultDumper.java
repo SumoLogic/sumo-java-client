@@ -9,15 +9,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import au.com.bytecode.opencsv.CSVWriter;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -705,6 +704,7 @@ public class SearchJobResultDumper {
                 searchJobId, messageOffset, messageLength);
         messageOffset += messageLength;
 
+        Map<String, Boolean> hasJson = new HashMap<String, Boolean>();
         try {
           List<LogMessage> messages = getMessagesForSearchJobResponse.getMessages();
           for (LogMessage message : messages) {
@@ -725,7 +725,27 @@ public class SearchJobResultDumper {
 
             // Write as JSON.
             if (outputFormat == OutputFormat.JSON) {
-              String json = objectMapper.writeValueAsString(fields);
+              Map<String, Object> jsonFields = new HashMap<String, Object>();
+              for (int i = 0; i < fieldNames.size(); i++) {
+                String fieldName = fieldNames.get(i);
+                String fieldValue = fields.get(fieldName);
+                jsonFields.put(fieldName, fieldValue);
+
+                // Replace with JSON if possible.
+                Boolean fieldHasJson = hasJson.get(fieldName);
+                if (fieldHasJson == null || fieldHasJson) {
+                    TypeReference<HashMap<String,Object>> typeRef =
+                            new TypeReference<HashMap<String,Object>>() {};
+                    try {
+                        HashMap<String, Object> actualValue = objectMapper.readValue(fieldValue, typeRef);
+                        jsonFields.put(fieldName, actualValue);
+                        hasJson.put(fieldName, true);
+                    } catch (JsonProcessingException jpe) {
+                        // Ta...
+                    }
+                }
+              }
+              String json = objectMapper.writeValueAsString(jsonFields);
               System.out.println(json);
             }
           }
