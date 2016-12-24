@@ -1,33 +1,11 @@
 package com.sumologic.client.searchjob;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import au.com.bytecode.opencsv.CSVWriter;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.GnuParser;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.OptionBuilder;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
-
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.model.LogMessage;
@@ -35,6 +13,14 @@ import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
 import com.sumologic.client.searchjob.model.SearchJobRecord;
+import org.apache.commons.cli.*;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A small but useful tool that executes a search job and dumps the results to
@@ -99,6 +85,10 @@ public class SearchJobResultDumper {
 
     // How many times to retry if the query fails.
     int retry = 1;
+
+    // If outputting JSON, which fields' keys to lift to the top level;
+    // this assumes that the lifted field contains valid JSON.
+    String liftJsonField = null;
 
     // Create the command line options.
     Options options = createOptions();
@@ -182,6 +172,13 @@ public class SearchJobResultDumper {
       searchQueryFilename = commandLine.getOptionValue("file");
       if (commandLine.hasOption("json")) {
         outputFormat = OutputFormat.JSON;
+      }
+      if (commandLine.hasOption("lift")) {
+        if (commandLine.hasOption("json")) {
+          liftJsonField = commandLine.getOptionValue("lift");
+        } else {
+          throw new ParseException("--json required if --lift is specified");
+        }
       }
       if (commandLine.hasOption("aggregates")) {
         dumpAggregates = true;
@@ -279,7 +276,8 @@ public class SearchJobResultDumper {
             "" + chunkEndMillis,
             timezone,
             retry,
-            lastEndFile);
+            lastEndFile,
+            liftJsonField);
         if (failure) {
           break;
         }
@@ -422,6 +420,12 @@ public class SearchJobResultDumper {
             .withDescription("Format the output as JSON")
             .create());
     options.addOption(
+        OptionBuilder.withLongOpt("lift")
+            .withArgName("lift")
+            .withDescription("Name of JSON field in the result to lift to the top level JSON output")
+            .hasArg()
+            .create());
+    options.addOption(
         OptionBuilder.withLongOpt("last-end-file")
             .withArgName("last-end-file")
             .withDescription("Name of the file to write the end timestamp of the last successful run")
@@ -475,7 +479,8 @@ public class SearchJobResultDumper {
                                                    String endTimestamp,
                                                    String timeZone,
                                                    int retry,
-                                                   String lastEndFile) {
+                                                   String lastEndFile,
+                                                   String liftedJsonField) {
 
     int triesLeft = retry;
     int attempt = 1;
@@ -498,7 +503,8 @@ public class SearchJobResultDumper {
           endTimestamp,
           timeZone,
           attempt,
-          lastEndFile);
+          lastEndFile,
+          liftedJsonField);
 
       if (failure) {
         System.err.println(String.format(
@@ -524,7 +530,8 @@ public class SearchJobResultDumper {
                                        String endTimestamp,
                                        String timeZone,
                                        int attempt,
-                                       String lastEndFile) {
+                                       String lastEndFile,
+                                       String liftedJsonField) {
 
     // Create the search job.
     String searchJobId = sumoClient.createSearchJob(
@@ -534,7 +541,7 @@ public class SearchJobResultDumper {
         timeZone);
 
     System.err.printf("[%s] %s - Search job ID: '%s', attempt: '%d'\n",
-            new Date(), prefix, searchJobId, attempt);
+        new Date(), prefix, searchJobId, attempt);
 
     try {
 
@@ -592,7 +599,8 @@ public class SearchJobResultDumper {
               sumoClient,
               searchJobId,
               offset,
-              messageCount);
+              messageCount,
+              liftedJsonField);
         }
 
         // Wait if necessary.
@@ -668,7 +676,8 @@ public class SearchJobResultDumper {
                                  SumoLogicClient sumoClient,
                                  String searchJobId,
                                  int messageOffset,
-                                 int messageCount) {
+                                 int messageCount,
+                                 String liftedJsonField) {
 
     int messageLength = 0;
     while ((messageLength = messageCount - messageOffset) > 0) {
@@ -734,17 +743,27 @@ public class SearchJobResultDumper {
                 // Replace with JSON if possible.
                 Boolean fieldHasJson = hasJson.get(fieldName);
                 if (fieldHasJson == null || fieldHasJson) {
-                    TypeReference<HashMap<String,Object>> typeRef =
-                            new TypeReference<HashMap<String,Object>>() {};
-                    try {
-                        HashMap<String, Object> actualValue = objectMapper.readValue(fieldValue, typeRef);
-                        jsonFields.put(fieldName, actualValue);
-                        hasJson.put(fieldName, true);
-                    } catch (JsonProcessingException jpe) {
-                        // Ta...
+                  TypeReference<HashMap<String, Object>> typeRef =
+                      new TypeReference<HashMap<String, Object>>() {
+                      };
+                  try {
+                    HashMap<String, Object> actualValue = objectMapper.readValue(fieldValue, typeRef);
+                    if (liftedJsonField != null && fieldName.equals(liftedJsonField)) {
+                      for (Map.Entry<String, Object> entry: actualValue.entrySet()) {
+                        String liftedFieldName = entry.getKey();
+                        Object liftedFieldValue = entry.getValue();
+                        jsonFields.put(liftedFieldName, liftedFieldValue);
+                      }
+                    } else {
+                      jsonFields.put(fieldName, actualValue);
                     }
+                    hasJson.put(fieldName, true);
+                  } catch (JsonProcessingException jpe) {
+                    hasJson.put(fieldName, false);
+                  }
                 }
               }
+
               String json = objectMapper.writeValueAsString(jsonFields);
               System.out.println(json);
             }
