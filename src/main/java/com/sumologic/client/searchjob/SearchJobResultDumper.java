@@ -736,7 +736,6 @@ public class SearchJobResultDumper {
               for (int i = 0; i < fieldNames.size(); i++) {
                 String fieldName = fieldNames.get(i);
                 String fieldValue = fields.get(fieldName);
-                jsonFields.put(fieldName, fieldValue);
 
                 // Replace with JSON if possible.
                 Boolean fieldHasJson = hasJson.get(fieldName);
@@ -758,7 +757,10 @@ public class SearchJobResultDumper {
                     hasJson.put(fieldName, true);
                   } catch (JsonProcessingException jpe) {
                     hasJson.put(fieldName, false);
+                    jsonFields.put(fieldName, fieldValue);
                   }
+                } else {
+                  jsonFields.put(fieldName, fieldValue);
                 }
               }
 
