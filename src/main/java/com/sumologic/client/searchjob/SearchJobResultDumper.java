@@ -4,6 +4,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.util.ClassUtil;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.model.LogMessage;
@@ -744,15 +745,11 @@ public class SearchJobResultDumper {
                       new TypeReference<HashMap<String, Object>>() {
                       };
                   try {
-                    HashMap<String, Object> actualValue = objectMapper.readValue(fieldValue, typeRef);
+                    HashMap<String, Object> jsonValue = objectMapper.readValue(fieldValue, typeRef);
                     if (liftedJsonField != null && fieldName.equals(liftedJsonField)) {
-                      for (Map.Entry<String, Object> entry: actualValue.entrySet()) {
-                        String liftedFieldName = entry.getKey();
-                        Object liftedFieldValue = entry.getValue();
-                        jsonFields.put(liftedFieldName, liftedFieldValue);
-                      }
+                      addToJsonFields(objectMapper, jsonFields, jsonValue, null);
                     } else {
-                      jsonFields.put(fieldName, actualValue);
+                      jsonFields.put(fieldName, jsonValue);
                     }
                     hasJson.put(fieldName, true);
                   } catch (JsonProcessingException jpe) {
@@ -764,7 +761,8 @@ public class SearchJobResultDumper {
                 }
               }
 
-              String json = objectMapper.writeValueAsString(jsonFields);
+              String json = objectMapper.writeValueAsString(
+                  new TreeMap((Map) jsonFields));
               System.out.println(json);
             }
           }
@@ -775,6 +773,46 @@ public class SearchJobResultDumper {
       }
     }
     return messageOffset;
+  }
+
+  private static void addToJsonFields(ObjectMapper objectMapper,
+                                      Map<String, Object> jsonFields,
+                                      Map<String, Object> jsonValue,
+                                      String prefix) {
+    for (Map.Entry<String, Object> entry : jsonValue.entrySet()) {
+      String fieldName = entry.getKey();
+      Object fieldValue = entry.getValue();
+      if (ClassUtil.isCollectionMapOrArray(fieldValue.getClass())) {
+        if (fieldValue instanceof Map) {
+          String fieldNamePrefix = (prefix == null)
+              ? fieldName + "_"
+              : prefix + fieldName + "_";
+          addToJsonFields(objectMapper, jsonFields, ((Map<String, Object>) fieldValue), fieldNamePrefix);
+        } else {
+          List valueList = (List) fieldValue;
+          for (int i = 0; i < valueList.size(); i++) {
+            String fieldNamePrefix = (prefix == null)
+                ? fieldName + "_" + i + "_"
+                : prefix + fieldName + "_" + i + "_";
+            addToJsonFields(objectMapper, jsonFields, ((Map<String, Object>) valueList.get(i)), fieldNamePrefix);
+          }
+        }
+      } else {
+        // Primitive
+        addToJsonFieldsWithPrefix(jsonFields, prefix, fieldName, fieldValue);
+      }
+    }
+  }
+
+  private static void addToJsonFieldsWithPrefix(Map<String, Object> jsonFields,
+                                                String prefix,
+                                                String fieldName,
+                                                Object fieldValue) {
+    if (prefix != null) {
+      jsonFields.put(prefix + fieldName, fieldValue);
+    } else {
+      jsonFields.put(fieldName, fieldValue);
+    }
   }
 
   private static int getRecords(CSVWriter csvWriter,
