@@ -792,7 +792,12 @@ public class SearchJobResultDumper {
                   try {
                     HashMap<String, Object> jsonValue = objectMapper.readValue(fieldValue, typeRef);
                     if (jsonFieldToFlatten != null && fieldName.equals(jsonFieldToFlatten)) {
-                      addToJsonFields(objectMapper, jsonFields, jsonValue, null, skipArrays, arraysAsJson);
+                      addToJsonFields(objectMapper,
+                          jsonFields,
+                          jsonValue,
+                          fieldName + "_",
+                          skipArrays,
+                          arraysAsJson);
                     } else {
                       jsonFields.put(fieldName, jsonValue);
                     }
