@@ -85,9 +85,15 @@ public class SearchJobResultDumper {
     // How many times to retry if the query fails.
     int retry = 1;
 
-    // If outputting JSON, which fields' keys to lift to the top level;
+    // If outputting JSON, which field to flatten, or: add to the output as columns;
     // this assumes that the lifted field contains valid JSON.
-    String liftJsonField = null;
+    String flattenJson = null;
+
+    // Whether to skip arrays when flattening JSON.
+    boolean skipArrays = false;
+
+    // Whether to turn arrays into a JSON string when flattening JSON.
+    boolean arraysAsJson = false;
 
     // Create the command line options.
     Options options = createOptions();
@@ -172,11 +178,28 @@ public class SearchJobResultDumper {
       if (commandLine.hasOption("json")) {
         outputFormat = OutputFormat.JSON;
       }
-      if (commandLine.hasOption("lift")) {
+      if (commandLine.hasOption("flatten")) {
         if (commandLine.hasOption("json")) {
-          liftJsonField = commandLine.getOptionValue("lift");
+          flattenJson = commandLine.getOptionValue("flatten");
         } else {
-          throw new ParseException("--json required if --lift is specified");
+          throw new ParseException("--json required if --flatten is specified");
+        }
+      }
+      if (commandLine.hasOption("skip-arrays")) {
+        if (commandLine.hasOption("flatten")) {
+          skipArrays = true;
+        } else {
+          throw new ParseException("--flatten required if --skip-arrays is specified");
+        }
+      }
+      if (commandLine.hasOption("arrays-as-json")) {
+        if (commandLine.hasOption("flatten")) {
+          if (commandLine.hasOption("skip-arrays")) {
+            throw new ParseException("--skip-arrays and --arrays-as-json cannot be specified together");
+          }
+          arraysAsJson = true;
+        } else {
+          throw new ParseException("--flatten required if --skip-arrays is specified");
         }
       }
       if (commandLine.hasOption("aggregates")) {
@@ -276,7 +299,9 @@ public class SearchJobResultDumper {
             timezone,
             retry,
             lastEndFile,
-            liftJsonField);
+            flattenJson,
+            skipArrays,
+            arraysAsJson);
         if (failure) {
           break;
         }
@@ -419,10 +444,20 @@ public class SearchJobResultDumper {
             .withDescription("Format the output as JSON")
             .create());
     options.addOption(
-        OptionBuilder.withLongOpt("lift")
-            .withArgName("lift")
-            .withDescription("Name of JSON field in the result to lift to the top level JSON output")
+        OptionBuilder.withLongOpt("flatten")
+            .withArgName("flatten")
+            .withDescription("Name of the JSON field in the result to flatten into columns in the output")
             .hasArg()
+            .create());
+    options.addOption(
+        OptionBuilder.withLongOpt("skip-arrays")
+            .withArgName("skip-arrays")
+            .withDescription("When flattening JSON in the output, skip arrays")
+            .create());
+    options.addOption(
+        OptionBuilder.withLongOpt("arrays-as-json")
+            .withArgName("arrays-as-json")
+            .withDescription("Turns arrays into a JSON string")
             .create());
     options.addOption(
         OptionBuilder.withLongOpt("last-end-file")
@@ -479,7 +514,9 @@ public class SearchJobResultDumper {
                                                    String timeZone,
                                                    int retry,
                                                    String lastEndFile,
-                                                   String liftedJsonField) {
+                                                   String jsonFieldToFlatten,
+                                                   boolean skipArrays,
+                                                   boolean arraysAsJson) {
 
     int triesLeft = retry;
     int attempt = 1;
@@ -503,7 +540,9 @@ public class SearchJobResultDumper {
           timeZone,
           attempt,
           lastEndFile,
-          liftedJsonField);
+          jsonFieldToFlatten,
+          skipArrays,
+          arraysAsJson);
 
       if (failure) {
         System.err.println(String.format(
@@ -530,7 +569,9 @@ public class SearchJobResultDumper {
                                        String timeZone,
                                        int attempt,
                                        String lastEndFile,
-                                       String liftedJsonField) {
+                                       String jsonFieldToFlatten,
+                                       boolean skipArrays,
+                                       boolean arraysAsJson) {
 
     // Create the search job.
     String searchJobId = sumoClient.createSearchJob(
@@ -599,7 +640,9 @@ public class SearchJobResultDumper {
               searchJobId,
               offset,
               messageCount,
-              liftedJsonField);
+              jsonFieldToFlatten,
+              skipArrays,
+              arraysAsJson);
         }
 
         // Wait if necessary.
@@ -676,7 +719,9 @@ public class SearchJobResultDumper {
                                  String searchJobId,
                                  int messageOffset,
                                  int messageCount,
-                                 String liftedJsonField) {
+                                 String jsonFieldToFlatten,
+                                 boolean skipArrays,
+                                 boolean arraysAsJson) {
 
     int messageLength = 0;
     while ((messageLength = messageCount - messageOffset) > 0) {
@@ -746,8 +791,8 @@ public class SearchJobResultDumper {
                       };
                   try {
                     HashMap<String, Object> jsonValue = objectMapper.readValue(fieldValue, typeRef);
-                    if (liftedJsonField != null && fieldName.equals(liftedJsonField)) {
-                      addToJsonFields(objectMapper, jsonFields, jsonValue, null);
+                    if (jsonFieldToFlatten != null && fieldName.equals(jsonFieldToFlatten)) {
+                      addToJsonFields(objectMapper, jsonFields, jsonValue, null, skipArrays, arraysAsJson);
                     } else {
                       jsonFields.put(fieldName, jsonValue);
                     }
@@ -778,7 +823,9 @@ public class SearchJobResultDumper {
   private static void addToJsonFields(ObjectMapper objectMapper,
                                       Map<String, Object> jsonFields,
                                       Map<String, Object> jsonValue,
-                                      String prefix) {
+                                      String prefix,
+                                      boolean skipArrays,
+                                      boolean arraysAsJson) {
     for (Map.Entry<String, Object> entry : jsonValue.entrySet()) {
       String fieldName = entry.getKey();
       Object fieldValue = entry.getValue();
@@ -787,14 +834,35 @@ public class SearchJobResultDumper {
           String fieldNamePrefix = (prefix == null)
               ? fieldName + "_"
               : prefix + fieldName + "_";
-          addToJsonFields(objectMapper, jsonFields, ((Map<String, Object>) fieldValue), fieldNamePrefix);
+          addToJsonFields(objectMapper,
+              jsonFields,
+              ((Map<String, Object>) fieldValue),
+              fieldNamePrefix,
+              skipArrays,
+              arraysAsJson);
         } else {
-          List valueList = (List) fieldValue;
-          for (int i = 0; i < valueList.size(); i++) {
-            String fieldNamePrefix = (prefix == null)
-                ? fieldName + "_" + i + "_"
-                : prefix + fieldName + "_" + i + "_";
-            addToJsonFields(objectMapper, jsonFields, ((Map<String, Object>) valueList.get(i)), fieldNamePrefix);
+          if (!skipArrays) {
+            if (!arraysAsJson) {
+              List valueList = (List) fieldValue;
+              for (int i = 0; i < valueList.size(); i++) {
+                String fieldNamePrefix = (prefix == null)
+                    ? fieldName + "_" + i + "_"
+                    : prefix + fieldName + "_" + i + "_";
+                addToJsonFields(objectMapper,
+                    jsonFields,
+                    ((Map<String, Object>) valueList.get(i)),
+                    fieldNamePrefix,
+                    skipArrays,
+                    arraysAsJson);
+              }
+            } else {
+              try {
+                String value = objectMapper.writeValueAsString(fieldValue);
+                addToJsonFieldsWithPrefix(jsonFields, prefix, fieldName, value);
+              } catch (IOException ioe) {
+                throw new RuntimeException(ioe);
+              }
+            }
           }
         }
       } else {
