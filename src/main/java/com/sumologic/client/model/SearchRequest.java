@@ -19,6 +19,7 @@ import java.util.List;
  * @author Sebastian Mies
  * @author Daphne Hsieh
  */
+@Deprecated
 public final class SearchRequest implements HttpGetRequest {
 
     private String query;

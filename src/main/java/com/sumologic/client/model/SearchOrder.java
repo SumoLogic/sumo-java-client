@@ -7,6 +7,7 @@ import com.sumologic.client.UrlParameters;
  *
  * @author Sebastian Mies
  */
+@Deprecated
 public enum SearchOrder {
     ASCENDING(UrlParameters.SEARCH_ORDER_ASC),
     DESCENDING(UrlParameters.SEARCH_ORDER_DESC),

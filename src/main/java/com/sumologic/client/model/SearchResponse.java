@@ -9,6 +9,7 @@ import java.util.List;
  *
  * @author Sebastian Mies
  */
+@Deprecated
 public final class SearchResponse {
 
     private SearchRequest request;
