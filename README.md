@@ -5,7 +5,7 @@
 Sumo Logic provides a cloud-based log management solution. It can process and analyze log files in peta-byte scale. This library provides a Java client to execute searches on the data collected by the Sumo Logic service.
 
 ## News
-  * 2017-02-21: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) as been deprecated and will be removed in the next release.  Please migrate to the [Search Job API](https://help.sumologic.com/APIs/02Search_Job_API/About_the_Search_Job_API).
+  * 2017-02-21: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) has been deprecated and will be removed in the next release. Please migrate to the [Search Job API](https://help.sumologic.com/APIs/02Search_Job_API/About_the_Search_Job_API).
   * 2016-09-16: Version 2.2 released to maven central.
   * 2015-11-23: Version 2.1 released to maven central.
   * 2014-10-30: Version 2.0 released to maven central.
