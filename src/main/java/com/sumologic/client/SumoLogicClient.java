@@ -37,6 +37,9 @@ public class SumoLogicClient implements SumoLogic {
     private String hostname = "api.sumologic.com";
     private int port = 443;
     private Credentials credentials;
+    private String proxyHost;
+    private int proxyPort;
+    private String proxyProtocol;
     private static JsonFactory jsonFactory = new JsonFactory();
 
     private SearchClient searchClient = new SearchClient(httpUtils);
@@ -80,8 +83,18 @@ public class SumoLogicClient implements SumoLogic {
         this.protocol = url.getProtocol();
     }
 
+    public void setProxyHost(String proxyHost) {
+        this.proxyHost = proxyHost;
+    }
+
+    public void setProxyPort(int proxyPort) {
+        this.proxyPort = proxyPort;
+    }
+
+    public void setProxyProtocol(String proxyProtocol) {this.proxyProtocol = proxyProtocol;}
+
     private ConnectionConfig getConnectionConfig() {
-        return new ConnectionConfig(protocol, hostname, port, credentials);
+        return new ConnectionConfig(protocol, hostname, port, credentials, proxyProtocol, proxyHost, proxyPort);
     }
 
     //

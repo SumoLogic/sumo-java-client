@@ -8,17 +8,14 @@ import com.sumologic.client.model.HttpGetRequest;
 import com.sumologic.client.model.HttpPostRequest;
 import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
+import org.apache.http.impl.client.*;
 import org.apache.http.protocol.HTTP;
 
 import java.io.*;
@@ -54,6 +51,7 @@ public class HttpUtils {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
                     config.getPort(), getEndpointURI(endpoint), params, null);
             HttpGet get = new HttpGet(uri);
+            configureRequest(config, get, timeout);
 
             return doRequest(config, timeout, get, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
@@ -70,6 +68,7 @@ public class HttpUtils {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpPost post = new HttpPost(uri);
+            configureRequest(config, post, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
@@ -109,6 +108,7 @@ public class HttpUtils {
             StringEntity entity = new StringEntity(body, HTTP.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             put.setEntity(entity);
+            configureRequest(config, put, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             return doRequest(
                     config, put, requestHeaders, request, handler, expectedStatusCode);
@@ -133,6 +133,7 @@ public class HttpUtils {
             URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
                     config.getPort(), getEndpointURI(endpoint), null, null);
             HttpDelete delete = new HttpDelete(uri);
+            configureRequest(config, delete, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             Map<String, String> requestHeaders = HttpUtils.toRequestHeaders();
 
@@ -153,12 +154,12 @@ public class HttpUtils {
 
     // Private methods
 
-    private HttpClient getHttpClient(ConnectionConfig config) {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.setCookieStore(cookieStore);
-        httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
-                config.getUsernamePasswordCredentials());
-        return httpClient;
+    private CloseableHttpClient getHttpClient(ConnectionConfig config) {
+        CredentialsProvider provider = new BasicCredentialsProvider();
+        provider.setCredentials(config.getAuthScope(), config.getUsernamePasswordCredentials());
+        return HttpClients.custom().setDefaultCookieStore(cookieStore)
+                .setDefaultCredentialsProvider(provider)
+                .build();
     }
 
     private static String getEndpointURI(String endpoint) {
@@ -182,14 +183,12 @@ public class HttpUtils {
             method.setHeader(header.getKey(), header.getValue());
         }
 
-        HttpClient httpClient = getHttpClient(config);
-        HttpParams params = httpClient.getParams();
-        HttpConnectionParams.setConnectionTimeout(params, timeout);
-        HttpConnectionParams.setSoTimeout(params, timeout);
+        CloseableHttpClient httpClient = getHttpClient(config);
 
         InputStream httpStream = null;
+        CloseableHttpResponse httpResponse = null;
         try {
-            HttpResponse httpResponse = httpClient.execute(method);
+            httpResponse = httpClient.execute(method);
             HttpEntity entity = httpResponse.getEntity();
             httpStream = entity.getContent();
 
@@ -237,15 +236,30 @@ public class HttpUtils {
             if (httpStream != null) {
                 try {
                     httpStream.close();
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                 }
             }
 
-            httpClient.getConnectionManager().shutdown();
-
             if (method != null) {
-                method.abort();
+               try { method.abort();} catch (Exception ex) {}
             }
+
+            try {
+                httpResponse.close();
+            }catch (Exception ex) {}
+
+            try {
+                httpClient.close();
+            }catch (Exception ex) {}
         }
+    }
+
+    private void configureRequest(ConnectionConfig config, HttpRequestBase request, int timeout) {
+        RequestConfig.Builder builder = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout);
+        if (config.getProxy() != null) {
+            builder.setProxy(config.getProxy()).build();
+        }
+        request.setConfig(builder.build());
+
     }
 }
