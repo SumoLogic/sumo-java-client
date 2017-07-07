@@ -12,15 +12,14 @@ import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.*;
-import org.apache.http.protocol.HTTP;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,9 +46,14 @@ public class HttpUtils {
         ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), params, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .setParameters(request.toUrlParams())
+                    .setCharset(StandardCharsets.UTF_8)
+                    .build();
             HttpGet get = new HttpGet(uri);
             configureRequest(config, get, timeout);
 
@@ -65,13 +69,18 @@ public class HttpUtils {
          ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .setCharset(StandardCharsets.UTF_8)
+                    .build();
             HttpPost post = new HttpPost(uri);
             configureRequest(config, post, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
-            StringEntity entity = new StringEntity(body, HTTP.UTF_8);
+            StringEntity entity = new StringEntity(body, StandardCharsets.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             post.setEntity(entity);
 
@@ -81,9 +90,7 @@ public class HttpUtils {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
             throw new SumoClientException("Unsupported character encoding", e);
-        } catch (JsonMappingException e) {
-            throw new SumoClientException("Error generating JSON", e);
-        } catch (JsonGenerationException e) {
+        } catch (JsonMappingException| JsonGenerationException e) {
             throw new SumoClientException("Error generating JSON", e);
         } catch (IOException e) {
             throw new SumoClientException("Error generating JSON", e);
@@ -95,8 +102,13 @@ public class HttpUtils {
         Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .build();
+
             HttpPut put = new HttpPut(uri);
 
             Map<String, String> requestHeaders = new HashMap<String, String>();
@@ -105,7 +117,7 @@ public class HttpUtils {
             }
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
-            StringEntity entity = new StringEntity(body, HTTP.UTF_8);
+            StringEntity entity = new StringEntity(body, StandardCharsets.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             put.setEntity(entity);
             configureRequest(config, put, Defaults.DEFAULT_HTTP_TIMEOUT);
@@ -130,8 +142,12 @@ public class HttpUtils {
            Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .build();
             HttpDelete delete = new HttpDelete(uri);
             configureRequest(config, delete, Defaults.DEFAULT_HTTP_TIMEOUT);
 
