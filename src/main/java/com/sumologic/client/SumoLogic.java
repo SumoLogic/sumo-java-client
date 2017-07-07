@@ -5,8 +5,6 @@ import com.sumologic.client.searchjob.model.CancelSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
-import com.sumologic.client.model.SearchRequest;
-import com.sumologic.client.model.SearchResponse;
 
 /**
  * Provides an interface for accessing Sumo Logic's log web service.
