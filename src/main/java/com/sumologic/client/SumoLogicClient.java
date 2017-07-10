@@ -3,8 +3,6 @@ package com.sumologic.client;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.fasterxml.jackson.core.JsonFactory;
-
 import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.dashboard.DashboardClient;
@@ -14,9 +12,6 @@ import com.sumologic.client.dashboard.model.GetDashboardRequest;
 import com.sumologic.client.dashboard.model.GetDashboardResponse;
 import com.sumologic.client.dashboard.model.GetDashboardsRequest;
 import com.sumologic.client.dashboard.model.GetDashboardsResponse;
-import com.sumologic.client.model.SearchRequest;
-import com.sumologic.client.model.SearchResponse;
-import com.sumologic.client.search.SearchClient;
 import com.sumologic.client.searchjob.*;
 import com.sumologic.client.searchjob.model.*;
 import com.sumologic.client.util.HttpUtils;
@@ -40,9 +35,7 @@ public class SumoLogicClient implements SumoLogic {
     private String proxyHost;
     private int proxyPort;
     private String proxyProtocol;
-    private static JsonFactory jsonFactory = new JsonFactory();
 
-    private SearchClient searchClient = new SearchClient(httpUtils);
     private CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
     private SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
     private DashboardClient dashboardClient = new DashboardClient(httpUtils);
@@ -95,31 +88,6 @@ public class SumoLogicClient implements SumoLogic {
 
     private ConnectionConfig getConnectionConfig() {
         return new ConnectionConfig(protocol, hostname, port, credentials, proxyProtocol, proxyHost, proxyPort);
-    }
-
-    //
-    // One-shot search.
-    //
-
-    /**
-     * Issues a search query using Sumo Logic's web service.
-     *
-     * @param request The search query.
-     * @return The resulting log messages.
-     */
-    @Override
-    public SearchResponse search(SearchRequest request) {
-        return searchClient.search(getConnectionConfig(), request);
-    }
-
-    /**
-     * Convenience method: takes a query string as argument.
-     *
-     * @param query The sumo log query string.
-     * @return The search response.
-     */
-    public SearchResponse search(String query) {
-        return search(new SearchRequest(query));
     }
 
     //

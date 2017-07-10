@@ -5,8 +5,6 @@ import com.sumologic.client.searchjob.model.CancelSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
-import com.sumologic.client.model.SearchRequest;
-import com.sumologic.client.model.SearchResponse;
 
 /**
  * Provides an interface for accessing Sumo Logic's log web service.
@@ -16,26 +14,6 @@ import com.sumologic.client.model.SearchResponse;
  * @author Christian Beedgen
  */
 public interface SumoLogic {
-
-    //
-    // One-shot search.
-    //
-
-    /**
-     * Issues a search query using the Sumo Logic's search engine.
-     *
-     * @param searchRequest The search query to be issued
-     * @return The search result
-     */
-    SearchResponse search(SearchRequest searchRequest);
-
-    /**
-     * Convenience method: takes a query string as argument.
-     *
-     * @param query The sumo log query string.
-     * @return The search response.
-     */
-    SearchResponse search(String query);
 
     //
     // Search jobs.
