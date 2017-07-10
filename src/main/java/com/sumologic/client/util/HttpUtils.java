@@ -90,7 +90,7 @@ public class HttpUtils {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
             throw new SumoClientException("Unsupported character encoding", e);
-        } catch (JsonMappingException| JsonGenerationException e) {
+        } catch (JsonMappingException | JsonGenerationException e) {
             throw new SumoClientException("Error generating JSON", e);
         } catch (IOException e) {
             throw new SumoClientException("Error generating JSON", e);
@@ -128,9 +128,7 @@ public class HttpUtils {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
             throw new SumoClientException("Unsupported character encoding", ex);
-        } catch (JsonMappingException e) {
-            throw new SumoClientException("Error generating JSON", e);
-        } catch (JsonGenerationException e) {
+        } catch (JsonMappingException | JsonGenerationException e) {
             throw new SumoClientException("Error generating JSON", e);
         } catch (IOException e) {
             throw new SumoClientException("Error generating JSON", e);
