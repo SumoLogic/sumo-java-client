@@ -7,8 +7,6 @@ import java.util.List;
 
 /**
  * A response containing a list of sources.
- *
- * @author Jeffrey Wang
  */
 public class GetSourcesResponse {
 

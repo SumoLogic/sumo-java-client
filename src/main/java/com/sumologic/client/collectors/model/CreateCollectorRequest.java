@@ -4,8 +4,6 @@ import com.sumologic.client.model.HttpPostRequest;
 
 /**
  * A request to create a collector in the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class CreateCollectorRequest implements HttpPostRequest {
 

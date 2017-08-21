@@ -10,9 +10,6 @@ import java.util.Map;
  * A sumo server-side exception comprising the HTTP status code,
  * error identifier and code, the query uri used and a human-readable
  * message.
- *
- * @author Sebastian Mies
- * @author Daphne Hsieh
  */
 public class SumoServerException extends SumoException {
 

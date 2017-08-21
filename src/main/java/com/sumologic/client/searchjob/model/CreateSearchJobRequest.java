@@ -2,19 +2,12 @@ package com.sumologic.client.searchjob.model;
 
 import com.sumologic.client.model.HttpPostRequest;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class CreateSearchJobRequest implements HttpPostRequest {
-
-    // Instance fields.
 
     private String query;
     private String from;
     private String to;
     private String timeZone;
-
-    // Implementation.
 
     /**
      * Creates a search job request.

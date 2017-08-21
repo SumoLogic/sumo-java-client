@@ -44,8 +44,6 @@ import com.sumologic.client.searchjob.model.SearchJobRecord;
  * In order to reliably dump results for large time ranges, the tool can also
  * operate in incremental mode, splitting a large time range into multiple
  * queries each covering one or more day.
- *
- * @author Christian Beedgen (christian@sumologic.com)
  */
 public class SearchJobResultDumper {
 

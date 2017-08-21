@@ -2,20 +2,13 @@ package com.sumologic.client.dashboard.model;
 
 import java.util.List;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class Dashboard {
-
-    // Instance fields.
 
     private long id;
     private String title;
     private String description;
     private List<DashboardMonitor> dashboardMonitors;
     private String properties;
-
-    // Implementation.
 
     public long getId() {
         return id;

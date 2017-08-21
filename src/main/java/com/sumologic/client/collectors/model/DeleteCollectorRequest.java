@@ -8,8 +8,6 @@ import java.util.List;
 
 /**
  * A request to delete a collector from the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class DeleteCollectorRequest implements HttpDeleteRequest {
 

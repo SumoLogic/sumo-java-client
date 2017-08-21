@@ -17,9 +17,6 @@ import com.sumologic.client.dashboard.model.GetDashboardsResponse;
 import com.sumologic.client.searchjob.model.SearchJobField;
 import com.sumologic.client.searchjob.model.SearchJobRecord;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class DashboardExample {
 
     public static void main(String[] args) throws Exception {

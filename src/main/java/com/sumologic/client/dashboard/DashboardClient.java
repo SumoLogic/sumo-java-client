@@ -13,12 +13,7 @@ import com.sumologic.client.dashboard.model.GetDashboardsResponse;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class DashboardClient {
-
-    // Implementation.
 
     private HttpUtils httpUtils;
 

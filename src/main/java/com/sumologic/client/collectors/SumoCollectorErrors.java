@@ -4,8 +4,6 @@ import com.sumologic.client.SumoServerError;
 
 /**
  * Errors that might occur during collector API requests.
- *
- * @author Jeffrey Wang
  */
 public enum SumoCollectorErrors implements SumoServerError {
     INVALID_COLLECTOR("collector.invalid"),

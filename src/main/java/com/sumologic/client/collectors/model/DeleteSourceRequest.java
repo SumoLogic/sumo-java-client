@@ -4,8 +4,6 @@ import com.sumologic.client.model.HttpDeleteRequest;
 
 /**
  * A request to delete a source for a collector in the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class DeleteSourceRequest implements HttpDeleteRequest {
 

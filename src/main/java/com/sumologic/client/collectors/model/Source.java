@@ -11,8 +11,6 @@ import java.util.Map;
 
 /**
  * A generic source for a collector in the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class Source extends SumoEntity {
 

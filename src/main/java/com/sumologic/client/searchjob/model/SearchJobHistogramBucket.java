@@ -2,18 +2,11 @@ package com.sumologic.client.searchjob.model;
 
 import java.util.Date;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class SearchJobHistogramBucket {
-
-    // Instance fields.
 
     private long startTimestamp;
     private long length;
     private int count;
-
-    // Implementation.
 
     /**
      * Returns the start timestamp.

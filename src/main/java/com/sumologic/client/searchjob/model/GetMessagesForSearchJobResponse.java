@@ -4,17 +4,10 @@ import java.util.List;
 
 import com.sumologic.client.model.LogMessage;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class GetMessagesForSearchJobResponse {
-
-    // Instance fields.
 
     private List<SearchJobField> fields;
     private List<LogMessage> messages;
-
-    // Implementation.
 
     /**
      * Returns the fields.

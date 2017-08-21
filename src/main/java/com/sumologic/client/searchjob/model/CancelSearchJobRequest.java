@@ -2,16 +2,9 @@ package com.sumologic.client.searchjob.model;
 
 import com.sumologic.client.model.HttpDeleteRequest;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class CancelSearchJobRequest implements HttpDeleteRequest {
 
-    // Instance fields.
-
     private String id;
-
-    // Implementation.
 
     /**
      * Creates a get search job status request.

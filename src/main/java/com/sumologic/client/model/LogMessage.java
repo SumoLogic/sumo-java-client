@@ -9,8 +9,6 @@ import java.util.*;
 /**
  * This class represents a sumo logic log message which is basically
  * a map of keys and values of type string.
- *
- * @author Sebastian Mies
  */
 public class LogMessage {
 

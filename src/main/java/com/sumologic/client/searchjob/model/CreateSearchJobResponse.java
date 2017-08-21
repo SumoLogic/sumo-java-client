@@ -1,15 +1,8 @@
 package com.sumologic.client.searchjob.model;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class CreateSearchJobResponse {
 
-    // Instance fields.
-
     private String id;
-
-    // Implementation.
 
     /**
      * Returns the ID of the search job.

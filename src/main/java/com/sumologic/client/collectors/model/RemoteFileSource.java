@@ -4,8 +4,6 @@ import java.util.List;
 
 /**
  * A source that reads from a remote file over SSH.
- *
- * @author Jeffrey Wang
  */
 public class RemoteFileSource extends Source {
 

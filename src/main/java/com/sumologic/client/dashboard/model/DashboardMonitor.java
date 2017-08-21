@@ -1,11 +1,6 @@
 package com.sumologic.client.dashboard.model;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class DashboardMonitor {
-
-    // Instance fields.
 
     private long id;
     private long dashboardId;
@@ -22,8 +17,6 @@ public class DashboardMonitor {
     private int height;
     private String properties;
     private boolean isDisabled;
-
-    // Implementation.
 
     public long getId() {
         return id;

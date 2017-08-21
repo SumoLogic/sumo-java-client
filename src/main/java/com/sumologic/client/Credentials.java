@@ -2,9 +2,6 @@ package com.sumologic.client;
 
 /**
  * The sumo credentials to access the web service.
- *
- * @author Daphne Hsieh
- * @author Sebastian Mies
  */
 public class Credentials {
     private String accessId;

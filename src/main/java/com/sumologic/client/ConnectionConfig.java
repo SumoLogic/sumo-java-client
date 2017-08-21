@@ -4,6 +4,9 @@ import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
+/**
+ * Connection configuration for the client.
+ */
 public class ConnectionConfig {
 
     private String protocol;

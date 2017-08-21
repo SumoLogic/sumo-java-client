@@ -2,8 +2,6 @@ package com.sumologic.client;
 
 /**
  * Base class for sumo logic client exceptions.
- *
- * @author Sebastian Mies
  */
 public class SumoClientException extends SumoException {
 

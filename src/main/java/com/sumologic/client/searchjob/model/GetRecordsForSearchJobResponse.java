@@ -3,17 +3,10 @@ package com.sumologic.client.searchjob.model;
 
 import java.util.List;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class GetRecordsForSearchJobResponse {
-
-    // Instance fields.
 
     private List<SearchJobField> fields;
     private List<SearchJobRecord> records;
-
-    // Implementation.
 
     /**
      * Returns the fields.

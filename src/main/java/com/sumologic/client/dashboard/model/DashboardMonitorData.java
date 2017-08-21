@@ -5,12 +5,7 @@ import java.util.List;
 import com.sumologic.client.searchjob.model.SearchJobField;
 import com.sumologic.client.searchjob.model.SearchJobRecord;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class DashboardMonitorData {
-
-    // Instance fields.
 
     private long id;
     private List<SearchJobField> fields;
@@ -20,8 +15,6 @@ public class DashboardMonitorData {
     private long queryStartTime;
     private boolean lastUpdated;
     private List<String> warnings;
-
-    // Implementation.
 
     public long getId() {
         return id;

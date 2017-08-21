@@ -10,43 +10,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+
+
 /**
- * @author Christian Beedgen (christian@sumologic.com)
+ * A simple example showing the basic usage pattern for interacting with the Sumo Logic search job API. This API models
+ * closely the asynchronous, interactive nature of search evaluation in the Sumo Logic service. When a search job is
+ * being created, a process in the Sumo Logic service will start to process the query. While making process in
+ * continuing to process the query, a basic status is exposed via the API which can be polled. The status includes a
+ * current state for the search job, how many messages have so far been found, how many records have been produced in
+ * case the query contains an aggregation operator, as as any pending warning and errors. Finally, the status also
+ * includes any new histogram buckets that have been generated since the last time the status has been polled.
+ *
+ * As soon as the status indicates more than one message, or more than one record, messages and records, respectively
+ * can be requested using a simple paging API. Finally, a search job can and should be cancelled when not used anymore.
  */
 public class SearchJobExample {
 
-    // A simple example showing the basic
-    // usage pattern for interacting with
-    // the Sumo Logic search job API. This
-    // API models closely the asynchronous,
-    // interactive nature of search evaluation
-    // in the Sumo Logic service.
-    //
-    // When a search job is being created,
-    // a process in the Sumo Logic service
-    // will start to process the query. While
-    // making process in continuing to process
-    // the query, a basic status is exposed
-    // via the API which can be polled.
-    // The status includes a current state
-    // for the search job, how many messages
-    // have so far been found, how many records
-    // have been produced in case the query
-    // contains an aggregation operator, as
-    // as any pending warning and errors.
-    // Finally, the status also includes any
-    // new histogram buckets that have been
-    // generated since the last time the status
-    // has been polled.
-    //
-    // As soon as the status indicates more
-    // than one message, or more than one
-    // record, messages and records, respectively
-    // can be requested using a simple paging
-    // API. Finally, a search job can and
-    // should be cancelled when not used anymore.
-    //
-    // Let's jump in.
+
     public static void main(String[] args) throws Exception {
 
         // The API URL should always point to

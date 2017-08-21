@@ -2,12 +2,7 @@ package com.sumologic.client.searchjob.model;
 
 import java.util.List;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class GetSearchJobStatusResponse {
-
-    // Instance fields.
 
     private String state;
     private List<SearchJobHistogramBucket> histogramBuckets;
@@ -15,8 +10,6 @@ public final class GetSearchJobStatusResponse {
     private int recordCount;
     private List<String> pendingWarnings;
     private List<String> pendingErrors;
-
-    // Implementation.
 
     /**
      * Returns the state.

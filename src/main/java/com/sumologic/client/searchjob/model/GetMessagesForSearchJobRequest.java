@@ -8,18 +8,11 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.sumologic.client.model.HttpGetRequest;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
-
-    // Instance fields.
 
     private String id;
     private int offset;
     private int limit;
-
-    // Implementation.
 
     /**
      * Creates a new messages for search job request.

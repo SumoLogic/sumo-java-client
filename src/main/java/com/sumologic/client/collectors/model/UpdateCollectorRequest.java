@@ -5,8 +5,6 @@ import com.sumologic.client.model.HttpPutRequest;
 
 /**
  * A request to modify a collector in the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class UpdateCollectorRequest implements HttpPutRequest {
 

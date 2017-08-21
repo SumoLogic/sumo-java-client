@@ -5,8 +5,6 @@ import com.sumologic.client.model.SumoEntityResponse;
 
 /**
  * A response containing the updated collector.
- *
- * @author Jeffrey Wang
  */
 public class UpdateCollectorResponse extends SumoEntityResponse {
 

@@ -1,17 +1,10 @@
 package com.sumologic.client.searchjob.model;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class SearchJobField {
-
-    // Instance fields.
 
     private String name;
     private String fieldType;
     private boolean keyField;
-
-    // Implementation.
 
     /**
      * Returns the name.

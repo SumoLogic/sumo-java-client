@@ -4,8 +4,6 @@ import java.util.List;
 
 /**
  * A source that reads from local files matching a path expression.
- *
- * @author Jeffrey Wang
  */
 public class LocalFileSource extends Source {
 

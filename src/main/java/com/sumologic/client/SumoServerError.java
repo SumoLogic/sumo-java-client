@@ -3,7 +3,6 @@ package com.sumologic.client;
 /**
  * The sumo API error interface for an extensible enum pattern.
  *
- * @author Sebastian Mies
  * @see com.sumologic.client.collectors.SumoCollectorErrors
  * @see SumoSearchErrors
  * @see SumoServerErrors

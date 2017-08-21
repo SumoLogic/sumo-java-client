@@ -7,16 +7,9 @@ import org.apache.http.NameValuePair;
 
 import com.sumologic.client.model.HttpGetRequest;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class GetDashboardDataRequest implements HttpGetRequest {
 
-    // Instance fields.
-
     private long id;
-
-    // Implementation.
 
     /**
      * Creates a get dashboards request.

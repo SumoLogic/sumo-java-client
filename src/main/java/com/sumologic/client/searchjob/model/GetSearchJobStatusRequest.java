@@ -6,16 +6,9 @@ import org.apache.http.NameValuePair;
 
 import com.sumologic.client.model.HttpGetRequest;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public final class GetSearchJobStatusRequest implements HttpGetRequest {
 
-    // Instance fields.
-
     private String id;
-
-    // Implementation.
 
     /**
      * Creates a get search job status request.

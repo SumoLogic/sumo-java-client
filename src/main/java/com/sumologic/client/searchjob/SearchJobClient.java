@@ -9,11 +9,9 @@ import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
 
 /**
- * @author Christian Beedgen (christian@sumologic.com)
+ * Client for the search jobs API.
  */
 public class SearchJobClient {
-
-    // Implementation.
 
     private HttpUtils httpUtils;
 

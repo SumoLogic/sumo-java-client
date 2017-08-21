@@ -1,16 +1,9 @@
 package com.sumologic.client.dashboard.model;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class ResolvedTimeRange {
-
-    // Instance fields.
 
     private long startMillis;
     private long endMillis;
-
-    // Implementation.
 
     public long getStartMillis() {
         return startMillis;

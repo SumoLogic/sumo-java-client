@@ -2,8 +2,6 @@ package com.sumologic.client.collectors.model;
 
 /**
  * An installable collector in the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class InstallableCollector extends Collector {
 

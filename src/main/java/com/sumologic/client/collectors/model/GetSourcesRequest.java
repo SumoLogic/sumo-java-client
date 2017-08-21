@@ -10,8 +10,6 @@ import java.util.List;
 
 /**
  * A request to get sources for a collector in the Sumo Logic system.
- *
- * @author Jeffrey Wang
  */
 public class GetSourcesRequest implements HttpGetRequest {
 

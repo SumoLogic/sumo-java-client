@@ -18,14 +18,9 @@ import com.sumologic.client.util.HttpUtils;
 
 /**
  * The Sumo Logic API client implementation.
- *
- * @author Sebastian Mies
- * @author Daphne Hsieh
- * @author Christian Beedgen
  */
 public class SumoLogicClient implements SumoLogic {
 
-    // Instance fields.
     private HttpUtils httpUtils = new HttpUtils();
 
     private String protocol = "https";
@@ -39,8 +34,6 @@ public class SumoLogicClient implements SumoLogic {
     private CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
     private SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
     private DashboardClient dashboardClient = new DashboardClient(httpUtils);
-
-    // Implementation.
 
     /**
      * Constructs a Sumo Logic client.

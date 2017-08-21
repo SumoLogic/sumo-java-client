@@ -8,10 +8,6 @@ import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
 
 /**
  * Provides an interface for accessing Sumo Logic's log web service.
- *
- * @author Sebastian Mies
- * @author Daphne Hsieh
- * @author Christian Beedgen
  */
 public interface SumoLogic {
 

@@ -4,8 +4,6 @@ import java.util.List;
 
 /**
  * A source that reads from remote Windows event logs.
- *
- * @author Jeffrey Wang
  */
 public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
 

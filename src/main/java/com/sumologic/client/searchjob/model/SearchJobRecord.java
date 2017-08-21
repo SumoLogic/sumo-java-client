@@ -4,16 +4,9 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * @author Christian Beedgen (christian@sumologic.com)
- */
 public class SearchJobRecord {
 
-    // Instance fields.
-
     private Map<String, String> map;
-
-    // Implementation.
 
     /**
      * Returns the names of the fields.
