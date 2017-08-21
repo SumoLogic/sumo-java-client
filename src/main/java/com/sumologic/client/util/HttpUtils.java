@@ -8,22 +8,20 @@ import com.sumologic.client.model.HttpGetRequest;
 import com.sumologic.client.model.HttpPostRequest;
 import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.CookieStore;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
-import org.apache.http.client.utils.URIUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.protocol.HTTP;
+import org.apache.http.impl.client.*;
 
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +32,8 @@ public class HttpUtils {
     private static final String JSON_CONTENT_TYPE = "application/json";
 
     private final CookieStore cookieStore = new BasicCookieStore();
+
+    private final AuthCache authCache = new BasicAuthCache();
 
     // Public HTTP request methods
 
@@ -50,10 +50,16 @@ public class HttpUtils {
         ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            String params = URLEncodedUtils.format(request.toUrlParams(), HTTP.UTF_8);
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), params, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .setParameters(request.toUrlParams())
+                    .setCharset(StandardCharsets.UTF_8)
+                    .build();
             HttpGet get = new HttpGet(uri);
+            configureRequest(config, get, timeout);
 
             return doRequest(config, timeout, get, requestHeaders, request, handler, expectedStatusCode);
         } catch (URISyntaxException e) {
@@ -67,12 +73,18 @@ public class HttpUtils {
          ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .setCharset(StandardCharsets.UTF_8)
+                    .build();
             HttpPost post = new HttpPost(uri);
+            configureRequest(config, post, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
-            StringEntity entity = new StringEntity(body, HTTP.UTF_8);
+            StringEntity entity = new StringEntity(body, StandardCharsets.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             post.setEntity(entity);
 
@@ -82,9 +94,7 @@ public class HttpUtils {
             throw new SumoClientException("URI cannot be generated", e);
         } catch (UnsupportedEncodingException e) {
             throw new SumoClientException("Unsupported character encoding", e);
-        } catch (JsonMappingException e) {
-            throw new SumoClientException("Error generating JSON", e);
-        } catch (JsonGenerationException e) {
+        } catch (JsonMappingException | JsonGenerationException e) {
             throw new SumoClientException("Error generating JSON", e);
         } catch (IOException e) {
             throw new SumoClientException("Error generating JSON", e);
@@ -96,8 +106,13 @@ public class HttpUtils {
         Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .build();
+
             HttpPut put = new HttpPut(uri);
 
             Map<String, String> requestHeaders = new HashMap<String, String>();
@@ -106,9 +121,10 @@ public class HttpUtils {
             }
 
             String body = JacksonUtils.MAPPER.writeValueAsString(request);
-            StringEntity entity = new StringEntity(body, HTTP.UTF_8);
+            StringEntity entity = new StringEntity(body, StandardCharsets.UTF_8);
             entity.setContentType(JSON_CONTENT_TYPE);
             put.setEntity(entity);
+            configureRequest(config, put, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             return doRequest(
                     config, put, requestHeaders, request, handler, expectedStatusCode);
@@ -116,9 +132,7 @@ public class HttpUtils {
             throw new SumoClientException("URI cannot be generated", ex);
         } catch (UnsupportedEncodingException ex) {
             throw new SumoClientException("Unsupported character encoding", ex);
-        } catch (JsonMappingException e) {
-            throw new SumoClientException("Error generating JSON", e);
-        } catch (JsonGenerationException e) {
+        } catch (JsonMappingException | JsonGenerationException e) {
             throw new SumoClientException("Error generating JSON", e);
         } catch (IOException e) {
             throw new SumoClientException("Error generating JSON", e);
@@ -130,9 +144,14 @@ public class HttpUtils {
            Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         try {
-            URI uri = URIUtils.createURI(config.getProtocol(), config.getHostname(),
-                    config.getPort(), getEndpointURI(endpoint), null, null);
+            URI uri = new URIBuilder()
+                    .setScheme(config.getProtocol())
+                    .setHost(config.getHostname())
+                    .setPort(config.getPort())
+                    .setPath(getEndpointURI(endpoint))
+                    .build();
             HttpDelete delete = new HttpDelete(uri);
+            configureRequest(config, delete, Defaults.DEFAULT_HTTP_TIMEOUT);
 
             Map<String, String> requestHeaders = HttpUtils.toRequestHeaders();
 
@@ -153,13 +172,6 @@ public class HttpUtils {
 
     // Private methods
 
-    private HttpClient getHttpClient(ConnectionConfig config) {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.setCookieStore(cookieStore);
-        httpClient.getCredentialsProvider().setCredentials(config.getAuthScope(),
-                config.getUsernamePasswordCredentials());
-        return httpClient;
-    }
 
     private static String getEndpointURI(String endpoint) {
         return "/" + UrlParameters.API_SERVICE +
@@ -174,22 +186,30 @@ public class HttpUtils {
     }
 
     private <Request, Response> Response
-    doRequest(ConnectionConfig config, int timeout, HttpUriRequest method, Map<String, String> requestHeaders,
+    doRequest(ConnectionConfig config, int timeout, HttpUriRequest uriRequest, Map<String, String> requestHeaders,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         // Set headers
         for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
-            method.setHeader(header.getKey(), header.getValue());
+            uriRequest.setHeader(header.getKey(), header.getValue());
         }
 
-        HttpClient httpClient = getHttpClient(config);
-        HttpParams params = httpClient.getParams();
-        HttpConnectionParams.setConnectionTimeout(params, timeout);
-        HttpConnectionParams.setSoTimeout(params, timeout);
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(config.getAuthScope(), config.getUsernamePasswordCredentials());
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setDefaultCookieStore(cookieStore)
+                .build();
+
+        // NOTE(stefan, 2017-08-21): Pass in a long-lived authCache so that on subsequent calls we don't have to make
+        // two requests.
+        HttpClientContext context = HttpClientContext.create();
+        context.setCredentialsProvider(credsProvider);
+        context.setAuthCache(authCache);
 
         InputStream httpStream = null;
+        CloseableHttpResponse httpResponse = null;
         try {
-            HttpResponse httpResponse = httpClient.execute(method);
+            httpResponse = httpClient.execute(uriRequest, context);
             HttpEntity entity = httpResponse.getEntity();
             httpStream = entity.getContent();
 
@@ -210,10 +230,10 @@ public class HttpUtils {
 
                 String json = writer.toString();
                 if (JacksonUtils.isValidJson(json))
-                    throw new SumoServerException(method.getURI().toString(), writer.toString());
+                    throw new SumoServerException(uriRequest.getURI().toString(), writer.toString());
                 else
                     throw new SumoServerException(
-                        method.getURI().toString(),
+                        uriRequest.getURI().toString(),
                         httpResponse.getStatusLine().getStatusCode());
             }
         }
@@ -237,15 +257,30 @@ public class HttpUtils {
             if (httpStream != null) {
                 try {
                     httpStream.close();
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                 }
             }
 
-            httpClient.getConnectionManager().shutdown();
-
-            if (method != null) {
-                method.abort();
+            if (uriRequest != null) {
+               try { uriRequest.abort();} catch (Exception ex) {}
             }
+
+            try {
+                httpResponse.close();
+            }catch (Exception ex) {}
+
+            try {
+                httpClient.close();
+            }catch (Exception ex) {}
         }
+    }
+
+    private void configureRequest(ConnectionConfig config, HttpRequestBase request, int timeout) {
+        RequestConfig.Builder builder = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout);
+        if (config.getProxy() != null) {
+            builder.setProxy(config.getProxy()).build();
+        }
+        request.setConfig(builder.build());
+
     }
 }

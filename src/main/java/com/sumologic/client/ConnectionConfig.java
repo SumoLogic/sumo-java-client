@@ -1,5 +1,6 @@
 package com.sumologic.client;
 
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 
@@ -9,12 +10,20 @@ public class ConnectionConfig {
     private String hostname;
     private int port;
     private Credentials credentials;
+    private HttpHost proxy;
 
     public ConnectionConfig(String protocol, String hostname, int port, Credentials credentials) {
+        this(protocol, hostname, port, credentials, null, null, 0);
+    }
+
+    public ConnectionConfig(String protocol, String hostname, int port, Credentials credentials, String proxyProtocol, String proxyHost, int proxyPort) {
         this.protocol = protocol;
         this.hostname = hostname;
         this.port = port;
         this.credentials = credentials;
+        if (proxyHost != null) {
+            proxy = new HttpHost(proxyHost, proxyPort, proxyProtocol);
+        }
     }
 
     public String getProtocol() {
@@ -28,6 +37,8 @@ public class ConnectionConfig {
     public int getPort() {
         return port;
     }
+
+    public HttpHost getProxy() { return proxy;}
 
     public Credentials getCredentials() {
         return credentials;
