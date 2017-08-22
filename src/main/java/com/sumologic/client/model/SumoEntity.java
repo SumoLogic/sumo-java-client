@@ -29,7 +29,8 @@ public abstract class SumoEntity {
      *
      * @return The ETag.
      */
-    @JsonIgnore public String getETag() {
+    @JsonIgnore
+    public String getETag() {
         return eTag;
     }
 

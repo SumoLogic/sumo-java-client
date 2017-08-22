@@ -18,13 +18,12 @@
  */
 package com.sumologic.client.searchjob.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.sumologic.client.model.HttpGetRequest;
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
-import com.sumologic.client.model.HttpGetRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class GetMessagesForSearchJobRequest implements HttpGetRequest {
 

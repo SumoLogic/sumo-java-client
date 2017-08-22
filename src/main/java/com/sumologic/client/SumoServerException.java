@@ -19,7 +19,6 @@
 package com.sumologic.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sumologic.client.util.JacksonUtils;
 
 import java.util.Map;
@@ -68,7 +67,8 @@ public class SumoServerException extends SumoException {
         // Parse JSON string
         try {
             Map<String, String> kv = JacksonUtils.MAPPER.readValue(json,
-                    new TypeReference<Map<String, String>>() {});
+                    new TypeReference<Map<String, String>>() {
+                    });
 
             // get fields
             status = Integer.parseInt(kv.get("status"));
@@ -136,6 +136,6 @@ public class SumoServerException extends SumoException {
      */
     public boolean equals(SumoServerError error) {
         return id != null &&
-               error.getId().equals(id.toLowerCase().trim());
+                error.getId().equals(id.toLowerCase().trim());
     }
 }

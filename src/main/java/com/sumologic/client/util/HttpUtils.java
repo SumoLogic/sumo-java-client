@@ -32,7 +32,10 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.*;
+import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import java.io.*;
 import java.net.URI;
@@ -244,8 +247,8 @@ public class HttpUtils {
                     throw new SumoServerException(method.getURI().toString(), writer.toString());
                 else
                     throw new SumoServerException(
-                        method.getURI().toString(),
-                        httpResponse.getStatusLine().getStatusCode());
+                            method.getURI().toString(),
+                            httpResponse.getStatusLine().getStatusCode());
             }
         }
 
@@ -273,16 +276,21 @@ public class HttpUtils {
             }
 
             if (method != null) {
-               try { method.abort();} catch (Exception ex) {}
+                try {
+                    method.abort();
+                } catch (Exception ex) {
+                }
             }
 
             try {
                 httpResponse.close();
-            }catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
 
             try {
                 httpClient.close();
-            }catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
     }
 

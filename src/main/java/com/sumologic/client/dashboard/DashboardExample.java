@@ -18,22 +18,18 @@
  */
 package com.sumologic.client.dashboard;
 
+import com.sumologic.client.Credentials;
+import com.sumologic.client.SumoLogicClient;
+import com.sumologic.client.dashboard.model.*;
+import com.sumologic.client.searchjob.model.SearchJobField;
+import com.sumologic.client.searchjob.model.SearchJobRecord;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.sumologic.client.Credentials;
-import com.sumologic.client.SumoLogicClient;
-import com.sumologic.client.dashboard.model.Dashboard;
-import com.sumologic.client.dashboard.model.DashboardMonitor;
-import com.sumologic.client.dashboard.model.DashboardMonitorData;
-import com.sumologic.client.dashboard.model.GetDashboardDataResponse;
-import com.sumologic.client.dashboard.model.GetDashboardsResponse;
-import com.sumologic.client.searchjob.model.SearchJobField;
-import com.sumologic.client.searchjob.model.SearchJobRecord;
 
 public class DashboardExample {
 

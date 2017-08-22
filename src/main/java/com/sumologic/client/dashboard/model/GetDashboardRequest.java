@@ -18,12 +18,11 @@
  */
 package com.sumologic.client.dashboard.model;
 
-import java.util.Collections;
-import java.util.List;
-
+import com.sumologic.client.model.HttpGetRequest;
 import org.apache.http.NameValuePair;
 
-import com.sumologic.client.model.HttpGetRequest;
+import java.util.Collections;
+import java.util.List;
 
 
 public final class GetDashboardRequest implements HttpGetRequest {

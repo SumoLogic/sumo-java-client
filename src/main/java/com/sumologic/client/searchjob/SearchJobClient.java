@@ -18,13 +18,12 @@
  */
 package com.sumologic.client.searchjob;
 
-import org.apache.http.HttpStatus;
-
 import com.sumologic.client.ConnectionConfig;
 import com.sumologic.client.UrlParameters;
 import com.sumologic.client.searchjob.model.*;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
+import org.apache.http.HttpStatus;
 
 /**
  * Client for the search jobs API.
