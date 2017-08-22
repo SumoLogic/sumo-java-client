@@ -25,5 +25,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public interface HttpPutRequest {
 
-    @JsonIgnore public String getETag();
+    @JsonIgnore
+    public String getETag();
 }

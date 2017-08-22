@@ -18,21 +18,16 @@
  */
 package com.sumologic.client;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.dashboard.DashboardClient;
-import com.sumologic.client.dashboard.model.GetDashboardDataRequest;
-import com.sumologic.client.dashboard.model.GetDashboardDataResponse;
-import com.sumologic.client.dashboard.model.GetDashboardRequest;
-import com.sumologic.client.dashboard.model.GetDashboardResponse;
-import com.sumologic.client.dashboard.model.GetDashboardsRequest;
-import com.sumologic.client.dashboard.model.GetDashboardsResponse;
-import com.sumologic.client.searchjob.*;
+import com.sumologic.client.dashboard.model.*;
+import com.sumologic.client.searchjob.SearchJobClient;
 import com.sumologic.client.searchjob.model.*;
 import com.sumologic.client.util.HttpUtils;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * The Sumo Logic API client implementation.
@@ -95,7 +90,9 @@ public class SumoLogicClient implements SumoLogic {
         this.proxyPort = proxyPort;
     }
 
-    public void setProxyProtocol(String proxyProtocol) {this.proxyProtocol = proxyProtocol;}
+    public void setProxyProtocol(String proxyProtocol) {
+        this.proxyProtocol = proxyProtocol;
+    }
 
     private ConnectionConfig getConnectionConfig() {
         return new ConnectionConfig(protocol, hostname, port, credentials, proxyProtocol, proxyHost, proxyPort);

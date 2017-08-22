@@ -24,8 +24,8 @@ import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
 import com.sumologic.client.util.PassingResponseHandler;
-import org.apache.http.HttpStatus;
 import com.sumologic.client.util.SumoEntityResponseHandler;
+import org.apache.http.HttpStatus;
 
 public class CollectorsClient {
 

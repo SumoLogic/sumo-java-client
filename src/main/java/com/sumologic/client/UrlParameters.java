@@ -162,17 +162,17 @@ public interface UrlParameters {
     /**
      * Search sub-tasks
      */
-    public static String SEARCH_JOBS_SERVICE ="search/jobs";
+    public static String SEARCH_JOBS_SERVICE = "search/jobs";
 
     /**
      * Search job messages
      */
-    public static String SEARCH_JOBS_SERVICE_MESSAGES ="messages";
+    public static String SEARCH_JOBS_SERVICE_MESSAGES = "messages";
 
     /**
      * Search job records
      */
-    public static String SEARCH_JOBS_SERVICE_RECORDS ="records";
+    public static String SEARCH_JOBS_SERVICE_RECORDS = "records";
 
     /**
      * Dashboards sub-tasks

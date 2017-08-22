@@ -18,10 +18,10 @@
  */
 package com.sumologic.client.dashboard.model;
 
-import java.util.List;
-
 import com.sumologic.client.searchjob.model.SearchJobField;
 import com.sumologic.client.searchjob.model.SearchJobRecord;
+
+import java.util.List;
 
 public class DashboardMonitorData {
 
