@@ -1,3 +1,21 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 package com.sumologic.client.searchjob;
 
 import com.sumologic.client.Credentials;
@@ -10,43 +28,23 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
+
+
 /**
- * @author Christian Beedgen (christian@sumologic.com)
+ * A simple example showing the basic usage pattern for interacting with the Sumo Logic search job API. This API models
+ * closely the asynchronous, interactive nature of search evaluation in the Sumo Logic service. When a search job is
+ * being created, a process in the Sumo Logic service will start to process the query. While making process in
+ * continuing to process the query, a basic status is exposed via the API which can be polled. The status includes a
+ * current state for the search job, how many messages have so far been found, how many records have been produced in
+ * case the query contains an aggregation operator, as as any pending warning and errors. Finally, the status also
+ * includes any new histogram buckets that have been generated since the last time the status has been polled.
+ *
+ * As soon as the status indicates more than one message, or more than one record, messages and records, respectively
+ * can be requested using a simple paging API. Finally, a search job can and should be cancelled when not used anymore.
  */
 public class SearchJobExample {
 
-    // A simple example showing the basic
-    // usage pattern for interacting with
-    // the Sumo Logic search job API. This
-    // API models closely the asynchronous,
-    // interactive nature of search evaluation
-    // in the Sumo Logic service.
-    //
-    // When a search job is being created,
-    // a process in the Sumo Logic service
-    // will start to process the query. While
-    // making process in continuing to process
-    // the query, a basic status is exposed
-    // via the API which can be polled.
-    // The status includes a current state
-    // for the search job, how many messages
-    // have so far been found, how many records
-    // have been produced in case the query
-    // contains an aggregation operator, as
-    // as any pending warning and errors.
-    // Finally, the status also includes any
-    // new histogram buckets that have been
-    // generated since the last time the status
-    // has been polled.
-    //
-    // As soon as the status indicates more
-    // than one message, or more than one
-    // record, messages and records, respectively
-    // can be requested using a simple paging
-    // API. Finally, a search job can and
-    // should be cancelled when not used anymore.
-    //
-    // Let's jump in.
+
     public static void main(String[] args) throws Exception {
 
         // The API URL should always point to
