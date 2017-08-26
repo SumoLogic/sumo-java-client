@@ -480,6 +480,12 @@ public class SearchJobResultDumper {
             .withDescription("Number of times to retry a query in case of an error")
             .hasArg()
             .create("r"));
+    options.addOption(
+        OptionBuilder.withLongOpt("messages-per-request")
+            .withArgName("messages-per-request")
+            .withDescription("Number of messages to fetch per request")
+            .hasArg()
+            .create());
     return options;
   }
 
