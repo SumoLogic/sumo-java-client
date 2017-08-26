@@ -95,6 +95,9 @@ public class SearchJobResultDumper {
     // Whether to turn arrays into a JSON string when flattening JSON.
     boolean arraysAsJson = false;
 
+    // How many messages to grab in each request.
+    int messagesPerRequest = 1000;
+
     // Create the command line options.
     Options options = createOptions();
 
@@ -219,6 +222,11 @@ public class SearchJobResultDumper {
         retry = Integer.parseInt(retryValue);
       }
 
+      if (commandLine.hasOption("messages-per-request")) {
+        String messagesPerRequestValue = commandLine.getOptionValue("messages-per-batch");
+        messagesPerRequest = Integer.parseInt(messagesPerRequestValue);
+      }
+
     } catch (ParseException exp) {
       System.err.println(exp.getMessage());
 
@@ -301,7 +309,8 @@ public class SearchJobResultDumper {
             lastEndFile,
             flattenJson,
             skipArrays,
-            arraysAsJson);
+            arraysAsJson,
+            messagesPerRequest);
         if (failure) {
           break;
         }
@@ -516,7 +525,8 @@ public class SearchJobResultDumper {
                                                    String lastEndFile,
                                                    String jsonFieldToFlatten,
                                                    boolean skipArrays,
-                                                   boolean arraysAsJson) {
+                                                   boolean arraysAsJson,
+                                                   int messagesPerRequest) {
 
     int triesLeft = retry;
     int attempt = 1;
@@ -542,7 +552,8 @@ public class SearchJobResultDumper {
           lastEndFile,
           jsonFieldToFlatten,
           skipArrays,
-          arraysAsJson);
+          arraysAsJson,
+          messagesPerRequest);
 
       if (failure) {
         System.err.println(String.format(
@@ -571,7 +582,8 @@ public class SearchJobResultDumper {
                                        String lastEndFile,
                                        String jsonFieldToFlatten,
                                        boolean skipArrays,
-                                       boolean arraysAsJson) {
+                                       boolean arraysAsJson,
+                                       int messagesPerRequest) {
 
     // Create the search job.
     String searchJobId = sumoClient.createSearchJob(
@@ -642,7 +654,8 @@ public class SearchJobResultDumper {
               messageCount,
               jsonFieldToFlatten,
               skipArrays,
-              arraysAsJson);
+              arraysAsJson,
+              messagesPerRequest);
         }
 
         // Wait if necessary.
@@ -721,7 +734,8 @@ public class SearchJobResultDumper {
                                  int messageCount,
                                  String jsonFieldToFlatten,
                                  boolean skipArrays,
-                                 boolean arraysAsJson) {
+                                 boolean arraysAsJson,
+                                 int messagesPerRequest) {
 
     int messageLength = 0;
     while ((messageLength = messageCount - messageOffset) > 0) {
@@ -746,7 +760,7 @@ public class SearchJobResultDumper {
         }
       }
 
-      messageLength = Math.min(messageLength, 1000);
+      messageLength = Math.min(messageLength, messagesPerRequest);
       if (messageLength > 0) {
         System.err.printf(
             "[%s] %s - Search job ID: '%s', messages: '%s', getting offset: '%d', length: '%d'\n",
