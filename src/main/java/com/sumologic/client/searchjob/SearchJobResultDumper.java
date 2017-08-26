@@ -223,7 +223,7 @@ public class SearchJobResultDumper {
       }
 
       if (commandLine.hasOption("messages-per-request")) {
-        String messagesPerRequestValue = commandLine.getOptionValue("messages-per-batch");
+        String messagesPerRequestValue = commandLine.getOptionValue("messages-per-request");
         messagesPerRequest = Integer.parseInt(messagesPerRequestValue);
       }
 
