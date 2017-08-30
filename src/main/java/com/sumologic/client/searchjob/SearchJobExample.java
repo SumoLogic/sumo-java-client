@@ -21,13 +21,13 @@ package com.sumologic.client.searchjob;
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
 import com.sumologic.client.model.LogMessage;
-import com.sumologic.client.searchjob.model.*;
+import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
+import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-
 
 
 /**

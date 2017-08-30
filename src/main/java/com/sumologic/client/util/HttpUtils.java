@@ -45,7 +45,7 @@ import java.util.Map;
 
 public class HttpUtils {
 
-    public static final int API_VERSION = 1;
+    private static final int API_VERSION = 1;
 
     private static final String JSON_CONTENT_TYPE = "application/json";
 
@@ -280,16 +280,21 @@ public class HttpUtils {
             }
 
             if (uriRequest != null) {
-               try { uriRequest.abort();} catch (Exception ex) {}
+                try {
+                    uriRequest.abort();
+                } catch (Exception ex) {
+                }
             }
 
             try {
                 httpResponse.close();
-            }catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
 
             try {
                 httpClient.close();
-            }catch (Exception ex) {}
+            } catch (Exception ex) {
+            }
         }
     }
 

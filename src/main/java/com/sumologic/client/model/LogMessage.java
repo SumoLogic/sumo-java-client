@@ -48,7 +48,7 @@ public class LogMessage {
      * @return A set of field names.
      */
     public final Set<String> getFieldNames() {
-      return Collections.unmodifiableSet(properties.keySet());
+        return Collections.unmodifiableSet(properties.keySet());
     }
 
     /**

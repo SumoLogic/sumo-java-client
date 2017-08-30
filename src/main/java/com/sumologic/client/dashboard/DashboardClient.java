@@ -18,18 +18,12 @@
  */
 package com.sumologic.client.dashboard;
 
-import org.apache.http.HttpStatus;
-
 import com.sumologic.client.ConnectionConfig;
 import com.sumologic.client.UrlParameters;
-import com.sumologic.client.dashboard.model.GetDashboardDataRequest;
-import com.sumologic.client.dashboard.model.GetDashboardDataResponse;
-import com.sumologic.client.dashboard.model.GetDashboardRequest;
-import com.sumologic.client.dashboard.model.GetDashboardResponse;
-import com.sumologic.client.dashboard.model.GetDashboardsRequest;
-import com.sumologic.client.dashboard.model.GetDashboardsResponse;
+import com.sumologic.client.dashboard.model.*;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
+import org.apache.http.HttpStatus;
 
 public class DashboardClient {
 

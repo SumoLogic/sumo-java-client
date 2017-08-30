@@ -59,7 +59,9 @@ public class ConnectionConfig {
         return port;
     }
 
-    public HttpHost getProxy() { return proxy;}
+    public HttpHost getProxy() {
+        return proxy;
+    }
 
     public Credentials getCredentials() {
         return credentials;

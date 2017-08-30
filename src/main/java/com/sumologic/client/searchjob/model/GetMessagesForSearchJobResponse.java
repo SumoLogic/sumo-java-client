@@ -18,9 +18,9 @@
  */
 package com.sumologic.client.searchjob.model;
 
-import java.util.List;
-
 import com.sumologic.client.model.LogMessage;
+
+import java.util.List;
 
 public class GetMessagesForSearchJobResponse {
 
