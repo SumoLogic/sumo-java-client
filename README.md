@@ -7,6 +7,7 @@ Sumo Logic provides a cloud-based log management solution. It can process and an
 ## News
   * 2017-09-27: Version 2.4 released to maven central.
   * 2017-07-11: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) has been removed
+  * 2017-03-28: Version 2.3 released to maven central.
   * 2017-02-21: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) has been deprecated and will be removed in the next release. Please migrate to the [Search Job API](https://help.sumologic.com/APIs/02Search_Job_API/About_the_Search_Job_API) by using the `SearchJobClient` class.
   * 2016-09-16: Version 2.2 released to maven central.
   * 2015-11-23: Version 2.1 released to maven central.
