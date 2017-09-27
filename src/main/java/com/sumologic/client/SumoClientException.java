@@ -24,14 +24,16 @@ package com.sumologic.client;
 public class SumoClientException extends SumoException {
 
     /**
-     * Delegation to Exception ({@see Exception})
+     * Delegation to Exception
+     * @see Exception
      */
     public SumoClientException(String message) {
         super(message);
     }
 
     /**
-     * Delegation to Exception ({@see Exception})
+     * Delegation to Exception
+     * @see Exception
      */
     public SumoClientException(String message, Throwable cause) {
         super(message, cause);

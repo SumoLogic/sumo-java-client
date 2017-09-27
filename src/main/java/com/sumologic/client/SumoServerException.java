@@ -129,7 +129,7 @@ public class SumoServerException extends SumoException {
 
     /**
      * Returns true, if the error is equal to a server error, e.g.,
-     * {@see SumoSearchErrors.EMPTY_FIELD_LIST}.
+     * @see SumoSearchErrors#EMPTY_FIELD_LIST
      *
      * @param error The error to compare
      * @return True, if the exception equals the given server error
