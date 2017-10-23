@@ -50,7 +50,7 @@ public class StreamingMetricsSource extends Source {
     }
 
     /**
-     * Sets the protocol.
+     * Sets the content type.
      */
     public void setContentType(String contentType) {
         setProperty(CONTENT_TYPE, contentType);
