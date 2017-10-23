@@ -4,7 +4,6 @@ public class StreamingMetricsSource extends Source {
 
     private static String PROTOCOL = "protocol";
     private static String PORT = "port";
-    private static String CONTENT_TYPE = "content_type";
 
     public StreamingMetricsSource() { setSourceType(SourceType.STREAMING_METRICS.getType()); }
 
@@ -38,21 +37,5 @@ public class StreamingMetricsSource extends Source {
      */
     public void setPort(Integer port) {
         setProperty(PORT, port);
-    }
-
-    /**
-     * Returns the content type.
-     *
-     * @return The content type.
-     */
-    public String getContentType() {
-        return getProperty(CONTENT_TYPE);
-    }
-
-    /**
-     * Sets the content type.
-     */
-    public void setContentType(String contentType) {
-        setProperty(CONTENT_TYPE, contentType);
     }
 }
