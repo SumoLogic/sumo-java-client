@@ -45,6 +45,7 @@ public class Source extends SumoEntity {
     private Boolean forceTimeZone;
     private String defaultDateFormat;
     private String sourceType;
+    private String contentType;
     private Boolean alive;
     private String status;
     private List<Filter> filters = new ArrayList<Filter>();
@@ -256,6 +257,22 @@ public class Source extends SumoEntity {
      */
     public void setSourceType(String sourceType) {
         this.sourceType = sourceType;
+    }
+
+    /**
+     * Returns the content type.
+     *
+     * @return The content type.
+     */
+    public String getContentType() {
+        return contentType;
+    }
+
+    /**
+     * Sets the content type.
+     */
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     /**

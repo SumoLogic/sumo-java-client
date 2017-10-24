@@ -33,7 +33,8 @@ public enum SourceType {
     SCRIPT("Script", ScriptSource.class),
     ALERT("Alert", AlertSource.class),
     AMAZON_S3("AmazonS3", AmazonS3Source.class),
-    HTTP("HTTP", HttpSource.class);
+    HTTP("HTTP", HttpSource.class),
+    STREAMING_METRICS("StreamingMetrics", StreamingMetricsSource.class);
 
     private String type;
     private Class<? extends Source> sourceClass;
