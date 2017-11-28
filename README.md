@@ -29,12 +29,6 @@ The Java client library is available on Maven central (http://search.maven.org/)
 
 to your pom.xml
 
-## Current Limitations and Known Bugs
-
-The older Search API has serious limitations; we strongly recommend you to use the Search Job API with the `SearchJobClient` class instead.  If you continue to use the deprecated `SearchClient` class, you will have the following limitations:
-  * A maximum of 100k log lines are returned at once. If you need more data you can issue subsequent queries covering a smaller time frame.
-  * Queries need to complete in 60 seconds. Otherwise the session will timeout and no results are returned.
-
 ## License
 
 The Sumo Logic client library is published under the Apache Software License, Version 2.0. Please visit http://www.apache.org/licenses/LICENSE-2.0.txt for details.
