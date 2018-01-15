@@ -28,11 +28,14 @@ import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
 import com.sumologic.client.searchjob.model.SearchJobRecord;
 import org.apache.commons.cli.*;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 import java.io.*;
 import java.net.URL;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -840,7 +843,14 @@ public class SearchJobResultDumper {
     }
 
     private static long iso8601toMillis(String timestamp, String timezone) {
-        DateTimeFormatter formatter = ISODateTimeFormat.dateTimeNoMillis();
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+            .parseCaseInsensitive()
+            .append(DateTimeFormatter.ISO_LOCAL_DATE)
+            .optionalStart()
+            .appendLiteral('T')
+            .append(DateTimeFormatter.ISO_TIME)
+            .toFormatter();
+
         TimeZone tz = TimeZone.getTimeZone(timezone);
         int offset = tz.getRawOffset();
         if (tz.inDaylightTime(new Date())) {
@@ -850,7 +860,7 @@ public class SearchJobResultDumper {
         int offsetMinutes = offset / 1000 / 60 % 60;
         String timestampWithTimezone =
                 String.format("%s%+03d:%02d", timestamp, offsetHours, offsetMinutes);
-        return formatter.parseDateTime(timestampWithTimezone).getMillis();
+        return OffsetDateTime.parse(timestampWithTimezone, formatter).toInstant().toEpochMilli();
     }
 
     private static boolean isCancelled(GetSearchJobStatusResponse getSearchJobStatusResponse) {
