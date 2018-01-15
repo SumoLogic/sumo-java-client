@@ -82,7 +82,7 @@ public class SearchJobRecord {
      * @return The value for the specified field as a double.
      */
     public double doubleField(String fieldName) {
-        return Double.parseDouble(fieldName);
+        return Double.parseDouble(stringField(fieldName));
     }
 
     /**
