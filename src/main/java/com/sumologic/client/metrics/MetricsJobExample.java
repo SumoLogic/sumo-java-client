@@ -6,10 +6,12 @@ import com.sumologic.client.model.LogMessage;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
 import com.sumologic.client.util.JacksonUtils;
+import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 
 public class MetricsJobExample {
@@ -52,7 +54,7 @@ public class MetricsJobExample {
     // job. But on the high level, we need to
     // specify a query, a time range, and a
     // time zone.
-    String searchJobId = sumoClient.createMetricsJob(
+    CreateMetricsJobResponse searchJobId = sumoClient.createMetricsJob(
             "_sourceCategory=cqmerger metric=CPU_Idle | avg",  // This query will return all messages
             "2018-01-25T08:42:00",    // between this start time and
             "2018-01-25T08:44:00",    // this end time, specified in ISO 8601 format
@@ -60,7 +62,14 @@ public class MetricsJobExample {
     // If successful, we will have gotten back
     // a search job ID. We will use this ID to
     // track the process of the search job.
-    System.out.printf("Search job ID: '%s'\n", searchJobId);
+    //System.out.printf("Search job ID: '%s'\n", searchJobId.getResponse());
+
+    DateTime[] timestamps = searchJobId.getTimestamps();
+    double[] values = searchJobId.getValues();
+
+    for (int i = 0; i < timestamps.length; i++ ) {
+      System.out.println(timestamps[i] + " " + values[i]);
+    }
 
 
 //    try {

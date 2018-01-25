@@ -19,6 +19,7 @@
 package com.sumologic.client;
 
 import com.sumologic.client.collectors.model.*;
+import com.sumologic.client.metrics.CreateMetricsJobResponse;
 import com.sumologic.client.searchjob.model.CancelSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
@@ -265,7 +266,7 @@ public interface SumoLogic {
      * @param timeZone       The time zone.
      * @return The search job ID.
      */
-    String createMetricsJob(
+    CreateMetricsJobResponse createMetricsJob(
             String query, String fromExpression, String toExpression, String timeZone);
 
 }

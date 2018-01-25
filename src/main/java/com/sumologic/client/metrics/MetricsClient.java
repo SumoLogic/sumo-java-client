@@ -13,7 +13,7 @@ public class MetricsClient {
     this.httpUtils = httpUtils;
   }
 
-  public String createMetricsJob(
+  public CreateMetricsJobResponse createMetricsJob(
           ConnectionConfig connection,
           CreateMetricsJobRequest createMetricsJobRequest) {
 
@@ -28,7 +28,7 @@ public class MetricsClient {
                     "Accept", "application/json"),
             new DeserializingResponseHandler<CreateMetricsJobRequest,
                     CreateMetricsJobResponse>(CreateMetricsJobResponse.class),
-            HttpStatus.SC_OK).getResponse();
+            HttpStatus.SC_OK);
   }
 
 }

@@ -23,6 +23,7 @@ import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.dashboard.DashboardClient;
 import com.sumologic.client.dashboard.model.*;
 import com.sumologic.client.metrics.CreateMetricsJobRequest;
+import com.sumologic.client.metrics.CreateMetricsJobResponse;
 import com.sumologic.client.metrics.MetricsClient;
 import com.sumologic.client.searchjob.SearchJobClient;
 import com.sumologic.client.searchjob.model.*;
@@ -441,7 +442,7 @@ public class SumoLogicClient implements SumoLogic {
      * @param timeZone       The time zone.
      * @return The search job ID.
      */
-    public String createMetricsJob(
+    public CreateMetricsJobResponse createMetricsJob(
             String query, String fromExpression, String toExpression, String timeZone) {
         CreateMetricsJobRequest createMetricsJobRequest =
                 new CreateMetricsJobRequest(query, fromExpression, toExpression, timeZone);
