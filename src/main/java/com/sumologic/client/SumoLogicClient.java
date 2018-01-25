@@ -22,10 +22,14 @@ import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.dashboard.DashboardClient;
 import com.sumologic.client.dashboard.model.*;
+import com.sumologic.client.metrics.CreateMetricsJobRequest;
+import com.sumologic.client.metrics.MetricsClient;
 import com.sumologic.client.searchjob.SearchJobClient;
 import com.sumologic.client.searchjob.model.*;
 import com.sumologic.client.util.HttpUtils;
+import com.sumologic.client.util.JacksonUtils;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -47,6 +51,7 @@ public class SumoLogicClient implements SumoLogic {
     private CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
     private SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
     private DashboardClient dashboardClient = new DashboardClient(httpUtils);
+    private MetricsClient metricsClient = new MetricsClient(httpUtils);
 
     /**
      * Constructs a Sumo Logic client.
@@ -425,4 +430,22 @@ public class SumoLogicClient implements SumoLogic {
         return dashboardClient.getDashboard(
                 getConnectionConfig(), new GetDashboardRequest(id));
     }
+
+    /**
+     * Starts a metrics search job and receive a job ID for subsequent
+     * polling of the search status.
+     *
+     * @param query          The query.
+     * @param fromExpression The from expression.
+     * @param toExpression   The toExpression.
+     * @param timeZone       The time zone.
+     * @return The search job ID.
+     */
+    public String createMetricsJob(
+            String query, String fromExpression, String toExpression, String timeZone) {
+        CreateMetricsJobRequest createMetricsJobRequest =
+                new CreateMetricsJobRequest(query, fromExpression, toExpression, timeZone);
+        return metricsClient.createMetricsJob(getConnectionConfig(), createMetricsJobRequest);
+    }
+
 }

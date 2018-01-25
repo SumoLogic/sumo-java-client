@@ -250,4 +250,22 @@ public interface SumoLogic {
      * @return The response.
      */
     DeleteSourceResponse deleteSource(Long collectorId, Long sourceId);
+
+    //
+    // Metrics jobs.
+    //
+
+    /**
+     * Starts a metrics search job and receive a job ID for subsequent
+     * polling of the search status.
+     *
+     * @param query          The query.
+     * @param fromExpression The from expression.
+     * @param toExpression   The toExpression.
+     * @param timeZone       The time zone.
+     * @return The search job ID.
+     */
+    String createMetricsJob(
+            String query, String fromExpression, String toExpression, String timeZone);
+
 }
