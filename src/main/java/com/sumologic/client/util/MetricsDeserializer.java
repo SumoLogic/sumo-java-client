@@ -8,10 +8,8 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 import com.sumologic.client.metrics.model.Metric;
 import org.joda.time.DateTime;
-
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 
 public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobResponse> {
 
@@ -35,7 +33,6 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
 
     DateTime[] timestamps = null;
     for (JsonNode v : results) {
-      System.out.println(v);
       if (timestamps == null) {
         timestamps = parseTimestamps(v);
       }
@@ -46,12 +43,13 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
       metricsResponse.addMetric(m);
     }
 
-    System.out.println(sessionId.toString());
+    metricsResponse.setResponse(response.toString());
     metricsResponse.setSessionId(sessionId.toString());
     metricsResponse.setStartTime(startTime.asLong());
     metricsResponse.setEndTime(endTime.asLong());
     metricsResponse.setError(error.toString());
     metricsResponse.setErrorMessage(errorMessage.toString());
+
 
     return metricsResponse;
   }
