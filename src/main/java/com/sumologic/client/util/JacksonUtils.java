@@ -49,7 +49,6 @@ public class JacksonUtils {
                 new Version(1, 0, 0, null, null, null));
         module.addDeserializer(CreateMetricsJobResponse.class, new MetricsDeserializer());
         MAPPER.registerModule(module);
-
     }
 
     public static Long asLong(Object value) {

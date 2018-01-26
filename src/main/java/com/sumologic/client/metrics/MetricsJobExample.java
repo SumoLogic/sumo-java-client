@@ -43,7 +43,7 @@ public class MetricsJobExample {
     SumoLogicClient sumoClient = new SumoLogicClient(credential);
     sumoClient.setURL(url);
 
-    // There's some options in creating a search
+    // There's some options in creating a metrics
     // job. But on the high level, we need to
     // specify a query, a time range, and a
     // time zone.
@@ -52,14 +52,11 @@ public class MetricsJobExample {
             "2018-01-25T08:42:00",    // between this start time and
             "2018-01-25T08:44:00",    // this end time, specified in ISO 8601 format
             "america/los_angeles");   // and assuming we are in California.
+
     // If successful, we will have gotten back
-    // a search job ID. We will use this ID to
-    // track the process of the search job.
-    //System.out.printf("Search job ID: '%s'\n", searchJobId.getResponse());
+    // a json with all time series. We print the meta data
 
-
-    for (Iterator<Metric> iter = metricsJob.iterator(); iter.hasNext() ; ) {
-      Metric m = iter.next();
+    for (Metric m : metricsJob) {
       System.out.println(m.getDimensions());
     }
 

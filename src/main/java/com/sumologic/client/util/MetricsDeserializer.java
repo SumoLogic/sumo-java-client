@@ -48,9 +48,7 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
     metricsResponse.setError(error.toString());
     metricsResponse.setErrorMessage(errorMessage.toString());
 
-//    "errorInstanceId"
-//    "errorKey"
-//    "keyedErrors"
+
 //    "queryInfo":{"startTime":1516898520000,"endTime":1516898640000,"desiredQuantizationInSecs":{"empty":true,"defined":false},"actualQuantizationInSecs":1,"sessionIdStr":"7B6E746B50BC2046"}
 
     return metricsResponse;

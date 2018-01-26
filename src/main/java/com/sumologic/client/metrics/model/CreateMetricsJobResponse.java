@@ -17,34 +17,18 @@ public final class CreateMetricsJobResponse implements Iterable<Metric> {
   private String response;
   private ArrayList<Metric> metrics = new ArrayList<>();
 
-  /**
-   * Returns the ID of the metrics job.
-   *
-   * @return The ID of the metrics job.
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   * Sets the ID of the metrics job.
-   *
-   * @param id The ID of the metrics job.
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
-
   public String getError() {
     return error;
   }
-  public void setError(String response) {
+
+  public void setError(String error) {
     this.error = error;
   }
 
   public String getErrorMessage() {
     return errorMessage;
   }
+
   public void setErrorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
   }
@@ -52,6 +36,7 @@ public final class CreateMetricsJobResponse implements Iterable<Metric> {
   public String getResponse() {
     return response;
   }
+
   public void setResponse(String response) {
     this.response = response;
   }
