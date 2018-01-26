@@ -11,11 +11,21 @@ import java.util.Iterator;
 
 public final class CreateMetricsJobResponse implements Iterable<Metric> {
 
-  private String id;
+  private String sessionId;
   private String error;
   private String errorMessage;
   private String response;
   private ArrayList<Metric> metrics = new ArrayList<>();
+  private DateTime startTime;
+  private DateTime endTime;
+
+  public String getSessionId() {
+    return sessionId;
+  }
+
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
+  }
 
   public String getError() {
     return error;
@@ -45,10 +55,24 @@ public final class CreateMetricsJobResponse implements Iterable<Metric> {
     metrics.add(metric);
   }
 
+  public void setStartTime(long startTime) {
+    this.startTime = new DateTime(startTime);
+  }
+
+  public DateTime getStartTime() {
+    return startTime;
+  }
+
+  public void setEndTime(long endTime) {
+    this.endTime = new DateTime(endTime);
+  }
+
+  public DateTime getEndTime() {
+    return endTime;
+  }
+
   @Override
   public Iterator<Metric> iterator() {
     return metrics.iterator();
   }
-
 }
-

@@ -29,11 +29,12 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
     JsonNode error = root.get("error");
     JsonNode errorMessage = root.get("errorMessage");
     JsonNode results = response.findValue("results");
-    JsonNode dimensions = response.findValue("dimensions");
+    JsonNode sessionId = root.path("queryInfo").path("sessionIdStr");
+    JsonNode startTime = root.path("queryInfo").path("startTime");
+    JsonNode endTime = root.path("queryInfo").path("endTime");
 
     DateTime[] timestamps = null;
-    for(Iterator<JsonNode> iter = results.iterator(); iter.hasNext(); ) {
-      JsonNode v = iter.next();
+    for (JsonNode v : results) {
       System.out.println(v);
       if (timestamps == null) {
         timestamps = parseTimestamps(v);
@@ -45,11 +46,12 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
       metricsResponse.addMetric(m);
     }
 
+    System.out.println(sessionId.toString());
+    metricsResponse.setSessionId(sessionId.toString());
+    metricsResponse.setStartTime(startTime.asLong());
+    metricsResponse.setEndTime(endTime.asLong());
     metricsResponse.setError(error.toString());
     metricsResponse.setErrorMessage(errorMessage.toString());
-
-
-//    "queryInfo":{"startTime":1516898520000,"endTime":1516898640000,"desiredQuantizationInSecs":{"empty":true,"defined":false},"actualQuantizationInSecs":1,"sessionIdStr":"7B6E746B50BC2046"}
 
     return metricsResponse;
   }
@@ -58,9 +60,10 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
     JsonNode timestamp = metric.findValue("timestamp");
     DateTime[] timestamps = new DateTime[timestamp.size()];
     int idx = 0;
-    for (Iterator<JsonNode> iter = timestamp.iterator(); iter.hasNext(); idx++) {
-      JsonNode v = iter.next();
+
+    for (JsonNode v : timestamp) {
       timestamps[idx] = new DateTime(v.asLong());
+      idx++;
     }
     return timestamps;
   }
@@ -69,9 +72,10 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
     JsonNode value = metric.findValue("value");
     double[] values = new double[value.size()];
     int idx =0;
-    for(Iterator<JsonNode> iter = value.iterator(); iter.hasNext();idx++) {
-      JsonNode v = iter.next();
+
+    for (JsonNode v : value) {
       values[idx] = v.asDouble();
+      idx++;
     }
     return values;
   }
@@ -79,9 +83,8 @@ public class MetricsDeserializer extends StdDeserializer<CreateMetricsJobRespons
   private HashMap<String, String> parseDimensions(JsonNode metric) {
     JsonNode dim = metric.findValue("dimensions");
     HashMap<String, String> dimensions = new HashMap<>();
-    int idx =0;
-    for(Iterator<JsonNode> iter = dim.iterator(); iter.hasNext();idx++) {
-      JsonNode v = iter.next();
+
+    for (JsonNode v : dim) {
       dimensions.put(v.findValue("key").toString(), v.findValue("value").toString());
     }
     return dimensions;

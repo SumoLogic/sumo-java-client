@@ -59,6 +59,8 @@ public class MetricsJobExample {
     for (Metric m : metricsJob) {
       System.out.println(m.getDimensions());
     }
+    System.out.println(metricsJob.getStartTime());
+    System.out.println(metricsJob.getEndTime());
 
 
 //    try {
