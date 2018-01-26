@@ -2,17 +2,14 @@ package com.sumologic.client.metrics;
 
 import com.sumologic.client.Credentials;
 import com.sumologic.client.SumoLogicClient;
-import com.sumologic.client.model.LogMessage;
-import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
-import com.sumologic.client.searchjob.model.GetSearchJobStatusResponse;
-import com.sumologic.client.util.JacksonUtils;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
+import com.sumologic.client.metrics.model.Metric;
 import org.joda.time.DateTime;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 
 public class MetricsJobExample {
 
@@ -36,12 +33,8 @@ public class MetricsJobExample {
     // Read the accessId and the accessKey from
     // the commandline so we don't have to
     // hard-code credentials in this example.
-//    String accessId = read("AccessId");
-//    String accessKey = read("AccessKey");
-
-    String accessId = "suIcTvyc22crXd";
-    String accessKey = "cvNU273KOtgYxTwpAR4WnIaqMLW9WE8557P8sUfN9eFmaLh5M5uBmPsUHqbvshMr";
-
+    String accessId = read("AccessId");
+    String accessKey = read("AccessKey");
 
     // With url, accessId, and accessKey in hand,
     // we can now construct a Sumo Logic API
@@ -54,8 +47,8 @@ public class MetricsJobExample {
     // job. But on the high level, we need to
     // specify a query, a time range, and a
     // time zone.
-    CreateMetricsJobResponse searchJobId = sumoClient.createMetricsJob(
-            "_sourceCategory=cqmerger metric=CPU_Idle | avg",  // This query will return all messages
+    CreateMetricsJobResponse metricsJob = sumoClient.createMetricsJob(
+            "_sourceCategory=cqmerger metric=CPU_Idle",  // This query will return all messages
             "2018-01-25T08:42:00",    // between this start time and
             "2018-01-25T08:44:00",    // this end time, specified in ISO 8601 format
             "america/los_angeles");   // and assuming we are in California.
@@ -64,11 +57,10 @@ public class MetricsJobExample {
     // track the process of the search job.
     //System.out.printf("Search job ID: '%s'\n", searchJobId.getResponse());
 
-    DateTime[] timestamps = searchJobId.getTimestamps();
-    double[] values = searchJobId.getValues();
 
-    for (int i = 0; i < timestamps.length; i++ ) {
-      System.out.println(timestamps[i] + " " + values[i]);
+    for (Iterator<Metric> iter = metricsJob.iterator(); iter.hasNext() ; ) {
+      Metric m = iter.next();
+      System.out.println(m.getDimensions());
     }
 
 

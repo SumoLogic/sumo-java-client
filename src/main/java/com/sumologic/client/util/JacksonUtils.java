@@ -19,16 +19,12 @@
 package com.sumologic.client.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.sumologic.client.metrics.CreateMetricsJobRequest;
-import com.sumologic.client.metrics.CreateMetricsJobResponse;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 
 import java.io.IOException;
 

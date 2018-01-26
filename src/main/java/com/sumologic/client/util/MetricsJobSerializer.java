@@ -3,7 +3,7 @@ package com.sumologic.client.util;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import com.sumologic.client.metrics.CreateMetricsJobRequest;
+import com.sumologic.client.metrics.model.CreateMetricsJobRequest;
 
 import java.io.IOException;
 

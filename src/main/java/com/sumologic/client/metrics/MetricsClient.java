@@ -2,6 +2,8 @@ package com.sumologic.client.metrics;
 
 import com.sumologic.client.ConnectionConfig;
 import com.sumologic.client.UrlParameters;
+import com.sumologic.client.metrics.model.CreateMetricsJobRequest;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 import com.sumologic.client.util.DeserializingResponseHandler;
 import com.sumologic.client.util.HttpUtils;
 import org.apache.http.HttpStatus;

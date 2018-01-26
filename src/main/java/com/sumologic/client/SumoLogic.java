@@ -19,7 +19,7 @@
 package com.sumologic.client;
 
 import com.sumologic.client.collectors.model.*;
-import com.sumologic.client.metrics.CreateMetricsJobResponse;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 import com.sumologic.client.searchjob.model.CancelSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;

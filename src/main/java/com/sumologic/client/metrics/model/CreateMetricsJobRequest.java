@@ -1,4 +1,4 @@
-package com.sumologic.client.metrics;
+package com.sumologic.client.metrics.model;
 
 import com.sumologic.client.model.HttpPostRequest;
 import org.joda.time.DateTime;

@@ -1,4 +1,4 @@
-package com.sumologic.client.metrics;
+package com.sumologic.client.metrics.model;
 
 import org.apache.http.HttpResponse;
 import com.sumologic.client.util.*;
@@ -6,15 +6,16 @@ import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public final class CreateMetricsJobResponse {
+public final class CreateMetricsJobResponse implements Iterable<Metric> {
 
   private String id;
   private String error;
   private String errorMessage;
   private String response;
-  private DateTime[] timestamps;
-  private double[] values;
+  private ArrayList<Metric> metrics = new ArrayList<>();
 
   /**
    * Returns the ID of the metrics job.
@@ -55,18 +56,13 @@ public final class CreateMetricsJobResponse {
     this.response = response;
   }
 
-  public DateTime[] getTimestamps() {
-    return timestamps;
-  }
-  public void setTimestamps(DateTime[] timestamps) {
-    this.timestamps = timestamps;
+  public void addMetric(Metric metric) {
+    metrics.add(metric);
   }
 
-  public double[] getValues() {
-    return values;
-  }
-  public void setValues(double[] values) {
-    this.values = values;
+  @Override
+  public Iterator<Metric> iterator() {
+    return metrics.iterator();
   }
 
 }

@@ -22,15 +22,13 @@ import com.sumologic.client.collectors.CollectorsClient;
 import com.sumologic.client.collectors.model.*;
 import com.sumologic.client.dashboard.DashboardClient;
 import com.sumologic.client.dashboard.model.*;
-import com.sumologic.client.metrics.CreateMetricsJobRequest;
-import com.sumologic.client.metrics.CreateMetricsJobResponse;
+import com.sumologic.client.metrics.model.CreateMetricsJobRequest;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 import com.sumologic.client.metrics.MetricsClient;
 import com.sumologic.client.searchjob.SearchJobClient;
 import com.sumologic.client.searchjob.model.*;
 import com.sumologic.client.util.HttpUtils;
-import com.sumologic.client.util.JacksonUtils;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
