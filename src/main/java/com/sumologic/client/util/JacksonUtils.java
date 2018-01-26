@@ -19,9 +19,12 @@
 package com.sumologic.client.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 
 import java.io.IOException;
 
@@ -36,6 +39,16 @@ public class JacksonUtils {
 
         // Only serialize non-null values.
         MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        SimpleModule testModule = new SimpleModule("MetricsJobSerializer", new Version(1, 0, 0, null, null, null));
+        testModule.addSerializer(new MetricsJobSerializer()); // assuming serializer declares correct class to bind to
+        MAPPER.registerModule(testModule);
+
+        SimpleModule module =
+                new SimpleModule("MetricsDeserializer",
+                new Version(1, 0, 0, null, null, null));
+        module.addDeserializer(CreateMetricsJobResponse.class, new MetricsDeserializer());
+        MAPPER.registerModule(module);
     }
 
     public static Long asLong(Object value) {

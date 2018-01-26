@@ -19,6 +19,7 @@
 package com.sumologic.client;
 
 import com.sumologic.client.collectors.model.*;
+import com.sumologic.client.metrics.model.CreateMetricsJobResponse;
 import com.sumologic.client.searchjob.model.CancelSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetMessagesForSearchJobResponse;
 import com.sumologic.client.searchjob.model.GetRecordsForSearchJobResponse;
@@ -250,4 +251,22 @@ public interface SumoLogic {
      * @return The response.
      */
     DeleteSourceResponse deleteSource(Long collectorId, Long sourceId);
+
+    //
+    // Metrics jobs.
+    //
+
+    /**
+     * Starts a metrics search job and receive a job ID for subsequent
+     * polling of the search status.
+     *
+     * @param query          The query.
+     * @param fromExpression The from expression.
+     * @param toExpression   The toExpression.
+     * @param timeZone       The time zone.
+     * @return The search job ID.
+     */
+    CreateMetricsJobResponse createMetricsJob(
+            String query, String fromExpression, String toExpression, String timeZone);
+
 }

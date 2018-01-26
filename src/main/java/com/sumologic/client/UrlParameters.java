@@ -183,4 +183,10 @@ public interface UrlParameters {
      * Dashboards data
      */
     public static String DASHBOARDS_SERVICE_DATA = "data";
+
+    /**
+     * Metrics sub-tasks
+     */
+    public static String METRICS_JOBS_SERVICE = "metrics/annotated/results";
+
 }
