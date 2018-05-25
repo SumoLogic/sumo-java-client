@@ -26,16 +26,15 @@ import com.sumologic.client.model.HttpGetRequest;
 import com.sumologic.client.model.HttpPostRequest;
 import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicCookieStore;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
+import org.apache.http.impl.client.*;
 
 import java.io.*;
 import java.net.URI;
@@ -46,11 +45,13 @@ import java.util.Map;
 
 public class HttpUtils {
 
-    public static final int API_VERSION = 1;
+    private static final int API_VERSION = 1;
 
     private static final String JSON_CONTENT_TYPE = "application/json";
 
     private final CookieStore cookieStore = new BasicCookieStore();
+
+    private final AuthCache authCache = new BasicAuthCache();
 
     // Public HTTP request methods
 
@@ -189,13 +190,6 @@ public class HttpUtils {
 
     // Private methods
 
-    private CloseableHttpClient getHttpClient(ConnectionConfig config) {
-        CredentialsProvider provider = new BasicCredentialsProvider();
-        provider.setCredentials(config.getAuthScope(), config.getUsernamePasswordCredentials());
-        return HttpClients.custom().setDefaultCookieStore(cookieStore)
-                .setDefaultCredentialsProvider(provider)
-                .build();
-    }
 
     private static String getEndpointURI(String endpoint) {
         return "/" + UrlParameters.API_SERVICE +
@@ -210,20 +204,30 @@ public class HttpUtils {
     }
 
     private <Request, Response> Response
-    doRequest(ConnectionConfig config, int timeout, HttpUriRequest method, Map<String, String> requestHeaders,
+    doRequest(ConnectionConfig config, int timeout, HttpUriRequest uriRequest, Map<String, String> requestHeaders,
               Request request, ResponseHandler<Request, Response> handler, int expectedStatusCode) {
 
         // Set headers
         for (Map.Entry<String, String> header : requestHeaders.entrySet()) {
-            method.setHeader(header.getKey(), header.getValue());
+            uriRequest.setHeader(header.getKey(), header.getValue());
         }
 
-        CloseableHttpClient httpClient = getHttpClient(config);
+        CredentialsProvider credsProvider = new BasicCredentialsProvider();
+        credsProvider.setCredentials(config.getAuthScope(), config.getUsernamePasswordCredentials());
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setDefaultCookieStore(cookieStore)
+                .build();
+
+        // NOTE(stefan, 2017-08-21): Pass in a long-lived authCache so that on subsequent calls we don't have to make
+        // two requests.
+        HttpClientContext context = HttpClientContext.create();
+        context.setCredentialsProvider(credsProvider);
+        context.setAuthCache(authCache);
 
         InputStream httpStream = null;
         CloseableHttpResponse httpResponse = null;
         try {
-            httpResponse = httpClient.execute(method);
+            httpResponse = httpClient.execute(uriRequest, context);
             HttpEntity entity = httpResponse.getEntity();
             httpStream = entity.getContent();
 
@@ -244,11 +248,11 @@ public class HttpUtils {
 
                 String json = writer.toString();
                 if (JacksonUtils.isValidJson(json))
-                    throw new SumoServerException(method.getURI().toString(), writer.toString());
+                    throw new SumoServerException(uriRequest.getURI().toString(), writer.toString());
                 else
                     throw new SumoServerException(
-                            method.getURI().toString(),
-                            httpResponse.getStatusLine().getStatusCode());
+                        uriRequest.getURI().toString(),
+                        httpResponse.getStatusLine().getStatusCode());
             }
         }
 
@@ -275,9 +279,9 @@ public class HttpUtils {
                 }
             }
 
-            if (method != null) {
+            if (uriRequest != null) {
                 try {
-                    method.abort();
+                    uriRequest.abort();
                 } catch (Exception ex) {
                 }
             }
