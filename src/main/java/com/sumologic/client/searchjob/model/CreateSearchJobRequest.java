@@ -26,6 +26,7 @@ public final class CreateSearchJobRequest implements HttpPostRequest {
     private String from;
     private String to;
     private String timeZone;
+    private String byReceiptTime;
 
     /**
      * Creates a search job request.
@@ -38,11 +39,13 @@ public final class CreateSearchJobRequest implements HttpPostRequest {
     public CreateSearchJobRequest(String query,
                                   String from,
                                   String to,
-                                  String timeZone) {
+                                  String timeZone,
+                                  String byReceiptTime) {
         this.query = query;
         this.from = from;
         this.to = to;
         this.timeZone = timeZone;
+        this.byReceiptTime = byReceiptTime;
     }
 
     /**
@@ -148,6 +151,33 @@ public final class CreateSearchJobRequest implements HttpPostRequest {
      */
     public CreateSearchJobRequest withTimeZone(String timeZone) {
         setTimeZone(timeZone);
+        return this;
+    }
+
+    /**
+     * Returns the by receipt time flag.
+     *
+     * @return The by receipt time flag.
+     */
+    public String getByReceiptTime() {
+        return byReceiptTime;
+    }
+
+    /**
+     * Sets the by receipt time flag.
+     */
+    public void setByReceiptTime(String byReceiptTime) {
+        this.byReceiptTime = byReceiptTime;
+    }
+
+    /**
+     * Sets the by receipt time flag.
+     *
+     * @return This object.
+     */
+
+    public CreateSearchJobRequest withByReceiptTime(String byReceiptTime) {
+        setByReceiptTime(byReceiptTime);
         return this;
     }
 }

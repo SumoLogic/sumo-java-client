@@ -41,10 +41,11 @@ public interface SumoLogic {
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
+     * @param byReceiptTime  Search by receipt time instead of message time.
      * @return The search job ID.
      */
     String createSearchJob(
-            String query, String fromExpression, String toExpression, String timeZone);
+            String query, String fromExpression, String toExpression, String timeZone, String byReceiptTime);
 
     /**
      * Returns the current status of a search job.

@@ -77,6 +77,8 @@ public class SearchJobResultDumper {
         // The timezone to interpret from and to in if given as ISO8601
         String timezone = null;
 
+        String byReceiptTime = null;
+
         // In chunk mode, the number of hours to execute the search query in.
         long chunkIncrementMillis = -1;
 
@@ -177,6 +179,10 @@ public class SearchJobResultDumper {
             if (commandLine.hasOption("minutes")) {
                 chunkIncrementMillis =
                         1000L * 60 * Long.parseLong(commandLine.getOptionValue("minutes"));
+            }
+
+            if (commandLine.hasOption("byReceiptTime")) {
+                byReceiptTime = commandLine.getOptionValue("byReceiptTime");
             }
 
             searchQuery = commandLine.getOptionValue("query");
@@ -280,7 +286,8 @@ public class SearchJobResultDumper {
                         "" + chunkEndMillis,
                         timezone,
                         retry,
-                        lastEndFile);
+                        lastEndFile,
+                        byReceiptTime);
                 if (failure) {
                     break;
                 }
@@ -366,6 +373,12 @@ public class SearchJobResultDumper {
                         .withDescription("The timezone to interpret from and to in")
                         .hasArg()
                         .create("tz"));
+        options.addOption(
+                OptionBuilder.withLongOpt("byReceiptTime")
+                        .withArgName("byReceiptTime")
+                        .withDescription("Search by receipt time instead of message time")
+                        .hasArg()
+                        .create("rt"));
         options.addOption(
                 OptionBuilder.withLongOpt("hours")
                         .withArgName("hours")
@@ -476,7 +489,8 @@ public class SearchJobResultDumper {
                                                      String endTimestamp,
                                                      String timeZone,
                                                      int retry,
-                                                     String lastEndFile) {
+                                                     String lastEndFile,
+                                                     String byReceiptTime) {
 
         int triesLeft = retry;
         int attempt = 1;
@@ -499,7 +513,8 @@ public class SearchJobResultDumper {
                     endTimestamp,
                     timeZone,
                     attempt,
-                    lastEndFile);
+                    lastEndFile,
+                    byReceiptTime);
 
             if (failure) {
                 System.err.println(String.format(
@@ -525,14 +540,16 @@ public class SearchJobResultDumper {
                                          String endTimestamp,
                                          String timeZone,
                                          int attempt,
-                                         String lastEndFile) {
+                                         String lastEndFile,
+                                         String byReceiptTime) {
 
         // Create the search job.
         String searchJobId = sumoClient.createSearchJob(
                 searchQuery,
                 startTimestamp,
                 endTimestamp,
-                timeZone);
+                timeZone,
+                byReceiptTime);
 
         System.err.printf("[%s] %s - Search job ID: '%s', attempt: '%d'\n",
                 new Date(), prefix, searchJobId, attempt);

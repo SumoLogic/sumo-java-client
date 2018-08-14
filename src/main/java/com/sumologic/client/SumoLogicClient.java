@@ -110,13 +110,14 @@ public class SumoLogicClient implements SumoLogic {
      * @param fromExpression The from expression.
      * @param toExpression   The toExpression.
      * @param timeZone       The time zone.
+     * @param byReceiptTime  Search by receipt time instead of message time
      * @return The search job ID.
      */
     @Override
     public String createSearchJob(
-            String query, String fromExpression, String toExpression, String timeZone) {
+            String query, String fromExpression, String toExpression, String timeZone, String byReceiptTime) {
         CreateSearchJobRequest createSearchJobRequest =
-                new CreateSearchJobRequest(query, fromExpression, toExpression, timeZone);
+                new CreateSearchJobRequest(query, fromExpression, toExpression, timeZone, byReceiptTime);
         return searchJobClient.createSearchJob(
                 getConnectionConfig(), createSearchJobRequest);
     }

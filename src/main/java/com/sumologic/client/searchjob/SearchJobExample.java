@@ -82,7 +82,8 @@ public class SearchJobExample {
                 "* | count _sourceHost",  // This query will return all messages
                 "2013-03-10T13:10:00",    // between this start time and
                 "2013-03-10T13:11:00",    // this end time, specified in ISO 8601 format
-                "america/los_angeles");   // and assuming we are in California.
+                "america/los_angeles",    // and assuming we are in California.
+                "false");                 // use message time by default
 
         // Note - above we are specifying the time
         // range using the ISO 8601 timestamp format.
