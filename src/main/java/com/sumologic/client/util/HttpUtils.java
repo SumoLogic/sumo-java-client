@@ -28,6 +28,7 @@ import com.sumologic.client.model.HttpPutRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.client.utils.URIBuilder;
@@ -296,6 +297,7 @@ public class HttpUtils {
 
     private void configureRequest(ConnectionConfig config, HttpRequestBase request, int timeout) {
         RequestConfig.Builder builder = RequestConfig.custom().setConnectTimeout(timeout).setSocketTimeout(timeout);
+        builder.setCookieSpec(CookieSpecs.STANDARD);
         if (config.getProxy() != null) {
             builder.setProxy(config.getProxy()).build();
         }
