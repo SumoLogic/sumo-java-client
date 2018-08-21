@@ -130,6 +130,7 @@ public class SumoLogicClient implements SumoLogic {
      * @param byReceiptTime  Search by receipt time instead of message time
      * @return The search job ID.
      */
+    @Override
     public String createSearchJob(
             String query, String fromExpression, String toExpression, String timeZone, String byReceiptTime) {
         CreateSearchJobRequest createSearchJobRequest =
