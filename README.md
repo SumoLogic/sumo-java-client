@@ -33,6 +33,16 @@ The Java client library is available on Maven central (http://search.maven.org/)
 
 to your pom.xml
 
+## Making changes to the code
+
+
+`mvn assembly:assembly -DdescriptorId=jar-with-dependencies` to compile the code with all depedencies.
+
+Then edit `bin/run-search-job-result-dumper.sh` to point to `target/sumo-java-client-<version>-SNAPSHOT-jar-with-dependencies.jar`
+
+You can test out api changes with
+`bin/run-search-job-result-dumper.sh` and entering the appropriate parameters to connect with and query the api.
+
 ## License
 
 The Sumo Logic client library is published under the Apache Software License, Version 2.0. Please visit http://www.apache.org/licenses/LICENSE-2.0.txt for details.
