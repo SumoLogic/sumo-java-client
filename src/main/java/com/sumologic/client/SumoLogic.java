@@ -47,6 +47,20 @@ public interface SumoLogic {
             String query, String fromExpression, String toExpression, String timeZone);
 
     /**
+     * Starts a search job and receive a job ID for subsequent
+     * polling of the search status.
+     *
+     * @param query          The query.
+     * @param fromExpression The from expression.
+     * @param toExpression   The toExpression.
+     * @param timeZone       The time zone.
+     * @param byReceiptTime  Search by receipt time instead of message time
+     * @return The search job ID.
+     */
+    String createSearchJob(
+            String query, String fromExpression, String toExpression, String timeZone, String byReceiptTime);
+
+    /**
      * Returns the current status of a search job.
      *
      * @param searchJobId The search job ID.
