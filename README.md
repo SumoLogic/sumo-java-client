@@ -49,5 +49,5 @@ The Sumo Logic client library is published under the Apache Software License, Ve
 
 ## Support
 
-If you have any problems using our Java client or if you need support please do not hesitate contact us via e-mail at api@sumologic.com 
+If you have any problems using our Java client or if you need support please do not hesitate contact us via e-mail at support@sumologic.com 
 
