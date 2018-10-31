@@ -9,7 +9,8 @@ Sumo Logic provides a cloud-based log management solution. It can process and an
 | In keeping with industry standard security best practices, as of May 31, 2018, the Sumo Logic service will only support TLS version 1.2 going forward. Verify that all connections to Sumo Logic endpoints are made from software that supports TLS 1.2. |
 
 ## News
-  * 2017-10-24: Version 2.5 released to maven central.
+  * 2018-10-31: Version 2.7 released to maven central.
+  * 2018-08-30: Version 2.6 released to maven central.
   * 2017-09-27: Version 2.4 released to maven central.
   * 2017-07-11: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) has been removed
   * 2017-03-28: Version 2.3 released to maven central.
@@ -27,7 +28,7 @@ The Java client library is available on Maven central (http://search.maven.org/)
 <dependency>
   <groupId>com.sumologic.api.client</groupId>
   <artifactId>sumo-java-client</artifactId> 
-  <version>2.5</version>
+  <version>2.7</version>
 </dependency>
 ```
 
