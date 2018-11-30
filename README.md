@@ -4,10 +4,6 @@
 
 Sumo Logic provides a cloud-based log management solution. It can process and analyze log files in peta-byte scale. This library provides a Java client to execute searches on the data collected by the Sumo Logic service.
 
-| TLS Deprecation Notice |
-| --- |
-| In keeping with industry standard security best practices, as of May 31, 2018, the Sumo Logic service will only support TLS version 1.2 going forward. Verify that all connections to Sumo Logic endpoints are made from software that supports TLS 1.2. |
-
 ## News
   * 2018-10-31: Version 2.7 released to maven central.
   * 2018-08-30: Version 2.6 released to maven central.
@@ -43,6 +39,10 @@ Then edit `bin/run-search-job-result-dumper.sh` to point to `target/sumo-java-cl
 
 You can test out api changes with
 `bin/run-search-job-result-dumper.sh` and entering the appropriate parameters to connect with and query the api.
+
+### TLS 1.2 Requirement
+
+Sumo Logic only accepts connections from clients using TLS version 1.2 or greater. To utilize the content of this repo, ensure that it's running in an execution environment that is configured to use TLS 1.2 or greater.
 
 ## License
 
