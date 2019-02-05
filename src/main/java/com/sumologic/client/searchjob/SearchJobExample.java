@@ -47,19 +47,9 @@ public class SearchJobExample {
 
     public static void main(String[] args) throws Exception {
 
-        // The API URL should always point to
-        //
+        // The API URL should point to (or other URls for other deployments)
         //        https://api.sumologic.com
-        //
-        // unless you are developing on the Sumo
-        // service itself, in which case
-        //
-        //        http://localhost:23667
-        //
-        // is a good choice as well.
-        String url = "http://localhost:23667";
-//        String url = "https://api.sumologic.com";
-//        String url = "https://long-api.sumologic.net";
+        String url = "https://api.sumologic.com";
 
         // Read the accessId and the accessKey from
         // the commandline so we don't have to
@@ -68,7 +58,7 @@ public class SearchJobExample {
         String accessKey = read("AccessKey");
 
         // With url, accessId, and accessKey in hand,
-        // we can now construct a Suno Logic API
+        // we can now construct a Sumo Logic API
         // client instance.
         Credentials credential = new Credentials(accessId, accessKey);
         SumoLogicClient sumoClient = new SumoLogicClient(credential);
@@ -252,20 +242,21 @@ public class SearchJobExample {
     }
 
     /**
-     * A simple method to prompt the user for input, and return the entered input.
-     *
-     * @param prompt The prompt.
-     * @return The user input.
+     * A simple method to fetch the values from the user (either from System environment or from interactive prompt)
      */
-    private static String read(String prompt) {
-        System.out.print(prompt + ": ");
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            return br.readLine();
-        } catch (IOException ioe) {
-            System.out.println("IO error trying to read your name!");
-            System.exit(1);
-            return null;
+    private static String read(String what) {
+        if (System.getenv(what) != null) {
+            return System.getenv(what);
+        } else {
+            System.out.print(what + ": ");
+            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+            try {
+                return br.readLine();
+            } catch (IOException ioe) {
+                System.out.println("IO error trying to read your name!");
+                System.exit(1);
+                return null;
+            }
         }
     }
 }
