@@ -48,7 +48,6 @@ public class SearchJobExample {
     public static void main(String[] args) throws Exception {
 
         // The API URL should point to (or other URls for other deployments)
-        //        https://api.sumologic.com
         String url = "https://api.sumologic.com";
 
         // Read the accessId and the accessKey from
@@ -70,8 +69,8 @@ public class SearchJobExample {
         // time zone.
         String searchJobId = sumoClient.createSearchJob(
                 "* | count _sourceHost",  // This query will return all messages
-                "2013-03-10T13:10:00",    // between this start time and
-                "2013-03-10T13:11:00",    // this end time, specified in ISO 8601 format
+                "2019-01-10T13:10:00",    // between this start time and
+                "2019-01-10T13:11:00",    // this end time, specified in ISO 8601 format
                 "america/los_angeles",    // and assuming we are in California.
                 "false");                 // use message time by default
 
