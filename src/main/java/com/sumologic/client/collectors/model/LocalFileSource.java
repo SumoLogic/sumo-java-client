@@ -27,6 +27,7 @@ public class LocalFileSource extends Source {
 
     private static String PATH_EXPRESSION = "pathExpression";
     private static String BLACKLIST = "blacklist";
+    private static String DENYLIST = "denylist";
 
     public LocalFileSource() {
         setSourceType(SourceType.LOCAL_FILE.getType());
@@ -62,5 +63,21 @@ public class LocalFileSource extends Source {
      */
     public void setBlacklist(List<String> blacklist) {
         setProperty(BLACKLIST, blacklist);
+    }
+
+    /**
+     * Returns the denylist.
+     *
+     * @return The denylist.
+     */
+    public List<String> getDenylist() {
+        return getProperty(DENYLIST);
+    }
+
+    /**
+     * Sets the denylist.
+     */
+    public void setDenylist(List<String> denylist) {
+        setProperty(DENYLIST, denylist);
     }
 }
