@@ -33,6 +33,7 @@ public class RemoteFileSource extends Source {
     private static String KEY_PASSWORD = "keyPassword";
     private static String REMOTE_PATH = "remotePath";
     private static String AUTH_METHOD = "authMethod";
+    private static String DENYLIST = "denylist";
 
     public RemoteFileSource() {
         setSourceType(SourceType.REMOTE_FILE.getType());
@@ -164,5 +165,21 @@ public class RemoteFileSource extends Source {
      */
     public void setAuthMethod(String authMethod) {
         setProperty(AUTH_METHOD, authMethod);
+    }
+
+    /**
+     * Returns the denylist.
+     *
+     * @return The denylist.
+     */
+    public List<String> getDenylist() {
+        return getProperty(DENYLIST);
+    }
+
+    /**
+     * Sets the denylist.
+     */
+    public void setDenylist(List<String> denylist) {
+        setProperty(DENYLIST, denylist);
     }
 }
