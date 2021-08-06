@@ -5,16 +5,17 @@
 Sumo Logic provides a cloud-based log management solution. It can process and analyze log files in peta-byte scale. This library provides a Java client to execute searches on the data collected by the Sumo Logic service.
 
 ## News
-  * 2018-10-31: Version 2.7 released to maven central.
-  * 2018-08-30: Version 2.6 released to maven central.
-  * 2017-09-27: Version 2.4 released to maven central.
+  * 2021-08-06: Version 2.8 released to Maven Central.
+  * 2018-10-31: Version 2.7 released to Maven Central.
+  * 2018-08-30: Version 2.6 released to Maven Central.
+  * 2017-09-27: Version 2.4 released to Maven Central.
   * 2017-07-11: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) has been removed
-  * 2017-03-28: Version 2.3 released to maven central.
+  * 2017-03-28: Version 2.3 released to Maven Central.
   * 2017-02-21: [The Search API](https://github.com/SumoLogic/sumo-api-doc/wiki/Search-API) has been deprecated and will be removed in the next release. Please migrate to the [Search Job API](https://help.sumologic.com/APIs/02Search_Job_API/About_the_Search_Job_API) by using the `SearchJobClient` class.
-  * 2016-09-16: Version 2.2 released to maven central.
-  * 2015-11-23: Version 2.1 released to maven central.
-  * 2014-10-30: Version 2.0 released to maven central.
-  * 2012-09-12: Version 1.0 released to maven central.
+  * 2016-09-16: Version 2.2 released to Maven Central.
+  * 2015-11-23: Version 2.1 released to Maven Central.
+  * 2014-10-30: Version 2.0 released to Maven Central.
+  * 2012-09-12: Version 1.0 released to Maven Central.
 
 ## How to use
 
@@ -24,7 +25,7 @@ The Java client library is available on Maven central (http://search.maven.org/)
 <dependency>
   <groupId>com.sumologic.api.client</groupId>
   <artifactId>sumo-java-client</artifactId> 
-  <version>2.7</version>
+  <version>2.8</version>
 </dependency>
 ```
 
