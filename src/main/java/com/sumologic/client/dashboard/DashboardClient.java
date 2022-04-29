@@ -27,7 +27,7 @@ import org.apache.http.HttpStatus;
 
 public class DashboardClient {
 
-    private HttpUtils httpUtils;
+    private final HttpUtils httpUtils;
 
     public DashboardClient(HttpUtils httpUtils) {
         this.httpUtils = httpUtils;

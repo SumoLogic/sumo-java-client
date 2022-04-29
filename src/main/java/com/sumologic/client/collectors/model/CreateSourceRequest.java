@@ -27,8 +27,8 @@ import com.sumologic.client.model.HttpPostRequest;
 public class CreateSourceRequest implements HttpPostRequest {
 
     @JsonIgnore
-    private Long collectorId;
-    private Source source;
+    private final Long collectorId;
+    private final Source source;
 
     public CreateSourceRequest(Long collectorId, Source source) {
         this.collectorId = collectorId;

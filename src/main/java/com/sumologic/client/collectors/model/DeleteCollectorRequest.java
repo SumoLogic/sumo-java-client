@@ -25,7 +25,7 @@ import com.sumologic.client.model.HttpDeleteRequest;
  */
 public class DeleteCollectorRequest implements HttpDeleteRequest {
 
-    private Long id;
+    private final Long id;
 
     public DeleteCollectorRequest(Long id) {
         this.id = id;

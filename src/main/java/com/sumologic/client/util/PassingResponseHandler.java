@@ -26,7 +26,7 @@ import java.io.InputStream;
 public class PassingResponseHandler<Request, Response>
         implements ResponseHandler<Request, Response> {
 
-    private Response response;
+    private final Response response;
 
     public PassingResponseHandler(Response response) {
         this.response = response;

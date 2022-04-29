@@ -27,10 +27,10 @@ import org.apache.http.auth.UsernamePasswordCredentials;
  */
 public class ConnectionConfig {
 
-    private String protocol;
-    private String hostname;
-    private int port;
-    private Credentials credentials;
+    private final String protocol;
+    private final String hostname;
+    private final int port;
+    private final Credentials credentials;
     private HttpHost proxy;
 
     public ConnectionConfig(String protocol, String hostname, int port, Credentials credentials) {

@@ -23,8 +23,8 @@ package com.sumologic.client.collectors.model;
  */
 public class SyslogSource extends Source {
 
-    private static String PROTOCOL = "protocol";
-    private static String PORT = "port";
+    private static final String PROTOCOL = "protocol";
+    private static final String PORT = "port";
 
     public SyslogSource() {
         setSourceType(SourceType.SYSLOG.getType());

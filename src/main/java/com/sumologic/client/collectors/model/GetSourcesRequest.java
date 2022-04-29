@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class GetSourcesRequest implements HttpGetRequest {
 
-    private Long collectorId;
+    private final Long collectorId;
     private Long limit;
     private Long offset;
 

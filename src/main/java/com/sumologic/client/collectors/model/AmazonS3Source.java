@@ -22,11 +22,11 @@ import com.sumologic.client.util.JacksonUtils;
 
 public class AmazonS3Source extends Source {
 
-    private static String KEY_ID = "keyId";
-    private static String SECRET_KEY = "secretKey";
-    private static String BUCKET_NAME = "bucketName";
-    private static String PATH_EXPRESSION = "pathExpression";
-    private static String SCAN_INTERVAL = "scanInterval";
+    private static final String KEY_ID = "keyId";
+    private static final String SECRET_KEY = "secretKey";
+    private static final String BUCKET_NAME = "bucketName";
+    private static final String PATH_EXPRESSION = "pathExpression";
+    private static final String SCAN_INTERVAL = "scanInterval";
 
     public AmazonS3Source() {
         setSourceType(SourceType.AMAZON_S3.getType());

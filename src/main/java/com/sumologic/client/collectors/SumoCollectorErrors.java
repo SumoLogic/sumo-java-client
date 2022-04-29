@@ -35,9 +35,9 @@ public enum SumoCollectorErrors implements SumoServerError {
     INVALID_FIELD_VALUE("validation.fields.invalid"),
     INVALID_SOURCE_TYPE("source.type.invalid");
 
-    private String id;
+    private final String id;
 
-    private SumoCollectorErrors(String id) {
+    SumoCollectorErrors(String id) {
         this.id = "collectors." + id;
     }
 

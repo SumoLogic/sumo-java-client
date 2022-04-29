@@ -23,8 +23,8 @@ package com.sumologic.client.collectors.model;
  */
 public class ScriptSource extends BaseScriptSource {
 
-    private static String SCRIPT = "script";
-    private static String CRON_EXPRESSION = "cronExpression";
+    private static final String SCRIPT = "script";
+    private static final String CRON_EXPRESSION = "cronExpression";
 
     public ScriptSource() {
         setSourceType(SourceType.SCRIPT.getType());

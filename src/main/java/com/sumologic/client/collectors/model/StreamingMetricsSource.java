@@ -20,8 +20,8 @@ package com.sumologic.client.collectors.model;
 
 public class StreamingMetricsSource extends Source {
 
-    private static String PROTOCOL = "protocol";
-    private static String PORT = "port";
+    private static final String PROTOCOL = "protocol";
+    private static final String PORT = "port";
 
     public StreamingMetricsSource() { setSourceType(SourceType.STREAMING_METRICS.getType()); }
 

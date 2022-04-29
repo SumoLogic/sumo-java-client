@@ -32,5 +32,5 @@ public interface SumoServerError {
      *
      * @return The identifier of the error
      */
-    public String getId();
+    String getId();
 }

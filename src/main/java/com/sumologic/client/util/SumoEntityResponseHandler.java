@@ -27,9 +27,9 @@ import java.io.InputStream;
 public class SumoEntityResponseHandler<Request, Response extends SumoEntityResponse>
         implements ResponseHandler<Request, Response> {
 
-    private static String ETAG_HEADER = "ETag";
+    private static final String ETAG_HEADER = "ETag";
 
-    private Class<Response> clazz;
+    private final Class<Response> clazz;
 
     public SumoEntityResponseHandler(Class<Response> clazz) {
         this.clazz = clazz;

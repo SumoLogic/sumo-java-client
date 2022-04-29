@@ -34,19 +34,19 @@ import java.net.URL;
  */
 public class SumoLogicClient implements SumoLogic {
 
-    private HttpUtils httpUtils = new HttpUtils();
+    private final HttpUtils httpUtils = new HttpUtils();
 
     private String protocol = "https";
     private String hostname = "api.sumologic.com";
     private int port = 443;
-    private Credentials credentials;
+    private final Credentials credentials;
     private String proxyHost;
     private int proxyPort;
     private String proxyProtocol;
 
-    private CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
-    private SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
-    private DashboardClient dashboardClient = new DashboardClient(httpUtils);
+    private final CollectorsClient collectorsClient = new CollectorsClient(httpUtils);
+    private final SearchJobClient searchJobClient = new SearchJobClient(httpUtils);
+    private final DashboardClient dashboardClient = new DashboardClient(httpUtils);
 
     /**
      * Constructs a Sumo Logic client.

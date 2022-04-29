@@ -30,7 +30,7 @@ import org.apache.http.HttpStatus;
  */
 public class SearchJobClient {
 
-    private HttpUtils httpUtils;
+    private final HttpUtils httpUtils;
 
     public SearchJobClient(HttpUtils httpUtils) {
         this.httpUtils = httpUtils;

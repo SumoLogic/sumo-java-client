@@ -24,10 +24,10 @@ import java.util.List;
 
 public abstract class BaseScriptSource extends Source {
 
-    private static String COMMANDS = "commands";
-    private static String FILE = "file";
-    private static String WORKING_DIR = "workingDir";
-    private static String TIMEOUT = "timeout";
+    private static final String COMMANDS = "commands";
+    private static final String FILE = "file";
+    private static final String WORKING_DIR = "workingDir";
+    private static final String TIMEOUT = "timeout";
 
     /**
      * Returns the list of commands.

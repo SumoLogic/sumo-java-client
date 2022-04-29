@@ -30,12 +30,12 @@ import java.util.Map;
  */
 public class SumoServerException extends SumoException {
 
-    private String uri;
-    private int status;
+    private final String uri;
+    private final int status;
     // (message, id, code) == null if the server doesn't respond with a nice JSON
-    private String message;
-    private String id;
-    private String code;
+    private final String message;
+    private final String id;
+    private final String code;
 
     /**
      * Constructs a server exception when a JSON error message is not available.

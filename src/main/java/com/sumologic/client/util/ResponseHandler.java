@@ -25,6 +25,6 @@ import java.io.InputStream;
 
 public interface ResponseHandler<Request, Response> {
 
-    public Response handle(HttpResponse httpResponse, InputStream httpStream, Request request)
+    Response handle(HttpResponse httpResponse, InputStream httpStream, Request request)
             throws IOException;
 }
