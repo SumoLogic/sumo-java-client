@@ -2,12 +2,15 @@ buildscript {
     repositories {
         mavenCentral()
     }
+    ext.scalatestVersion = '3.2.12'
 }
 
 plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
+    id 'scala'
+    id "com.github.maiflai.scalatest" version "0.32"
 }
 
 repositories {
@@ -20,6 +23,13 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
     implementation 'com.opencsv:opencsv:5.5.2'
     implementation 'commons-cli:commons-cli:1.5.0'
+
+    testImplementation "org.scala-lang:scala3-compiler_3:3.1.2"
+    testImplementation "org.scalatest:scalatest_3:$scalatestVersion"
+    testImplementation "org.scalatest:scalatest-wordspec_3:$scalatestVersion"
+    testImplementation "org.scalatest:scalatest-shouldmatchers_3:$scalatestVersion"
+    // Needed for scalatest as mentioned in https://github.com/scalatest/scalatest/issues/1736
+    testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.62.2")
 }
 
 group = 'com.sumologic.api.client'
