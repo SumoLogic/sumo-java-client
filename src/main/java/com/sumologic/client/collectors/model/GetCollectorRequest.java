@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class GetCollectorRequest implements HttpGetRequest {
 
-    private Long id;
+    private final Long id;
 
     public GetCollectorRequest(Long id) {
         this.id = id;

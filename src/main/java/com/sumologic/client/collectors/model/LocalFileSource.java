@@ -25,9 +25,9 @@ import java.util.List;
  */
 public class LocalFileSource extends Source {
 
-    private static String PATH_EXPRESSION = "pathExpression";
-    private static String BLACKLIST = "blacklist";
-    private static String DENYLIST = "denylist";
+    private static final String PATH_EXPRESSION = "pathExpression";
+    private static final String BLACKLIST = "blacklist";
+    private static final String DENYLIST = "denylist";
 
     public LocalFileSource() {
         setSourceType(SourceType.LOCAL_FILE.getType());

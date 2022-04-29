@@ -27,10 +27,10 @@ import com.sumologic.client.model.HttpPutRequest;
 public class UpdateSourceRequest implements HttpPutRequest {
 
     @JsonIgnore
-    private Long collectorId;
+    private final Long collectorId;
     @JsonIgnore
-    private Long sourceId;
-    private Source source;
+    private final Long sourceId;
+    private final Source source;
 
     public UpdateSourceRequest(Long collectorId, Long sourceId, Source source) {
         this.collectorId = collectorId;

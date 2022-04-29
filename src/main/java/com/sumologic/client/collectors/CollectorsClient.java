@@ -29,7 +29,7 @@ import org.apache.http.HttpStatus;
 
 public class CollectorsClient {
 
-    private HttpUtils httpUtils;
+    private final HttpUtils httpUtils;
 
     public CollectorsClient(HttpUtils httpUtils) {
         this.httpUtils = httpUtils;

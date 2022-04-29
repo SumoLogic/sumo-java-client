@@ -25,7 +25,7 @@ import com.sumologic.client.model.HttpPostRequest;
  */
 public class CreateCollectorRequest implements HttpPostRequest {
 
-    private Collector collector;
+    private final Collector collector;
 
     public CreateCollectorRequest(Collector collector) {
         this.collector = collector;

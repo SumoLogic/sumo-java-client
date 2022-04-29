@@ -25,10 +25,10 @@ import java.util.List;
  */
 public class RemoteWindowsEventLogSource extends WindowsEventLogSource {
 
-    private static String DOMAIN = "domain";
-    private static String USERNAME = "username";
-    private static String PASSWORD = "password";
-    private static String HOSTS = "hosts";
+    private static final String DOMAIN = "domain";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String HOSTS = "hosts";
 
     public RemoteWindowsEventLogSource() {
         setSourceType(SourceType.REMOTE_WINDOWS_EVENT_LOG.getType());

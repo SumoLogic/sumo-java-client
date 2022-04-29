@@ -25,15 +25,15 @@ import java.util.List;
  */
 public class RemoteFileSource extends Source {
 
-    private static String REMOTE_HOSTS = "remoteHosts";
-    private static String REMOTE_PORT = "remotePort";
-    private static String REMOTE_USER = "remoteUser";
-    private static String REMOTE_PASSWORD = "remotePassword";
-    private static String KEY_PATH = "keyPath";
-    private static String KEY_PASSWORD = "keyPassword";
-    private static String REMOTE_PATH = "remotePath";
-    private static String AUTH_METHOD = "authMethod";
-    private static String DENYLIST = "denylist";
+    private static final String REMOTE_HOSTS = "remoteHosts";
+    private static final String REMOTE_PORT = "remotePort";
+    private static final String REMOTE_USER = "remoteUser";
+    private static final String REMOTE_PASSWORD = "remotePassword";
+    private static final String KEY_PATH = "keyPath";
+    private static final String KEY_PASSWORD = "keyPassword";
+    private static final String REMOTE_PATH = "remotePath";
+    private static final String AUTH_METHOD = "authMethod";
+    private static final String DENYLIST = "denylist";
 
     public RemoteFileSource() {
         setSourceType(SourceType.REMOTE_FILE.getType());

@@ -36,10 +36,10 @@ public enum SourceType {
     HTTP("HTTP", HttpSource.class),
     STREAMING_METRICS("StreamingMetrics", StreamingMetricsSource.class);
 
-    private String type;
-    private Class<? extends Source> sourceClass;
+    private final String type;
+    private final Class<? extends Source> sourceClass;
 
-    private SourceType(String type, Class<? extends Source> sourceClass) {
+    SourceType(String type, Class<? extends Source> sourceClass) {
         this.type = type;
         this.sourceClass = sourceClass;
     }
@@ -54,7 +54,7 @@ public enum SourceType {
 
     // Static mapping
 
-    private static Map<String, Class<? extends Source>> SOURCE_TYPE_MAP =
+    private static final Map<String, Class<? extends Source>> SOURCE_TYPE_MAP =
             new HashMap<String, Class<? extends Source>>();
 
     static {

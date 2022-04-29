@@ -49,7 +49,7 @@ public class Source extends SumoEntity {
     private Boolean alive;
     private String status;
     private List<Filter> filters = new ArrayList<Filter>();
-    private Map<String, Object> properties = new HashMap<String, Object>();
+    private final Map<String, Object> properties = new HashMap<String, Object>();
 
     /**
      * Returns the id.

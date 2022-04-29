@@ -26,7 +26,7 @@ import java.io.InputStream;
 public class DeserializingResponseHandler<Request, Response>
         implements ResponseHandler<Request, Response> {
 
-    private Class<Response> clazz;
+    private final Class<Response> clazz;
 
     public DeserializingResponseHandler(Class<Response> clazz) {
         this.clazz = clazz;

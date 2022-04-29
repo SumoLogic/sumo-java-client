@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class WindowsEventLogSource extends Source {
 
-    private static String LOG_NAMES = "logNames";
+    private static final String LOG_NAMES = "logNames";
 
     public WindowsEventLogSource() {
         setSourceType(SourceType.LOCAL_WINDOWS_EVENT_LOG.getType());

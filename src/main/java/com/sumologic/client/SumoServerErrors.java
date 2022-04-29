@@ -39,7 +39,7 @@ public enum SumoServerErrors implements SumoServerError {
 
     private String id = "";
 
-    private SumoServerErrors(String id) {
+    SumoServerErrors(String id) {
         this.id = id;
     }
 

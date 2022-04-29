@@ -27,8 +27,8 @@ import com.sumologic.client.model.HttpPutRequest;
 public class UpdateCollectorRequest implements HttpPutRequest {
 
     @JsonIgnore
-    private Long id;
-    private Collector collector;
+    private final Long id;
+    private final Collector collector;
 
     public UpdateCollectorRequest(Long id, Collector collector) {
         this.id = id;

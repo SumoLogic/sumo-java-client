@@ -29,8 +29,8 @@ import java.util.List;
  */
 public class GetSourceRequest implements HttpGetRequest {
 
-    private Long collectorId;
-    private Long sourceId;
+    private final Long collectorId;
+    private final Long sourceId;
 
     public GetSourceRequest(Long collectorId, Long sourceId) {
         this.collectorId = collectorId;
