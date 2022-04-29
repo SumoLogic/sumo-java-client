@@ -1,0 +1,105 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+plugins {
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.12.4'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.4'
+    implementation 'com.opencsv:opencsv:5.5.2'
+    implementation 'commons-cli:commons-cli:1.4'
+}
+
+group = 'com.sumologic.api.client'
+version = '2.10'
+description = 'Sumo Logic Java Client Library'
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+ext.gitCommitIdAbbrev = System.getenv('GIT_COMMIT_ID_ABBREV') ?: 'git rev-parse --verify --short=12 HEAD'.execute().text.trim()
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from(sourceSets.main.allJava) {
+        expand(project: [version: project.version], git: [commit: [id: [abbrev: gitCommitIdAbbrev]]])
+    }
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier.set('javadoc')
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId(project.group)
+            artifactId(project.name)
+            version(project.version)
+
+            pom {
+                name = project.name
+                description = project.description
+                url = 'https://github.com/SumoLogic/sumo-java-client'
+
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'jacek'
+                        name = 'Jacek Migdal'
+                        organization = 'Sumo Logic'
+                    }
+                    developer {
+                        id = 'goledzki'
+                        name = 'Greg Oledzki'
+                        organization = 'Sumo Logic'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:SumoLogic/sumo-java-client.git'
+                    developerConnection = 'scm:git:git@github.com:SumoLogic/sumo-java-client.git'
+                    url = 'https://github.com/SumoLogic/sumo-java-client'
+                    tag = 'HEAD'
+                }
+            }
+
+            from(components.java)
+            artifact(sourcesJar)
+            artifact(javadocJar)
+        }
+    }
+    repositories {
+        maven {
+            url 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            credentials {
+                username project.findProperty("nexus_username") ?: ""
+                password project.findProperty("nexus_password") ?: ""
+            }
+        }
+    }
+}
+
+signing {
+    useGpgCmd()
+    sign publishing.publications.maven
+}
