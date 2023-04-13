@@ -2,7 +2,7 @@ buildscript {
     repositories {
         mavenCentral()
     }
-    ext.scalatestVersion = '3.2.15'
+    ext.scalatestVersion = '3.3.0-SNAP4'
 }
 
 plugins {
