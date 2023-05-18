@@ -29,7 +29,7 @@ dependencies {
     testImplementation "org.scalatest:scalatest-wordspec_3:$scalatestVersion"
     testImplementation "org.scalatest:scalatest-shouldmatchers_3:$scalatestVersion"
     // Needed for scalatest as mentioned in https://github.com/scalatest/scalatest/issues/1736
-    testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.62.2")
+    testRuntimeOnly("com.vladsch.flexmark:flexmark-all:0.64.6")
 }
 
 group = 'com.sumologic.api.client'
