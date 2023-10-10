@@ -1,3 +1,4 @@
+* 2023-10-10: Version 2.11 released to Maven Central.
 * 2022-04-29: Version 2.10 released to Maven Central.
 * 2022-01-17: Version 2.9 released to Maven Central.
 * 2021-08-06: Version 2.8 released to Maven Central.
