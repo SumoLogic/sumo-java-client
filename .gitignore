@@ -11,3 +11,5 @@
 /logs
 /temp
 /.idea
+/.gradle
+/build
