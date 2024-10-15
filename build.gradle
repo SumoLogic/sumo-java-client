@@ -24,7 +24,7 @@ dependencies {
     implementation 'com.opencsv:opencsv:5.9'
     implementation 'commons-cli:commons-cli:1.9.0'
 
-    testImplementation "org.scala-lang:scala3-compiler_3:3.4.2"
+    testImplementation "org.scala-lang:scala3-compiler_3:3.5.0"
     testImplementation "org.scalatest:scalatest_3:$scalatestVersion"
     testImplementation "org.scalatest:scalatest-wordspec_3:$scalatestVersion"
     testImplementation "org.scalatest:scalatest-shouldmatchers_3:$scalatestVersion"
