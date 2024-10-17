@@ -33,7 +33,7 @@ dependencies {
 }
 
 group = 'com.sumologic.api.client'
-version = '2.12-SNAPSHOT'
+version = '2.12'
 description = 'Sumo Logic Java Client Library'
 java.sourceCompatibility = JavaVersion.VERSION_1_8
 
