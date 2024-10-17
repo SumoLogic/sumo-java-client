@@ -12,7 +12,7 @@ The Java client library is available on Maven central (http://search.maven.org/)
 <dependency>
   <groupId>com.sumologic.api.client</groupId>
   <artifactId>sumo-java-client</artifactId> 
-  <version>2.11</version>
+  <version>2.12</version>
 </dependency>
 ```
 
