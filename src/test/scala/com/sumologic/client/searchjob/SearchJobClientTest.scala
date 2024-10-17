@@ -22,7 +22,7 @@ class SearchJobClientTest extends AnyWordSpecLike with Matchers with Eventually 
       // given
       val sut = SearchJobClientTest.createClient
       val queryText = "_sourceName=dummy"
-      val timeRange = Seq("2023-09-29T15:59:00", "2023-09-29T16:00:00")
+      val timeRange = Seq("2024-09-29T15:59:00", "2024-09-29T16:00:00")
 
       // when
       val searchJobId = sut.createSearchJob(
