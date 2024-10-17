@@ -1,14 +1,15 @@
 package com.sumologic.client.searchjob
 
 import com.sumologic.client.{Credentials, SumoLogicClient}
-import org.scalatest.Tag
-import org.scalatest.Ignore
+import org.scalatest.{Ignore, Tag}
 import org.scalatest.concurrent.Eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{Seconds, Span}
 import org.scalatest.wordspec.AnyWordSpecLike
 
-import scala.jdk.CollectionConverters.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import scala.jdk.CollectionConverters._
 
 class SearchJobClientTest extends AnyWordSpecLike with Matchers with Eventually {
 
@@ -17,27 +18,27 @@ class SearchJobClientTest extends AnyWordSpecLike with Matchers with Eventually 
 
   "SearchJobClient" should {
     "succeed in searching" taggedAs WhenCredentialsAreProvided in {
-      // NOTE: this test is not self-contained, it assumes particular log data being available in the Sumo org
+      val twoDaysAgo = LocalDate.now().minusDays(2)
+      val dateAsString = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(twoDaysAgo)
+      withClue(s"dateAsString=${dateAsString}") {
+        // NOTE: this test is not self-contained, it assumes particular log data being available in the Sumo org
 
-      // given
-      val sut = SearchJobClientTest.createClient
-      val queryText = "_sourceName=dummy"
-      val timeRange = Seq("2024-09-29T15:59:00", "2024-09-29T16:00:00")
+        // given
+        val sut = SearchJobClientTest.createClient
+        val queryText = "_sourceName=dummy"
+        val timeRange = Seq(s"${dateAsString}T15:59:00", s"${dateAsString}T16:00:00")
 
-      // when
-      val searchJobId = sut.createSearchJob(
-        queryText,
-        timeRange(0), timeRange(1),
-        "Europe/Warsaw"
-      )
+        // when
+        val searchJobId = sut.createSearchJob(queryText, timeRange(0), timeRange(1), "Europe/Warsaw")
 
-      // test
-      eventually {
-        sut.getSearchJobStatus(searchJobId).getState shouldBe("DONE GATHERING RESULTS")
+        // test
+        eventually {
+          sut.getSearchJobStatus(searchJobId).getState shouldBe ("DONE GATHERING RESULTS")
+        }
+        val lines = sut.getMessagesForSearchJob(searchJobId, 0, 10).getMessages.asScala
+        lines.size shouldBe (3)
+        lines.map(_.getLogLine) should contain theSameElementsAs List("a message 123", "a message 123", "a message 123")
       }
-      val lines = sut.getMessagesForSearchJob(searchJobId, 0, 10).getMessages.asScala
-      lines.size shouldBe(3)
-      lines.map(_.getLogLine) should contain theSameElementsAs List("a message 123", "a message 123", "a message 123")
     }
   }
 }
